@@ -37,7 +37,7 @@ df.rename(columns = {150: 'status'}, inplace = True)
 
 
 feature_cols = []
-for i in range(149):
+for i in range(150):
     feature_cols.append(i)
     
 X = df[feature_cols]
