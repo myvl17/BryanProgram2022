@@ -30,6 +30,7 @@ def rand_value_col(perturbation):
         # Adds new row from pre-existing random row
         augmented_df = pd.concat([augmented_df, augmented_df.iloc[[random_row]]], ignore_index=True)
         
+        # Filter data set for common status
         temp = augmented_df[augmented_df['status'] == row_status]   
         
         
@@ -39,7 +40,7 @@ def rand_value_col(perturbation):
             # Selects random column index
             random_col = random.randint(0, augmented_df.shape[1]-2)
             
-            # Selects random value from row and column
+            # Selects random value from row and column while maintaining status
             rand_value = temp.iloc[random.randint(0, temp.shape[0]-1)][random_col]
             
             # Selects random index location and changes value
