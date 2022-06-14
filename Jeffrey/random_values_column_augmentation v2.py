@@ -49,22 +49,24 @@ def rand_value_col(perturbation):
     return augmented_df
 
  
-test = rand_value_col(1)
+test = rand_value_col(5000)
 
 
 fig, ax = plt.subplots(1,2, sharey=True) #figsize=(50,20)
-
-ax[0].scatter(df[1], df[2], alpha=0.3)
-
-ax[1].scatter(test[1], test[2], alpha=0.3)
-
-# ax[0].hist(df, density=True, bins=50)
-# ax[1].hist(test, density=True, bins=50)
+ax[0].hist(df, density=True, bins=20)
+ax[1].hist(test, density=True, bins=20)
 plt.show()
 
-# print(df.describe(include='all'))
-# print(test.describe(include='all'))
+fig, ax = plt.subplots(1,2, sharey=True) #figsize=(50,20)
+ax[0].scatter(df[1], df[2], alpha=0.1)
+ax[1].scatter(test[1], test[2], alpha=0.1)
+plt.show()
 
+
+"""
+Christina's linear regression
+
+"""
 
 feature_cols = []
 for i in range(150):
