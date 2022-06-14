@@ -21,3 +21,5 @@ df = dataset.sample(frac=1)
 
 plt.scatter(df[0], df[1])
 plt.show()
+
+np.savetxt('Gaussian Distribution Data Set.txt', df)
