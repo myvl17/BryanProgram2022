@@ -12,7 +12,9 @@ import pandas as pd
 np.random.seed(1)
 
 df0 = pd.DataFrame(np.random.normal(5, 1, size=(250, 150)))
+df0["Status"] = 0
 df1 = pd.DataFrame(np.random.normal(15, 1, size=(250, 150)))
+df1["Status"] = 1
 
 
 dataset = pd.concat([df0, df1])
@@ -22,4 +24,4 @@ df = pd.DataFrame(np.random.permutation(dataset))
 plt.scatter(df[0], df[1])
 plt.show()
 
-np.savetxt('Gaussian Distribution Data Set.txt', df)
+np.savetxt('Gaussian Distribution Data Set with Status.txt', df)
