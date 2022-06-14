@@ -22,7 +22,7 @@ perm = np.random.permutation(df)
 
 dfreal = pd.DataFrame(perm)
 
-np.savetxt('test.out', dfreal)
+np.savetxt('test.txt', dfreal)
 
 fig, ax = plt.subplots()
 
