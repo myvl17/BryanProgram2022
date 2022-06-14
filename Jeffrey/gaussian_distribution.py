@@ -16,7 +16,7 @@ df1 = pd.DataFrame(np.random.normal(15, 1, size=(250, 150)))
 
 
 dataset = pd.concat([df0, df1])
-df = dataset.sample(frac=1)
+df = pd.DataFrame(np.random.permutation(dataset))
 
 
 plt.scatter(df[0], df[1])
