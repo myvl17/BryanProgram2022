@@ -16,10 +16,10 @@ df = pd.read_table("Gaussian Distribution Data Set with Status.txt", delimiter="
 
 df.rename(columns = {150: 'status'}, inplace = True)
 
-def rand_value_col(perturbation):
+def rand_value_col(file, perturbation, columns_changed):
     
     # Copies original data set
-    augmented_df = df.copy(deep=True)
+    augmented_df = file.copy(deep=True)
     
     for k in range(0, perturbation, 1):
                
@@ -35,7 +35,7 @@ def rand_value_col(perturbation):
         
         
         # Performs 30 pertubations
-        for i in range(30):
+        for i in range(columns_changed):
             
             # Selects random column index
             random_col = random.randint(0, augmented_df.shape[1]-2)
@@ -44,12 +44,12 @@ def rand_value_col(perturbation):
             rand_value = temp.iloc[random.randint(0, temp.shape[0]-1)][random_col]
             
             # Selects random index location and changes value
-            augmented_df.iloc[-1][random_col] = rand_value # THIS BREAKS EVERYTHING
+            augmented_df.iloc[-1][random_col] = rand_value
             
     return augmented_df
 
  
-test = rand_value_col(5000)
+test = rand_value_col(df, 1000, 30)
 
 
 fig, ax = plt.subplots(1,2, sharey=True) #figsize=(50,20)
@@ -63,10 +63,10 @@ ax[1].scatter(test[1], test[2], alpha=0.1)
 plt.show()
 
 
-"""
-Christina's linear regression
+
 
 """
+Christina's linear regression
 
 feature_cols = []
 for i in range(150):
@@ -167,3 +167,4 @@ auc = metrics.roc_auc_score(y_test, y_pred_proba)
 plt.plot(fpr,tpr,label="data 1, auc = "+str(auc))
 plt.legend(loc=4)
 plt.show()  
+"""
