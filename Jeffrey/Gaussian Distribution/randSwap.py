@@ -6,17 +6,20 @@ Created on Wed Jun 15 09:48:14 2022
 """
 
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 import random
+
+"""
+randSwap Inputs
+
+file: file name, NOTE: DELIMETER IS SET TO SPACES AND THERE IS NO HEADER
+perturbations: number of new rows to generate
+ncols: number of columns to substitute with random value
+"""
 
 def randSwap(file, perturbations, ncols):
     # Reads .txt data frame file
     df = pd.read_table(file, delimiter=" ", header=None)
-    
-    # Renames label column
-    df.rename(columns = {150: 'label'}, inplace = True)
     
     # Copies original data set
     augmented_df = pd.DataFrame()
@@ -48,8 +51,12 @@ def randSwap(file, perturbations, ncols):
 
 augmented = randSwap("Generated Gaussian Distribution.txt", 1000, 30)
 
-fix, ax = plt.subplots(1,2, sharey=True)
 
+"""
+Graph to visualize augmented data frame versus original
+
+"""
+fix, ax = plt.subplots(1,2, sharey=True)
 
 ax[0].hist(augmented)
 ax[0].set_title("Augmented")
