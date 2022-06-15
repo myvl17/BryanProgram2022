@@ -14,16 +14,14 @@ import matplotlib.pyplot as plt
 
 def LogReg(dataset, name, feature_cols, target):
     # read in the file
-    name = pd.read_csv(dataset)
-    
-    # View a snippet of the file to check that it imported correctly
-    name.head()
-    
-    # # Break up the data set into the feature variables and the target variables
-    # feature_cols = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)',
-    #                'MDVP:RAP', 'MDVP:PPQ',	'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)', 'Shimmer:APQ3',
-    #                'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR', 'RPDE', 'DFA', 'spread1',
-    #                'spread2', 'D2', 'PPE']
+    txt = "txt"
+    csv = "csv"
+    if csv in dataset:
+        name = pd.read_csv(dataset)
+        
+    elif txt in dataset:
+        name = pd.read_table(dataset, delimiter = " ", header = None)
+        name.rename(columns = {150: target}, inplace = True)
     
     # Feature variables
     X = name[feature_cols]
@@ -125,13 +123,13 @@ def LogReg(dataset, name, feature_cols, target):
     plt.show()  
     
     # auc of 1 is a perfect classifier and auc of 0.5 is a 
-    #worthless classifier, auc = 0.933
+    # worthless classifier, auc = 0.933
     
     
-array = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)',
-                'MDVP:RAP', 'MDVP:PPQ',	'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)', 'Shimmer:APQ3',
-                'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR', 'RPDE', 'DFA', 'spread1',
-                'spread2', 'D2', 'PPE']
-print(LogReg(dataset = "C:/Users/cdiet/Desktop/Parkinson_datset.csv", 
-             name = "parkinson", feature_cols = array, target = 'status'))
+# array = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)',
+#                 'MDVP:RAP', 'MDVP:PPQ',	'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)', 'Shimmer:APQ3',
+#                 'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR', 'RPDE', 'DFA', 'spread1',
+#                 'spread2', 'D2', 'PPE']
+# print(LogReg(dataset = "C:/Users/cdiet/Desktop/Parkinson_datset.csv", 
+#              name = "parkinson", feature_cols = array, target = 'status'))
 
