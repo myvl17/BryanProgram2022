@@ -129,6 +129,6 @@ array = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:
                 'MDVP:RAP', 'MDVP:PPQ',	'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)', 'Shimmer:APQ3',
                 'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR', 'RPDE', 'DFA', 'spread1',
                 'spread2', 'D2', 'PPE']
-print(LogReg(dataset = "C:/Users/cdiet/Desktop/Parkinson_datset.csv", 
+print(LogRegFake(dataset = "C:/Users/cdiet/Desktop/Parkinson_datset.csv", 
               name = "parkinson", feature_cols = array, target = 'status'))
 
