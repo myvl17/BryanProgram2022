@@ -21,7 +21,7 @@ def randSwap(file, perturbations, ncols):
     # Reads .txt data frame file
     df = pd.read_table(file, delimiter=" ", header=None)
     
-    # Copies original data set
+    # Creates empty data frame
     augmented_df = pd.DataFrame()
     
     for k in range(0, perturbations, 1):
@@ -33,7 +33,10 @@ def randSwap(file, perturbations, ncols):
         augmented_df = pd.concat([augmented_df, df.iloc[[random_row]]], ignore_index=True)
         
         
-        # Changes ncols amount of rows
+        # Actual Data Augmentation Method:
+        # Grabs random row from original data set and appends to new data frame
+        # Selects random column from new row and takes random value from same column in original data set
+        # Appends random value from original data frame and appends to new row column in new data frame
         for i in range(ncols):
             
             # Selects random column index
