@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd 
 
-def UniformSythetic(distance, labels, data): 
+def UniformSythetic(nrows, ncolumns, distance): 
     # Makes sure the random numbers are the same each time the 
     # program runs
     np.random.seed(1)
@@ -25,8 +25,8 @@ def UniformSythetic(distance, labels, data):
 
     # Create two separate dataframes that fit in two different 
     # ranges on a uniform distribution
-    df1 = pd.DataFrame(np.random.uniform(a, b, (250, 150)))
-    df2 = pd.DataFrame(np.random.uniform(c, d, (250, 150)))
+    df1 = pd.DataFrame(np.random.uniform(a, b, (int(nrows / 2), ncolumns)))
+    df2 = pd.DataFrame(np.random.uniform(c, d, (int(nrows/2), ncolumns)))
     
     # Concatenate the data frames and mix the rows together
     df = pd.concat([df1, df2])
@@ -43,12 +43,12 @@ def UniformSythetic(distance, labels, data):
             targetvalue.append(1)
     
     # Save the dataframe to a text file if others want to use
-    np.savetxt(labels, targetvalue)
-    np.savetxt(data, dfreal)
+    np.savetxt('synthetic_data_labels', targetvalue)
+    np.savetxt('synthetic_data', dfreal)
     
     # Initiate the plot and graph a scatter of two rows
     fig, ax = plt.subplots()
     plt.scatter(df[0], df[1])
     plt.show()
 
-print(UniformSythetic(2, 'synthetic_data_labels',  'synthetic_data'))
+print(UniformSythetic(500, 150, 2))
