@@ -4,9 +4,24 @@ Created on Wed Jun 15 13:12:19 2022
 
 @author: cdiet
 """
-
+# Import the libraries needed
 import pandas as pd
 import numpy as np
+
+"""
+LogReg Inputs
+dataset: saved txt or csv file with augmented data and labels 
+name: what to call the dataset once it is read in
+feature_cols: All columns that are not the labels
+target: the labels or status column, a string, the name of that column
+in the dataframe
+split: the number of the row in the dataframe where it goes from 
+original to augmented data
+save: what to save the output labels as
+
+
+Output: Will be an 
+"""
 
 def LogReg(dataset, name, feature_cols, target, split, save):
     # read in the file

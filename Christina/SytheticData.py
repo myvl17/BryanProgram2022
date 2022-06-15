@@ -34,7 +34,7 @@ def UniformSythetic(nrows, ncolumns, distance):
     
     # Turn the permutated data back into a dataframe for use
     dfreal = pd.DataFrame(perm)
-    np.savetxt('synthetic_data', dfreal)
+    np.savetxt('synthetic_data.txt', dfreal)
     
     targetvalue = []
     for i in range(len(dfreal)):
@@ -46,8 +46,8 @@ def UniformSythetic(nrows, ncolumns, distance):
     dfreal['status'] = targetvalue
     
     # Save the dataframe to a text file if others want to use
-    np.savetxt('synthetic_data_labels', targetvalue)
-    np.savetxt('synthetic_data_with_labels', dfreal)
+    np.savetxt('synthetic_data_labels.txt', targetvalue)
+    np.savetxt('synthetic_data_with_labels.txt', dfreal)
     
     # Initiate the plot and graph a scatter of two rows
     fig, ax = plt.subplots()
