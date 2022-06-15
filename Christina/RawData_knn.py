@@ -5,21 +5,6 @@ Created on Wed Jun 15 09:22:31 2022
 @author: cdiet
 """
 
-from UniformAugmentation import RandUnit
-
-# Run the function
-print(RandUnit('test.txt', 500, 0.1, 150))   
-       
-
-from LogisticRegression import LogReg
-
-feature_cols = []
-for i in range(0, 149, 1):
-    feature_cols.append(i)
-print(LogReg(dataset = 'augmented_original_label.txt', name = "data",
-             feature_cols = feature_cols, target = 'status', split = 500,
-             save = 'augmented_data_labels.txt'))
-
 # import libraries
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
  
 # Loading data
-dfknn = pd.read_table('test.txt', delimiter = " ", header = None)
+dfknn = pd.read_table('synthetic_data_with_labels', delimiter = " ", header = None)
 
 # rename the status column
 dfknn.rename(columns = {150: 'status'}, inplace = True)
