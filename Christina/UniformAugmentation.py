@@ -15,10 +15,10 @@ import random
 
 
 # Create the function that utilizes the sythetic data
-def RandUnit(dataset, numbRows, unit):
+def RandUnit(dataset, numbRows, unit, labels):
     
-    df = pd.read_table(dataset, delimiter = " ", header = None) 
-    
+    dftest = pd.read_table(dataset, delimiter = " ", header = None) 
+    df = dftest.drop(columns = labels)
 
 # if statement to determine if the number of rows entered is odd
 # The sample function takes random rows from the df
@@ -57,43 +57,43 @@ def RandUnit(dataset, numbRows, unit):
             newValue = oldValue - unit
             sample2real.replace(to_replace = oldValue, value = newValue)
     
-    # Add all new rows to the existing dataframe
-    dffinaltest = pd.concat([df, sample1real, sample2real])
+    # # Add all new rows to the existing dataframe
+    
+    dffinaltest = pd.concat([sample1real, sample2real])
+
+    dffinaltest2 = pd.concat([df, sample1real, sample2real])
 
     # Reset the index again so it increases from 0 to n
     dffinal = dffinaltest.reset_index(drop = True)
     
-# Create a list of values where it loops through each row 
-# and determines if the first value is between 0 and 1 or 3
-# and 4 and then add the list as a column to the dataframe
-    # targetvalue = []
-    # for i in range(len(dffinal)):
-    #     if ((dffinal.iloc[i, 0]) < 1 and (dffinal.iloc[i, 0]) > 0):
-    #         targetvalue.append(0)
-    #     else:
-    #         targetvalue.append(1)
-            
-    # dffinal['status'] = targetvalue
-    
+    dffinal2 = dffinaltest2.reset_index(drop = True)
+
     # Add too the original scatterplot with a different
     #alpha to show the new points
     plt.scatter(dffinal[0], dffinal[1], alpha = 0.5) 
     plt.show()
-
+    
     # Save dataframe as a text file to be used outside
     # of this function
-    np.savetxt('dataframe.txt', dffinal)
+    np.savetxt('augmented_data.txt', dffinal)
+    np.savetxt('augmented_original.txt', dffinal2)
+    
+    name = pd.read_table('synthetic_data_labels', delimiter = " ", header = None)
+    dffinal2['status'] = name
+    # name.rename(columns = {150: target}, inplace = True)
+    
+    np.savetxt('augmented_original_label.txt', dffinal2)
 
     return dffinal
     
 # Run the function
-print(RandUnit('test.txt', 500, 0.1))   
+print(RandUnit('test.txt', 500, 0.1, 150))   
        
 
-from LogisticRegression import LogReg
+# from LogisticRegression import LogReg
 
-feature_cols = []
-for i in range(0, 149, 1):
-    feature_cols.append(i)
-print(LogReg(dataset = 'dataframe.txt', name = random,
-             feature_cols = feature_cols, target = 'status'))
+# feature_cols = []
+# for i in range(0, 149, 1):
+#     feature_cols.append(i)
+# print(LogReg(dataset = 'dataframe.txt', name = random,
+#              feature_cols = feature_cols, target = 'status'))

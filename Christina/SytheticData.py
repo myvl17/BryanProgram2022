@@ -41,11 +41,10 @@ def UniformSythetic(distance):
             targetvalue.append(0)
         else:
             targetvalue.append(1)
-                
-    dfreal['status'] = targetvalue
     
     # Save the dataframe to a text file if others want to use
-    np.savetxt('test.txt', dfreal)
+    np.savetxt('synthetic_data_labels', targetvalue)
+    np.savetxt('synthetic_data', dfreal)
     
     # Initiate the plot and graph a scatter of two rows
     fig, ax = plt.subplots()

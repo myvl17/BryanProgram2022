@@ -12,7 +12,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def LogReg(dataset, name, feature_cols, target):
+def LogRegFake(dataset, name, feature_cols, target):
     # read in the file
     txt = "txt"
     csv = "csv"
