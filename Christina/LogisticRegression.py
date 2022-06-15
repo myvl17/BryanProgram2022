@@ -52,7 +52,6 @@ def LogReg(dataset, name, feature_cols, target):
     # create the prediction
     y_pred= logreg.predict(X_test)
     
-    
     # Confusion matrix
     # import the metrics class
     from sklearn import metrics
@@ -125,11 +124,11 @@ def LogReg(dataset, name, feature_cols, target):
     # auc of 1 is a perfect classifier and auc of 0.5 is a 
     # worthless classifier, auc = 0.933
     
-    
-# array = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)',
-#                 'MDVP:RAP', 'MDVP:PPQ',	'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)', 'Shimmer:APQ3',
-#                 'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR', 'RPDE', 'DFA', 'spread1',
-#                 'spread2', 'D2', 'PPE']
-# print(LogReg(dataset = "C:/Users/cdiet/Desktop/Parkinson_datset.csv", 
-#              name = "parkinson", feature_cols = array, target = 'status'))
+# An example for the Logistic Regression, will output confusion matrix and line graph    
+array = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)',
+                'MDVP:RAP', 'MDVP:PPQ',	'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)', 'Shimmer:APQ3',
+                'Shimmer:APQ5', 'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR', 'RPDE', 'DFA', 'spread1',
+                'spread2', 'D2', 'PPE']
+print(LogReg(dataset = "C:/Users/cdiet/Desktop/Parkinson_datset.csv", 
+              name = "parkinson", feature_cols = array, target = 'status'))
 
