@@ -12,43 +12,23 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 import random
 
-# Makes sure the random numbers are the same each time the 
-# program runs
-np.random.seed(1)
-
-# Create two separate dataframes that fit in two different 
-# ranges on a uniform distribution
-df1 = pd.DataFrame(np.random.uniform(0, 1, (250, 150)))
-df2 = pd.DataFrame(np.random.uniform(3, 4, (250, 150)))
-
-# Concatenate the data frames and mix the rows together
-df = pd.concat([df1, df2])
-perm = np.random.permutation(df)
-
-# Turn the permutated data back into a dataframe for use
-dfreal = pd.DataFrame(perm)
-
-# Save the dataframe to a text file if others want to use
-np.savetxt('test.txt', dfreal)
-
-# Initiate the plot and graph a scatter of two rows
-fig, ax = plt.subplots()
-plt.scatter(df[0], df[1])
-plt.show()
 
 
 # Create the function that utilizes the sythetic data
-def RandUnit(NumbRows, Unit):
+def RandUnit(dataset, numbRows, unit):
+    
+    df = pd.read_table(dataset, delimiter = " ", header = None) 
+    
 
 # if statement to determine if the number of rows entered is odd
 # The sample function takes random rows from the df
 # in this case it take in the NumbRows and the # of rows
-    if (NumbRows % 2 == 0):
-        sample1 = dfreal.sample(n = int(NumbRows / 2))
-        sample2 = dfreal.sample(n = int(NumbRows / 2))
+    if (numbRows % 2 == 0):
+        sample1 = df.sample(n = int(numbRows / 2))
+        sample2 = df.sample(n = int(numbRows / 2))
     else:
-        sample1 = dfreal.sample(n = int((NumbRows / 2 ) + 0.5))
-        sample2 = dfreal.sample(n = int((NumbRows / 2) - 0.5))
+        sample1 = df.sample(n = int((numbRows / 2 ) + 0.5))
+        sample2 = df.sample(n = int((numbRows / 2) - 0.5))
         
 # Reset the index in each sample so they increase from 0 to NumbRows        
     sample1real = sample1.reset_index(drop = True)
@@ -56,7 +36,7 @@ def RandUnit(NumbRows, Unit):
     
 # Create a list of random numbers
     randomlist = []
-    for j in range(0, NumbRows):
+    for j in range(0, numbRows):
         n = random.randint(0, 149)
         randomlist.append(n)
         
@@ -66,7 +46,7 @@ def RandUnit(NumbRows, Unit):
     for i in range(len(sample1real)):
         for j in randomlist:
             oldValue = (sample1real.iloc[i, j])
-            newValue = oldValue + Unit
+            newValue = oldValue + unit
             # Replace the oldvalue with the new value in the
             # samples set
             sample1real.replace(to_replace = oldValue, value = newValue)
@@ -74,11 +54,11 @@ def RandUnit(NumbRows, Unit):
     for i in range(len(sample2real)):
         for j in randomlist:
             oldValue = (sample2real.iloc[i, j])
-            newValue = oldValue - Unit
+            newValue = oldValue - unit
             sample2real.replace(to_replace = oldValue, value = newValue)
     
     # Add all new rows to the existing dataframe
-    dffinaltest = pd.concat([dfreal, sample1real, sample2real])
+    dffinaltest = pd.concat([df, sample1real, sample2real])
 
     # Reset the index again so it increases from 0 to n
     dffinal = dffinaltest.reset_index(drop = True)
@@ -107,7 +87,7 @@ def RandUnit(NumbRows, Unit):
     return dffinal
     
 # Run the function
-print(RandUnit(500, 0.1))   
+print(RandUnit('test.txt', 500, 0.1))   
        
 
 # LOGISTIC REGRESSION CODE
