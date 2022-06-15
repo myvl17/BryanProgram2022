@@ -5,12 +5,25 @@ Created on Wed Jun 15 09:22:31 2022
 @author: cdiet
 """
 
+from UniformAugmentation import RandUnit
+
+# Run the function
+print(RandUnit('test.txt', 500, 0.1, 150))   
+       
+
+from LogisticRegression import LogReg
+
+feature_cols = []
+for i in range(0, 149, 1):
+    feature_cols.append(i)
+print(LogReg(dataset = 'augmented_original_label.txt', name = "data",
+             feature_cols = feature_cols, target = 'status', split = 500,
+             save = 'augmented_data_labels.txt'))
+
 # import libraries
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd 
-import random
-
 
 # Import necessary modules
 from sklearn.neighbors import KNeighborsClassifier

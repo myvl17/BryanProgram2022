@@ -55,3 +55,13 @@ def LogReg(dataset, name, feature_cols, target, split, save):
 
     return y_pred
 
+## EXAMPLE
+
+feature_cols = []
+for i in range(0, 149, 1):
+    feature_cols.append(i)
+    
+print(LogReg(dataset = 'augmented_original_label.txt', name = "data",
+             feature_cols = feature_cols, target = 'status', split = 500,
+             save = 'augmented_data_labels.txt'))
+

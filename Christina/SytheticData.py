@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd 
 
-def UniformSythetic(distance): 
+def UniformSythetic(distance, labels, data): 
     # Makes sure the random numbers are the same each time the 
     # program runs
     np.random.seed(1)
@@ -43,12 +43,12 @@ def UniformSythetic(distance):
             targetvalue.append(1)
     
     # Save the dataframe to a text file if others want to use
-    np.savetxt('synthetic_data_labels', targetvalue)
-    np.savetxt('synthetic_data', dfreal)
+    np.savetxt(labels, targetvalue)
+    np.savetxt(data, dfreal)
     
     # Initiate the plot and graph a scatter of two rows
     fig, ax = plt.subplots()
     plt.scatter(df[0], df[1])
     plt.show()
 
-print(UniformSythetic(2))
+print(UniformSythetic(2, 'synthetic_data_labels',  'synthetic_data'))

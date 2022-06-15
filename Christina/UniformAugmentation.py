@@ -12,8 +12,6 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 import random
 
-
-
 # Create the function that utilizes the sythetic data
 def RandUnit(dataset, numbRows, unit, labels):
     
@@ -86,14 +84,3 @@ def RandUnit(dataset, numbRows, unit, labels):
 
     return dffinal
     
-# Run the function
-print(RandUnit('test.txt', 500, 0.1, 150))   
-       
-
-# from LogisticRegression import LogReg
-
-# feature_cols = []
-# for i in range(0, 149, 1):
-#     feature_cols.append(i)
-# print(LogReg(dataset = 'dataframe.txt', name = random,
-#              feature_cols = feature_cols, target = 'status'))
