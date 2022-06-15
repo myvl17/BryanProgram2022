@@ -92,6 +92,7 @@ print(RandUnit('test.txt', 500, 0.1))
 
 # LOGISTIC REGRESSION CODE
 
+
 # load in the data and rename the status column
 dffinal2 = pd.read_table('dataframe.txt', delimiter = " ", header = None)
 dffinal2.rename(columns = {150: 'status'}, inplace = True)
