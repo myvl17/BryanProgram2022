@@ -1,48 +1,81 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jun 14 10:20:34 2022
+Created on Tue Jun 14 10:41:43 2022
 
 @author: jeffr
 """
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import seaborn as sns
-
-# Maintains random data set generated
-np.random.seed(1)
-
-# Class 1 normal distribution
-df0 = pd.DataFrame(np.random.normal(5, 1, size=(250, 150)))
-df0["Status"] = 0
-
-# Class 2 normal distribution
-df1 = pd.DataFrame(np.random.normal(15, 1, size=(250, 150)))
-df1["Status"] = 1
-
-# Merging both data sets
-dataset = pd.concat([df0, df1])
-
-# Shuffling data set
-df = pd.DataFrame(np.random.permutation(dataset))
+import random
 
 
-plt.scatter(df[0], df[1])
-plt.show()
-
-np.savetxt('Gaussian Distribution Data Set with Status.txt', df)
+df = pd.read_table("Gaussian Distribution Data Set with Status.txt", delimiter=" ", header=None)
 
 df.rename(columns = {150: 'status'}, inplace = True)
 
+def rand_value_col(perturbation):
+    
+    # Copies original data set
+    augmented_df = df.copy(deep=True)
+    
+    for k in range(0, perturbation, 1):
+               
+        # Selects random row index
+        random_row = random.randint(0, augmented_df.shape[0]-1)
+        row_status = augmented_df.iloc[random_row, -1]
+        
+        # Adds new row from pre-existing random row
+        augmented_df = pd.concat([augmented_df, augmented_df.iloc[[random_row]]], ignore_index=True)
+        
+        # Filter data set for common status
+        temp = augmented_df[augmented_df['status'] == row_status]   
+        
+        
+        # Performs 30 pertubations
+        for i in range(30):
+            
+            # Selects random column index
+            random_col = random.randint(0, augmented_df.shape[1]-2)
+            
+            # Selects random value from row and column while maintaining status
+            rand_value = temp.iloc[random.randint(0, temp.shape[0]-1)][random_col]
+            
+            # Selects random index location and changes value
+            augmented_df.iloc[-1][random_col] = rand_value # THIS BREAKS EVERYTHING
+            
+    return augmented_df
+
+ 
+test = rand_value_col(5000)
+
+
+fig, ax = plt.subplots(1,2, sharey=True) #figsize=(50,20)
+ax[0].hist(df, density=True, bins=20)
+ax[1].hist(test, density=True, bins=20)
+plt.show()
+
+fig, ax = plt.subplots(1,2, sharey=True) #figsize=(50,20)
+ax[0].scatter(df[1], df[2], alpha=0.1)
+ax[1].scatter(test[1], test[2], alpha=0.1)
+plt.show()
+
+
+"""
+Christina's linear regression
+
+"""
 
 feature_cols = []
 for i in range(150):
     feature_cols.append(i)
     
-X = df[feature_cols]
+X = test[feature_cols]
 
-y = df['status']
+y = test['status']
+
 
 
 from sklearn.model_selection import train_test_split
