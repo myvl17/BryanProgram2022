@@ -15,7 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
  
 # Loading data
-dfknn = pd.read_table('synthetic_data_with_labels', delimiter = " ", header = None)
+dfknn = pd.read_table('synthetic_data_with_labels.txt', delimiter = " ", header = None)
 
 # rename the status column
 dfknn.rename(columns = {150: 'status'}, inplace = True)

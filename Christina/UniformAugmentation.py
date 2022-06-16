@@ -12,15 +12,31 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 import random
 
+"""
+RandUnit inputs:
+    dataset = The name of the file that contains the synthetic data with 
+    the labels.
+    numbRows = The number of rows that you want to augment.
+    unit =  The amount you want to add and subtract randomly from the rows
+    labels =  The number of the column that contains the labels/status
+
+RandUnit outputs: 
+    Outputs 3 text files, the augmented data, the augmented data with the 
+    original data, and the original data, augmented data, and labels (contains
+    Nan for the augmented labels)
+"""
+
 # Create the function that utilizes the sythetic data
 def RandUnit(dataset, numbRows, unit, labels):
     
+    # Reads in the dataset needed, dropping whatever column contains
+    # the labels/status
     dftest = pd.read_table(dataset, delimiter = " ", header = None) 
     df = dftest.drop(columns = labels)
 
-# if statement to determine if the number of rows entered is odd
-# The sample function takes random rows from the df
-# in this case it take in the NumbRows and the # of rows
+    # if statement to determine if the number of rows entered is odd
+    # The sample function takes random rows from the df
+    # in this case it take in the NumbRows and the # of rows
     if (numbRows % 2 == 0):
         sample1 = df.sample(n = int(numbRows / 2))
         sample2 = df.sample(n = int(numbRows / 2))
@@ -28,7 +44,7 @@ def RandUnit(dataset, numbRows, unit, labels):
         sample1 = df.sample(n = int((numbRows / 2 ) + 0.5))
         sample2 = df.sample(n = int((numbRows / 2) - 0.5))
         
-# Reset the index in each sample so they increase from 0 to NumbRows        
+    # Reset the index in each sample so they increase from 0 to NumbRows        
     sample1real = sample1.reset_index(drop = True)
     sample2real = sample2.reset_index(drop = True)
     
@@ -55,14 +71,19 @@ def RandUnit(dataset, numbRows, unit, labels):
             newValue = oldValue - unit
             sample2real.replace(to_replace = oldValue, value = newValue)
     
-    # # Add all new rows to the existing dataframe
-    
-    dffinaltest = pd.concat([sample1real, sample2real])
 
-    dffinaltest2 = pd.concat([df, sample1real, sample2real])
+    # Put the two samples together and mix them
+    dffinaltest = pd.concat([sample1real, sample2real])
+    perm = np.random.permutation(dffinaltest)
+    
+    # Save back to a dataframe to concatenate with original data
+    dfreal = pd.DataFrame(perm)
+
+    # Put the two samples with the original synthetic data
+    dffinaltest2 = pd.concat([df, dfreal])
 
     # Reset the index again so it increases from 0 to n
-    dffinal = dffinaltest.reset_index(drop = True)
+    dffinal = dfreal.reset_index(drop = True)
     
     dffinal2 = dffinaltest2.reset_index(drop = True)
 
@@ -72,15 +93,16 @@ def RandUnit(dataset, numbRows, unit, labels):
     plt.show()
     
     # Save dataframe as a text file to be used outside
-    # of this function
+    # of this function, one with just augmented and one 
+    # with original and augmented
     np.savetxt('augmented_data.txt', dffinal)
     np.savetxt('augmented_original.txt', dffinal2)
     
-    name = pd.read_table('synthetic_data_labels', delimiter = " ", header = None)
+    # Read back in the synthetic data labels to create a text file with
+    # original, sythetic data, and labels
+    name = pd.read_table('synthetic_data_labels.txt', delimiter = " ", header = None)
     dffinal2['status'] = name
-    # name.rename(columns = {150: target}, inplace = True)
     
+    # Save the text file
     np.savetxt('augmented_original_label.txt', dffinal2)
-
-    return dffinal
     
