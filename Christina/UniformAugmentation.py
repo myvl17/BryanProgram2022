@@ -50,7 +50,7 @@ def RandUnit(dataset, numbRows, unit, labels):
     
 # Create a list of random numbers
     randomlist = []
-    for j in range(0, numbRows):
+    for j in range(0, 30):
         n = random.randint(0, 149)
         randomlist.append(n)
         
@@ -89,7 +89,10 @@ def RandUnit(dataset, numbRows, unit, labels):
 
     # Add too the original scatterplot with a different
     #alpha to show the new points
+    ax, fig = plt.subplots()
+    
     plt.scatter(dffinal[0], dffinal[1], alpha = 0.5) 
+    plt.title("Random Uniform Data with Augmented Data")
     plt.show()
     
     # Save dataframe as a text file to be used outside
@@ -105,4 +108,5 @@ def RandUnit(dataset, numbRows, unit, labels):
     
     # Save the text file
     np.savetxt('augmented_original_label.txt', dffinal2)
+        
     
