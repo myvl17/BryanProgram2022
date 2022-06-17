@@ -33,4 +33,4 @@ knn.fit(X_train, y_train)
 pred = knn.predict(X_test)
 
 # Prints basic accuracy
-print(sklearn.metrics.accuracy_score(pred, y_test))
+print(sklearn.metrics.accuracy_score(y_test, pred))

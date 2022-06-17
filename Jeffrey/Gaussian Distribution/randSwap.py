@@ -54,12 +54,13 @@ def randSwap(file, perturbations, ncols):
     
     finished_df = pd.concat([df, augmented_df], ignore_index=True)
     np.savetxt("Augmented Gaussian Distribution.txt", finished_df)
-    return finished_df
+    return augmented_df
 
 augmented = randSwap("Generated Gaussian Distribution.txt", 500, 30)
 
 
 """
+
 Graph to visualize augmented data frame versus original
 
 """
@@ -72,6 +73,22 @@ ax[0].set_title("Augmented")
 ax[1].hist(pd.read_table("Generated Gaussian Distribution.txt", delimiter=" ", header=None))
 ax[1].set_title("Original")
 plt.show()
+
+
+
+plt.scatter(pd.read_table("Generated Gaussian Distribution.txt", delimiter=" ", header=None)[0], pd.read_table("Generated Gaussian Distribution.txt", delimiter=" ", header=None)[1], alpha=0.6, c="b", label="original")
+plt.scatter(augmented[0], augmented[1], alpha=0.2, c="r", label="augmented")
+plt.title("Augmented Random Gaussian Distribution")
+plt.legend()
+
+plt.show()
+
+
+"""
+
+Log regression
+
+"""
 
 from sklearn.model_selection import train_test_split
 import sklearn.metrics 
@@ -117,17 +134,27 @@ def LogReg(dataset, name, feature_cols, target, split, save):
     # create the prediction
     y_pred= logreg.predict(X_test)
     
-    np.savetxt(save, y_pred)
+    augmented['lablels'] = y_pred
+    
 
-    return y_pred
+    return augmented
+
+
+def combineDF(file1, file2):
+    np.savetxt("final dataset.txt", pd.concat([file1, file2], ignore_index=True))
+    return pd.concat([file1, file2])
+
     
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
 
-predicted = LogReg(dataset = "Augmented Gaussian Distribution.txt", name = "data",
+predicted = LogReg(dataset = "final dataset.txt", name = "data",
               feature_cols = feature_cols, target = 'labels', split = 500,
               save = 'augmented_data_labels.txt')
+
+
+final = combineDF(pd.read_table("Generated Gaussian Distribution.txt", delimiter=" ", header=None), augmented) 
 
 
 def accuracy(file):
@@ -135,8 +162,5 @@ def accuracy(file):
     df = pd.read_table(file, delimiter=" ", header=None)
     return sklearn.metrics.accuracy_score(df[150], predicted)
     
-print(accuracy("Generated Gaussian Distribution.txt"))
-    
-# print(df[150])
-# sklearn.metrics.accuracy_score(y_true, y_pred)
+#print(accuracy("Generated Gaussian Distribution.txt"))
     
