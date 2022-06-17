@@ -1,34 +1,60 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 15 09:22:31 2022
+Created on Wed Jun 15 15:16:47 2022
 
 @author: cdiet
 """
 
-# import libraries
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd 
 
 # Import necessary modules
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
- 
-# Loading data
-dfknn = pd.read_table('synthetic_data_with_labels.txt', delimiter = " ", header = None)
 
-# rename the status column
-dfknn.rename(columns = {150: 'status'}, inplace = True)
+from SyntheticData import UniformSythetic
 
-# Loop through to create a list of the names for the feature cols
+UniformSythetic(500, 150, 2)
+
+from UniformAugmentation import RandUnit
+
+# Run the function
+print(RandUnit('synthetic_data_with_labels.txt', 500, 0.1, 150))   
+       
+
+from LogisticRegressionReal import LogReg
+
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
+print(LogReg(dataset = 'augmented_original_label.txt',
+              feature_cols = feature_cols, target = 'status', split = 500,
+              save = 'augmented_data_labels.txt'))
 
+# Take the labels from the original data, append the predicted labels
+# Add that column to original and augmented data
+
+data = pd.read_table('augmented_original.txt', delimiter = " ", header = None)
+original_label = pd.read_table('synthetic_data_labels.txt', delimiter = " ", header = None)
+
+augmented_label = pd.read_table('augmented_data_labels.txt', delimiter = " ", header = None)
+
+labels =  pd.concat([original_label, augmented_label])
+
+data['status'] = labels
+
+# Output to txt
+np.savetxt('all_data.txt', data)
+
+#KNN
+ 
+# Loading data
+dfknn = pd.read_table('augmented_original.txt', delimiter = " ", header = None)
 
 # Create feature and target arrays
-X = dfknn[feature_cols]
-y = dfknn['status']
+X = dfknn
+y = labels
  
 # Split into training and test set
 X_train, X_test, y_train, y_test = train_test_split(
@@ -37,14 +63,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 knn = KNeighborsClassifier(n_neighbors=7)
  
 knn.fit(X_train, y_train)
- 
+
 # Predict on dataset which model has not seen before
 print(knn.predict(X_test))
 
-
-
-# Author: Alexandre Gramfort <alexandre.gramfort@inria.fr>
-# License: BSD 3 clause
+# ACCURACY
 
 import sklearn.metrics as skm
 from sklearn.linear_model import LogisticRegression
@@ -52,13 +75,11 @@ from sklearn.svm import SVC
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
 
-# Generating random data set
-
 # Create array out of first two columns
 array = dfknn[[0, 1]].to_numpy()
 
 X = array  # we only take the first two features for visualization
-y = dfknn['status']
+y = labels
 
 n_features = X.shape[1]
 
@@ -91,17 +112,9 @@ yy = np.linspace(1, 5, 100).T
 xx, yy = np.meshgrid(xx, yy)
 Xfull = np.c_[xx.ravel(), yy.ravel()]
 
-
 # Determining accuracy for each iteration
 for index, (name, classifier) in enumerate(classifiers.items()):
     classifier.fit(X, y)
-    
-    """
-    ********************* USEFUL PART *********************************
-    Using accuracy, mean absolute error, and rooted mean absolute error to 
-    determine accuracy
-    
-    """
 
     y_pred = classifier.predict(X)
     accuracy = skm.accuracy_score(y, y_pred)
@@ -115,7 +128,7 @@ for index, (name, classifier) in enumerate(classifiers.items()):
     
     print()
     
-
+    
     # View probabilities:
     probas = classifier.predict_proba(Xfull)
     n_classes = np.unique(y_pred).size
@@ -138,3 +151,4 @@ plt.title("Probability")
 plt.colorbar(imshow_handle, cax=ax, orientation="horizontal")
 
 plt.show()
+

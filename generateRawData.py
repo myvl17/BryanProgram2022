@@ -9,11 +9,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd 
 
+# Makes sure the random numbers are the same each time the 
+# program runs
+np.random.seed(1)
+
 def generateRawData(nrows, ncolumns, distance, distribution):
     if distribution == "uniform":
-        # Makes sure the random numbers are the same each time the 
-        # program runs
-        np.random.seed(1)
         
         # The first points will always be between 0 and 1
         a = 0
@@ -43,6 +44,7 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         
         fig, ax = plt.subplots()
         plt.scatter(df[0], df[1])
+        plt.title("Random Uniform Distribution")
         plt.show()
         
         return dfreal
@@ -66,7 +68,8 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         shuffled_df = pd.DataFrame(np.random.permutation(df))
         
         # Creates historgram of Gaussian distributions
-        plt.hist(shuffled_df)
+        plt.scatter(shuffled_df[0], shuffled_df[1])
+        plt.title("Random Gaussian Distribution")
         plt.show()
         
         # Saves generated Gaussian distribution in same folder as file
