@@ -34,8 +34,6 @@ def OkayFunction(data, accuracy):
      
     # Predict on dataset which model has not seen before
     predicted_values = knn.predict(X_test)
-
-    print(predicted_values)
         
     #Accuracy
     if (accuracy == "og"): 
