@@ -51,5 +51,9 @@ def OkayFunction(data, accuracy):
                                                     squared=False)
         return rmae_accuracy
     
+    elif(accuracy == "f1"):
+        f1_accuracy = skm.f1_score(y_test, predicted_values)
+        return f1_accuracy
     
-print(OkayFunction('synthetic_data_with_labels.txt', "rmae"))
+    
+print(OkayFunction('synthetic_data_with_labels.txt', "f1"))

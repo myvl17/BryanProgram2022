@@ -32,7 +32,7 @@ def RandUnit(dataset, numbRows, unit, labels):
     # Reads in the dataset needed, dropping whatever column contains
     # the labels/status
     dftest = pd.read_table(dataset, delimiter = " ", header = None) 
-    df = dftest.drop(columns = labels)
+    df = dftest.drop(columns = dftest.shape[1] - 1)
 
     # if statement to determine if the number of rows entered is odd
     # The sample function takes random rows from the df
