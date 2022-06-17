@@ -27,7 +27,7 @@ RandUnit outputs:
 """
 
 # Create the function that utilizes the sythetic data
-def RandUnit(dataset, numbRows, unit, labels):
+def RandUnit(dataset, numbRows, unit):
     
     # Reads in the dataset needed, dropping whatever column contains
     # the labels/status
