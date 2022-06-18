@@ -44,15 +44,18 @@ def OkayFunction(data, accuracy=None):
         
     elif (accuracy == "mae"):
         mae_accuracy = skm.mean_absolute_error(y_test, predicted_values)
+        results_df = results_df.append({'Mean Absolute Error' : mae_accuracy}, ignore_index=True)
 
     
     elif (accuracy == "rmse"):
         rmse_accuracy = skm.mean_squared_error(y_test, predicted_values,
                                                     squared=False)
+        results_df = results_df.append({'Rooted Mean Square Error' : rmse_accuracy}, ignore_index=True)
 
     
     elif(accuracy == "f1"):
         f1_accuracy = skm.f1_score(y_test, predicted_values)
+        results_df = results_df.append({'F1 Score' : f1_accuracy}, ignore_index=True)
 
         
     else:
@@ -71,4 +74,4 @@ def OkayFunction(data, accuracy=None):
     return results_df
     
     
-df = OkayFunction('Generated Gaussian Distribution.txt', 'og')
+df = OkayFunction('Generated Gaussian Distribution.txt')
