@@ -10,7 +10,6 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 
-gausDistribution = "Generated Gaussian Distribution.txt"
 
 def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
     # Reads .txt data frame file
@@ -300,6 +299,8 @@ nValues     Distance      Accuracy
 '''
 def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
     
+    random.seed(1)
+    
     logReg = LogReg(dataset = applyAugmentationMethod(dataset, method, nrows, nvalues, unit, noise), feature_cols = feature_cols, target = target, split = split)
     
     predictions = knnClassifier(logReg, feature_cols, target)
@@ -307,12 +308,102 @@ def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, ta
     
     return acc
 
+
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
+    
+files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"]
 
-pm1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=0.1, feature_cols = feature_cols, target = 150, split = 500)
+pmOneAcc_Gaus = []
+pmOneAcc_Uniform = []
+pmOneDist = [0.05, 0.25, 0.5, 0.75, 1]
 
-pm2 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=100, feature_cols = feature_cols, target = 150, split = 500)
 
-rs1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "randSwap", nrows = 100, nvalues = 30, feature_cols = feature_cols, target = 150, split = 500)
+for j in range(len(pmOneDist)):
+    pmOneAcc_Gaus.append(distanceAccuracyComparison(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(pmOneDist)):
+    pmOneAcc_Uniform.append(distanceAccuracyComparison(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("pmOne Augmentation Method")
+
+ax[0].plot(pmOneDist, pmOneAcc_Gaus)
+ax[1].plot(pmOneDist, pmOneAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("Unit")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Unit")
+
+ax[0].set_xticks(pmOneDist)
+
+plt.tight_layout()
+
+plt.show()
+
+
+gausNoiseAcc_Gaus = []
+gausNoiseAcc_Uniform = []
+gausNoiseDist = [0.05, 0.1, 0.3, 0.5, 0.75, 1]
+
+for j in range(len(gausNoiseDist)):
+    gausNoiseAcc_Gaus.append(distanceAccuracyComparison(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(gausNoiseDist)):
+    gausNoiseAcc_Uniform.append(distanceAccuracyComparison(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("gausNoise Augmentation Method")
+
+ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
+ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("Noise %")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Noise %")
+
+ax[0].set_xticks(gausNoiseDist)
+
+plt.tight_layout()
+
+plt.show()
+
+
+randSwapAcc_Gaus = []
+randSwapAcc_Uniform = []
+randSwapDist = [1, 10, 30, 50, 75, 100]
+
+for j in range(len(randSwapDist)):
+    randSwapAcc_Gaus.append(distanceAccuracyComparison(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(randSwapDist)):
+    randSwapAcc_Uniform.append(distanceAccuracyComparison(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("randSwap Augmentation Method")
+
+ax[0].plot(randSwapDist, randSwapAcc_Gaus)
+ax[1].plot(randSwapDist, randSwapAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("nValues")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("nValues")
+
+ax[0].set_xticks(randSwapDist)
+
+plt.tight_layout()
+
+plt.show()
