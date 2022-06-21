@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans
 from sklearn.naive_bayes import GaussianNB
-#import tensorflow as tf
+import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
 
@@ -91,27 +91,27 @@ def OkayFunction(data, classifier, accuracy=None):
         predicted_values  =  classifier.predict(X_test)
     
     elif classifier == "ANN":
-        print("Hello")
-        # X = dfdrop
-        # Y = df[df.shape[1] - 1]
         
-        # X_train,X_test,Y_train,Y_test = train_test_split(
-        #     X,Y,test_size=0.2,random_state=0)
+        X = dfdrop
+        Y = df[df.shape[1] - 1]
         
-        # sc = StandardScaler()
-        # X_train = sc.fit_transform(X_train)
-        # X_test = sc.transform(X_test)
+        X_train,X_test,Y_train,Y_test = train_test_split(
+            X,Y,test_size=0.2,random_state=0)
         
-        # ann = tf.keras.models.Sequential()
+        sc = StandardScaler()
+        X_train = sc.fit_transform(X_train)
+        X_test = sc.transform(X_test)
         
-        # ann.add(tf.keras.layers.Dense(units=6,activation="relu"))
-        # ann.add(tf.keras.layers.Dense(units=6,activation="relu"))
-        # ann.add(tf.keras.layers.Dense(units=1,activation="sigmoid"))
+        ann = tf.keras.models.Sequential()
         
-        # ann.compile(optimizer="adam",loss="binary_crossentropy",metrics=['accuracy'])
-        # ann.fit(X_train,Y_train,batch_size=32,epochs = 100)
+        ann.add(tf.keras.layers.Dense(units=6,activation="relu"))
+        ann.add(tf.keras.layers.Dense(units=6,activation="relu"))
+        ann.add(tf.keras.layers.Dense(units=1,activation="sigmoid"))
         
-        # predicted_values = ann.predict(X_test)
+        ann.compile(optimizer="adam",loss="binary_crossentropy",metrics=['accuracy'])
+        ann.fit(X_train,Y_train,batch_size=32,epochs = 100)
+        
+        predicted_values = ann.predict(X_test)
         
     #Accuracy
     if (accuracy == "og"): 
@@ -150,5 +150,5 @@ def OkayFunction(data, classifier, accuracy=None):
     return results_df
     
     
-df = OkayFunction("Gaussian_Distribution.txt", classifier= "Naive_bayes")
+df = OkayFunction("Generated Gaussian Distribution.txt", classifier= "ANN", accuracy="og")
 print(df)

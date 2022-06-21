@@ -29,6 +29,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         for k in range(0, nrows, 1):
                    
             # Selects random row index
+            random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
             
             # Adds new row from pre-existing random row
@@ -42,9 +43,11 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             for i in range(nvalues):
                 
                 # Selects random column index
+                random.seed(i)
                 random_col = random.randint(0, df.shape[1]-2)
                 
                 # Selects random value from original data frame in the same column
+                random.seed(i+1)
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
                 
                 # Appends original and old value to keep track of distances
@@ -79,9 +82,11 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         # The sample function takes random rows from the df
         # in this case it take in the nrows and the # of rows
         if (nrows % 2 == 0):
+            random.seed(1)
             sample1 = df1.sample(n = int(nrows / 2))
             sample2 = df1.sample(n = int(nrows / 2))
         else:
+            random.seed(0)
             sample1 = df1.sample(n = int((nrows / 2 ) + 0.5))
             sample2 = df1.sample(n = int((nrows / 2) - 0.5))
             
@@ -92,6 +97,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
     # Create a list of random numbers
         randomlist = []
         for j in range(0, nvalues):
+            random.seed(j)
             n = random.randint(0, 149)
             randomlist.append(n)
             
@@ -142,6 +148,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         
     elif method == "gausNoise":
     #Create a noise matrix
+       random.seed(1)
        noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, 150)))
        #Add noise to dataset if equal length
       
@@ -151,6 +158,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
       
        #add noise to random rows matrix from data set
        else:
+           random.seed(0)
            data_portion = df.sample(n = nrows, ignore_index=True)
            
            added_noise = data_portion.add(noise_matrix, fill_value = 0)
@@ -199,6 +207,8 @@ def LogReg(dataset, feature_cols, target, split):
     # import the class
     from sklearn.linear_model import LogisticRegression
     
+    random.seed(1)
+    
     # instantiate the model (using the default parameters)
     logreg = LogisticRegression(max_iter = 10000)
     
@@ -222,6 +232,7 @@ def knnClassifier(dataframe, feature_cols, target):
     X = dataframe[feature_cols]
     y = dataframe[target]
      
+    random.seed(1)
     knn = KNeighborsClassifier(n_neighbors=7)
      
     knn.fit(X, y)
