@@ -41,7 +41,7 @@ def LogReg(dataset, feature_cols, target, split, save):
         data.reset_index(drop = True)
         
     # Find the ratio so it knows what percent is test vs training
-    ratio = (split / len(data))
+    ratio = ((len(data) - split) / len(data))
 
     # Feature variables
     X = data[feature_cols]
