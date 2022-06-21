@@ -15,9 +15,10 @@ import sklearn.metrics as skm
 # Import necessary modules
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-
+import random
 
 def OkayFunction(data, accuracy=None):
+    
     txt = "txt"
     if txt in data:
         df = pd.read_table(data, delimiter = " ", header = None) 
@@ -34,8 +35,9 @@ def OkayFunction(data, accuracy=None):
 
     # Split into training and test set
     X_train, X_test, y_train, y_test = train_test_split(
-                 X, y, test_size = 0.2, random_state=42)
+                 X, y, test_size = 0.2, random_state=0)
      
+    random.seed(1)
     knn = KNeighborsClassifier(n_neighbors=7)
      
     knn.fit(X_train, y_train)
