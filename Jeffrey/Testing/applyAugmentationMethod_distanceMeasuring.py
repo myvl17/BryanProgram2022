@@ -63,7 +63,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         finished_df = pd.concat([df, augmented_df], ignore_index=True)
         
         # Norm 1 distance 
-        print(np.mean(np.abs(np.array(original_points) - np.array(augmented_points))))
+        #print(norm1Distance(original_points, augmented_points))
         
         return finished_df
         
@@ -128,7 +128,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
 
         #print(np.linalg.norm(np.array(original_points) - np.array(augmented_points), ord=2)) norm 2
         # Norm 1 distance
-        print(np.mean(np.abs(np.array(original_points) - np.array(augmented_points))))
+        #print(norm1Distance(original_points, augmented_points))
         
         
 
@@ -166,18 +166,82 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
 
   
            # Norm 1 distance 
-           print(np.mean(np.abs(np.array(original_points) - np.array(augmented_points))))
+           #print(norm1Distance(original_points, augmented_points))
                    
                    
            return finished_df
     else:
         return None
     
+def norm1Distance(original_points, augmented_points):
+    return np.mean(np.abs(np.array(original_points) - np.array(augmented_points)))
+
+
+from sklearn.model_selection import train_test_split
+import sklearn.metrics 
+
+def LogReg(dataset, feature_cols, target, split):
+        
+    # Feature variables
+    X = dataset[feature_cols]
     
-randSwap = applyAugmentationMethod("Generated Gaussian Distribution.txt", "randSwap", 100, 30)
-plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
-plt.scatter(randSwap[0], randSwap[1], c="r", alpha=0.2)
-plt.show()
+    # Target variable
+    y = dataset[target]
+    
+    # Split both x and y into training and testing sets
+    
+    # Splitting the sets
+    # Test_size indicates the ratio of testing to training data ie 0.25:0.75
+    # Random_state indicates to select data randomly
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, shuffle = False,  stratify = None) 
+    
+    
+    # import the class
+    from sklearn.linear_model import LogisticRegression
+    
+    # instantiate the model (using the default parameters)
+    logreg = LogisticRegression(max_iter = 10000)
+    
+    # fit the model with data
+    logreg.fit(X_train,y_train)
+    
+    # create the prediction
+    y_pred= logreg.predict(X_test)
+    
+    
+    # Appends predicted labels to NAN
+    for i in range(split, dataset.shape[0]):
+        dataset.loc[i, target] = y_pred[split-i]
+    
+    return dataset
+
+
+from sklearn.neighbors import KNeighborsClassifier
+
+def knnClassifier(dataframe, feature_cols, target):
+    X = dataframe[feature_cols]
+    y = dataframe[target]
+     
+     
+    knn = KNeighborsClassifier(n_neighbors=7)
+     
+    knn.fit(X, y)
+     
+    # Predict on dataset which model has not seen before
+    predictions = knn.predict(X)
+    
+    return predictions
+
+
+def accuracy(file, predictions):
+    # Grabs last column containing labels
+    return sklearn.metrics.accuracy_score(file[150], predictions)
+    
+''' 
+# randSwap = applyAugmentationMethod("Generated Gaussian Distribution.txt", "randSwap", 10, 30)
+# plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
+# plt.scatter(randSwap[0], randSwap[1], c="r", alpha=0.2)
+# plt.show()
 
 # pmOne = applyAugmentationMethod("Generated Gaussian Distribution.txt", "pmOne", 100, 30, 0.1)
 # plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
@@ -188,5 +252,56 @@ plt.show()
 # plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
 # plt.scatter(gausNoise[0], gausNoise[1], c="r", alpha=0.4)
 # plt.show()
+'''
 
+'''
+pmOne
+===================================
+Units       Distance       Accuracy
+1
+.5
+.25
+0.1
+0.05
+-----------------------------------
 
+gausNoise
+==================================
+%noise      Distance      Accuracy
+1.00
+.75
+.50
+.30
+.10
+0.05
+
+----------------------------------
+
+randSwap
+==================================
+nValues     Distance      Accuracy
+100
+10
+30
+50
+1
+
+----------------------------------
+'''
+def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
+    
+    predictions = knnClassifier(LogReg(dataset = applyAugmentationMethod(dataset, method, nvalues, nrows, unit, noise), feature_cols = feature_cols, target = target, split = split), feature_cols, target)
+    acc = accuracy(LogReg(dataset = applyAugmentationMethod(dataset, method, nvalues, nrows, unit, noise), feature_cols = feature_cols, target = target, split = split), predictions)
+    
+    print(acc)
+    return acc, predictions
+
+feature_cols = []
+for i in range(0, 149, 1):
+    feature_cols.append(i)
+
+#pm1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=0.1, feature_cols = feature_cols, target = 150, split = 500)
+
+#pm2 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=100, feature_cols = feature_cols, target = 150, split = 500)
+
+rs1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "randSwap", nrows = 500, nvalues = 30, feature_cols = feature_cols, target = 150, split = 500)
