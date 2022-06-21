@@ -13,7 +13,17 @@ import sklearn.metrics
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 
-df = pd.read_table("Gaussian_Distribution.txt", delimiter=" ", header=None)
+df_1 = pd.read_table("Gaussian_Distribution.txt", delimiter=" ", header=None)
+df_2 = pd.read_table("Gaussian_noise.txt", delimiter=" ", header=None)
+df_3 = pd.read_table("augmented_data_labels.txt", delimiter = " ", header = None)
+
+df_2[150] = df_3
+print(df_2)
+
+df = pd.concat([df_1, df_2])
+dfdrop = df.drop(columns = df.shape[1] - 1)
+
+
 
 feature_cols = []
 for i in range(150):
@@ -35,3 +45,4 @@ pred = knn.predict(X_test)
 
 # Prints basic accuracy
 print(sklearn.metrics.accuracy_score(pred, y_test))
+
