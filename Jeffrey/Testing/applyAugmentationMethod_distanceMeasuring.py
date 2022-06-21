@@ -349,7 +349,7 @@ plt.show()
 
 gausNoiseAcc_Gaus = []
 gausNoiseAcc_Uniform = []
-gausNoiseDist = [0.05, 0.1, 0.3, 0.5, 0.75, 1]
+gausNoiseDist = [0.05, 0.25, 0.5, 0.75, 1]
 
 for j in range(len(gausNoiseDist)):
     gausNoiseAcc_Gaus.append(distanceAccuracyComparison(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
@@ -380,7 +380,7 @@ plt.show()
 
 randSwapAcc_Gaus = []
 randSwapAcc_Uniform = []
-randSwapDist = [1, 10, 30, 50, 75, 100]
+randSwapDist = [1, 15, 30, 50, 75, 100]
 
 for j in range(len(randSwapDist)):
     randSwapAcc_Gaus.append(distanceAccuracyComparison(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
