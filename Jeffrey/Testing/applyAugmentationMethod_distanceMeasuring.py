@@ -222,7 +222,6 @@ def knnClassifier(dataframe, feature_cols, target):
     X = dataframe[feature_cols]
     y = dataframe[target]
      
-     
     knn = KNeighborsClassifier(n_neighbors=7)
      
     knn.fit(X, y)
@@ -290,18 +289,19 @@ nValues     Distance      Accuracy
 '''
 def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
     
-    predictions = knnClassifier(LogReg(dataset = applyAugmentationMethod(dataset, method, nvalues, nrows, unit, noise), feature_cols = feature_cols, target = target, split = split), feature_cols, target)
-    acc = accuracy(LogReg(dataset = applyAugmentationMethod(dataset, method, nvalues, nrows, unit, noise), feature_cols = feature_cols, target = target, split = split), predictions)
+    logReg = LogReg(dataset = applyAugmentationMethod(dataset, method, nrows, nvalues, unit, noise), feature_cols = feature_cols, target = target, split = split)
     
-    print(acc)
-    return acc, predictions
+    predictions = knnClassifier(logReg, feature_cols, target)
+    acc = accuracy(logReg, predictions)
+    
+    return acc
 
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
 
-#pm1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=0.1, feature_cols = feature_cols, target = 150, split = 500)
+pm1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=0.1, feature_cols = feature_cols, target = 150, split = 500)
 
-#pm2 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=100, feature_cols = feature_cols, target = 150, split = 500)
+pm2 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=100, feature_cols = feature_cols, target = 150, split = 500)
 
-rs1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "randSwap", nrows = 500, nvalues = 30, feature_cols = feature_cols, target = 150, split = 500)
+rs1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "randSwap", nrows = 100, nvalues = 30, feature_cols = feature_cols, target = 150, split = 500)
