@@ -22,6 +22,9 @@ def adding_noise (data, n_rows = int, g_noise = int):
         return data_portion.add(noise_matrix, fill_value = 0)
     
 aug_data = (adding_noise(df, 7, 0.05))
-print(aug_data)
-
-np.savetxt('Gaussian_noise_data.txt', df)
+final_data = aug_data.iloc[: , :-1]
+print(final_data)
+combined_data = pd.concat([df, final_data])
+print(combined_data)
+np.savetxt('Gaussian_noise.txt', final_data)
+np.savetxt('combined_data.txt', combined_data)

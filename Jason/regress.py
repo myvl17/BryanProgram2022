@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 15 13:12:19 2022
+Created on Fri Jun 17 13:50:57 2022
 
-@author: cdiet
+@author: jasonwhite
 """
-# Import the libraries needed
+
 import pandas as pd
 import numpy as np
 
@@ -12,7 +13,6 @@ import numpy as np
 LogReg runs original data with labels and take augmented data without
 labels, runs them through a logistic regression, and outputs predicted
 labels. 
-
 LogReg Inputs:
     dataset = Saved txt or csv file with original data, augmented data,
     and labels 
@@ -41,7 +41,7 @@ def LogReg(dataset, feature_cols, target, split, save):
         data.reset_index(drop = True)
         
     # Find the ratio so it knows what percent is test vs training
-    ratio = ((len(data) - split) / len(data))
+    ratio = (split / len(data))
 
     # Feature variables
     X = data[feature_cols]
@@ -77,11 +77,10 @@ def LogReg(dataset, feature_cols, target, split, save):
 
 ## EXAMPLE
 
-# feature_cols = []
-# for i in range(0, 149, 1):
-#     feature_cols.append(i)
+feature_cols = []
+for i in range(0, 150, 1):
+     feature_cols.append(i)
     
-# print(LogReg(dataset = 'augmented_original_label.txt',
-#              feature_cols = feature_cols, target = 'status', split = 500,
-#              save = 'augmented_data_labels.txt'))
-
+print(LogReg(dataset = 'combined_data.txt',
+             feature_cols = feature_cols, target = '150', split = 7,
+             save = 'augmented_data_labels.txt'))
