@@ -53,10 +53,10 @@ def randSwap(file, perturbations, ncols):
     augmented_df.drop(df.columns[-1], axis=1, inplace=True)
     
     finished_df = pd.concat([df, augmented_df], ignore_index=True)
-    np.savetxt("Augmented Gaussian Distribution.txt", finished_df)
-    return augmented_df
+    
+    return finished_df
 
-augmented = randSwap("Generated Gaussian Distribution.txt", 500, 30)
+augmented = randSwap("Generated Gaussian Distribution.txt", 100, 30)
 
 
 """
@@ -93,33 +93,20 @@ Log regression
 from sklearn.model_selection import train_test_split
 import sklearn.metrics 
 
-def LogReg(dataset, name, feature_cols, target, split, save):
-    # read in the file
-    txt = "txt"
-    csv = "csv"
-    if csv in dataset:
-        name = pd.read_csv(dataset)
+def LogReg(dataset, feature_cols, target, split):
         
-    elif txt in dataset:
-        name = pd.read_table(dataset, delimiter = " ", header = None)
-        name.rename(columns = {150: target}, inplace = True)
-        
-    # Find the ratio 
-    ratio = split / len(name)
-
     # Feature variables
-    X = name[feature_cols]
+    X = dataset[feature_cols]
     
     # Target variable
-    y = name[target]
+    y = dataset[target]
     
     # Split both x and y into training and testing sets
-    
     
     # Splitting the sets
     # Test_size indicates the ratio of testing to training data ie 0.25:0.75
     # Random_state indicates to select data randomly
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = ratio, shuffle = False,  stratify = None) 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, shuffle = False,  stratify = None) 
     
     
     # import the class
@@ -134,33 +121,44 @@ def LogReg(dataset, name, feature_cols, target, split, save):
     # create the prediction
     y_pred= logreg.predict(X_test)
     
-    augmented['lablels'] = y_pred
     
-
-    return augmented
-
-
-def combineDF(file1, file2):
-    np.savetxt("final dataset.txt", pd.concat([file1, file2], ignore_index=True))
-    return pd.concat([file1, file2])
+    # Appends predicted labels to NAN
+    for i in range(split, dataset.shape[0]):
+        dataset.loc[i, target] = y_pred[split-i]
+    
+    return dataset
 
     
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
 
-predicted = LogReg(dataset = "final dataset.txt", name = "data",
-              feature_cols = feature_cols, target = 'labels', split = 500,
-              save = 'augmented_data_labels.txt')
+complete_df = LogReg(dataset = augmented,
+               feature_cols = feature_cols, target = 150, split = 500)
 
 
-final = combineDF(pd.read_table("Generated Gaussian Distribution.txt", delimiter=" ", header=None), augmented) 
+from sklearn.neighbors import KNeighborsClassifier
 
-
-def accuracy(file):
-    # Grabs last column containing labels
-    df = pd.read_table(file, delimiter=" ", header=None)
-    return sklearn.metrics.accuracy_score(df[150], predicted)
+def knnClassifier(dataframe, feature_cols, target):
+    X = dataframe[feature_cols]
+    y = dataframe[target]
+     
+     
+    knn = KNeighborsClassifier(n_neighbors=7)
+     
+    knn.fit(X, y)
+     
+    # Predict on dataset which model has not seen before
+    predictions = knn.predict(X)
     
-#print(accuracy("Generated Gaussian Distribution.txt"))
+    return predictions
+
+predictions = knnClassifier(complete_df, feature_cols, 150)
+
+
+def accuracy(file, predictions):
+    # Grabs last column containing labels
+    return sklearn.metrics.accuracy_score(file[150], predictions)
+    
+print(accuracy(complete_df, predictions))
     

@@ -68,8 +68,8 @@ def UniformSythetic(nrows, ncolumns, distance):
     
     # Save the dataframe to a text file if others want to use
     # One file for the labels, one file for data with labels
-    np.savetxt('synthetic_data_labels.txt', targetvalue)
-    np.savetxt('synthetic_data_with_labels.txt', dfreal)
+    # np.savetxt('synthetic_data_labels.txt', targetvalue)
+    # np.savetxt('synthetic_data_with_labels.txt', dfreal)
     
     # Initiate the plot and graph a scatter of two rows
     # A visual representation of the two groupings
@@ -77,5 +77,6 @@ def UniformSythetic(nrows, ncolumns, distance):
     plt.scatter(df[0], df[1])
     plt.show()
 
+    return dfreal
 # Testing out the function
 print(UniformSythetic(500, 150, 2))

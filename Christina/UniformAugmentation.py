@@ -90,23 +90,18 @@ def RandUnit(dataset, numbRows, unit):
     # Add too the original scatterplot with a different
     #alpha to show the new points
     ax, fig = plt.subplots()
-    
-    plt.scatter(dffinal[0], dffinal[1], alpha = 0.5) 
+ 
+    plt.scatter(df[0], df[1], label = "original_data") 
+    plt.scatter(dfreal[0], dfreal[1], alpha = 0.2, c = "red", label = "augmented_data") 
     plt.title("Random Uniform Data with Augmented Data")
+    plt.legend()
     plt.show()
-    
-    # Save dataframe as a text file to be used outside
-    # of this function, one with just augmented and one 
-    # with original and augmented
-    np.savetxt('augmented_data.txt', dffinal)
-    np.savetxt('augmented_original.txt', dffinal2)
     
     # Read back in the synthetic data labels to create a text file with
     # original, sythetic data, and labels
     name = pd.read_table('synthetic_data_labels.txt', delimiter = " ", header = None)
     dffinal2['status'] = name
     
-    # Save the text file
-    np.savetxt('augmented_original_label.txt', dffinal2)
+    return dffinal2
         
     

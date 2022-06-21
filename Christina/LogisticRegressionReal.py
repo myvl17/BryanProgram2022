@@ -38,9 +38,10 @@ def LogReg(dataset, feature_cols, target, split, save):
     elif txt in dataset:
         data = pd.read_table(dataset, delimiter = " ", header = None)
         data.rename(columns = {150: target}, inplace = True)
+        data.reset_index(drop = True)
         
     # Find the ratio so it knows what percent is test vs training
-    ratio = (split / len(data))
+    ratio = ((len(data) - split) / len(data))
 
     # Feature variables
     X = data[feature_cols]
@@ -80,7 +81,7 @@ def LogReg(dataset, feature_cols, target, split, save):
 # for i in range(0, 149, 1):
 #     feature_cols.append(i)
     
-# print(LogReg(dataset = 'augmented_original_label.txt', name = "data",
+# print(LogReg(dataset = 'augmented_original_label.txt',
 #              feature_cols = feature_cols, target = 'status', split = 500,
 #              save = 'augmented_data_labels.txt'))
 

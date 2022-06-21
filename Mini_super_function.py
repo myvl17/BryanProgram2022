@@ -17,9 +17,11 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 
 
-def OkayFunction(data, accuracy):
+def OkayFunction(data, accuracy=None):
     df = pd.read_table(data, delimiter = " ", header = None) 
     dfdrop = df.drop(columns = df.shape[1] - 1)
+    
+    results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
     
     X = dfdrop
     y = df[df.shape[1] - 1]
@@ -34,26 +36,42 @@ def OkayFunction(data, accuracy):
      
     # Predict on dataset which model has not seen before
     predicted_values = knn.predict(X_test)
-
-    print(predicted_values)
         
     #Accuracy
     if (accuracy == "og"): 
-        acc = skm.metrics.accuracy_score(y_test, predicted_values)
-        return acc
-    
+        acc = skm.accuracy_score(y_test, predicted_values)
+        results_df = results_df.append({'Accuracy' : acc}, ignore_index=True)
+        
     elif (accuracy == "mae"):
         mae_accuracy = skm.mean_absolute_error(y_test, predicted_values)
-        return mae_accuracy
+        results_df = results_df.append({'Mean Absolute Error' : mae_accuracy}, ignore_index=True)
+
     
-    elif (accuracy == "rmae"):
-        rmae_accuracy = skm.mean_squared_error(y_test, predicted_values,
+    elif (accuracy == "rmse"):
+        rmse_accuracy = skm.mean_squared_error(y_test, predicted_values,
                                                     squared=False)
-        return rmae_accuracy
+        results_df = results_df.append({'Rooted Mean Square Error' : rmse_accuracy}, ignore_index=True)
+
     
     elif(accuracy == "f1"):
         f1_accuracy = skm.f1_score(y_test, predicted_values)
-        return f1_accuracy
+        results_df = results_df.append({'F1 Score' : f1_accuracy}, ignore_index=True)
+
+        
+    else:
+        acc = skm.accuracy_score(y_test, predicted_values)
+        mae_accuracy = skm.mean_absolute_error(y_test, predicted_values)
+        rmse_accuracy = skm.mean_squared_error(y_test, predicted_values,
+                                                    squared=False)
+        f1_accuracy = skm.f1_score(y_test, predicted_values)
+        
+        results_df = results_df.append({'Accuracy' : acc, 
+                           'Mean Absolute Error':mae_accuracy,
+                           'Rooted Mean Square Error':rmse_accuracy,
+                           'F1 Score':f1_accuracy}, ignore_index=True)
+        
+        
+    return results_df
     
     
-print(OkayFunction('synthetic_data_with_labels.txt', "f1"))
+df = OkayFunction('Generated Gaussian Distribution.txt')
