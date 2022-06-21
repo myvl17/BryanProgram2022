@@ -31,6 +31,8 @@ feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
    
+    
+# PMONE
 Gaussian2 = []
 
 uniform2 = []
@@ -82,6 +84,7 @@ ax[1, 1].set_xlabel("Distance Between Clusters")
 
 plt.tight_layout()
 
+# RANDSWAP
 
 fig, ax2 = plt.subplots(2, 2)
    
@@ -131,6 +134,8 @@ ax2[1, 1].set_title("Uniform Augmented Data Accuracy")
 ax2[1, 1].set_xlabel("Distance Between Clusters")
 
 plt.tight_layout()
+
+# GAUSNOISE
 
 fig, ax3 = plt.subplots(2, 2)
 

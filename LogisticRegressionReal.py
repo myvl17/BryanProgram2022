@@ -7,6 +7,7 @@ Created on Wed Jun 15 13:12:19 2022
 # Import the libraries needed
 import pandas as pd
 import numpy as np
+import random
 
 """
 LogReg runs original data with labels and take augmented data without
@@ -50,6 +51,7 @@ def LogReg(dataset, feature_cols, target, split):
     from sklearn.linear_model import LogisticRegression
     
     # instantiate the model (using the default parameters)
+    random.seed(1)
     logreg = LogisticRegression(max_iter = 10000)
     
     # fit the model with data
