@@ -18,14 +18,14 @@ perturbations: number of new rows to generate
 ncols: number of columns to substitute with random value
 """
 
-def randSwap(file, perturbations, ncols):
+def randSwap(file, nrows, nvalues):
     # Reads .txt data frame file
     df = pd.read_table(file, delimiter=" ", header=None)
     
     # Creates empty data frame
     augmented_df = pd.DataFrame()
     
-    for k in range(0, perturbations, 1):
+    for k in range(0, nrows, 1):
                
         # Selects random row index
         random_row = random.randint(0, df.shape[0]-1)
@@ -38,7 +38,7 @@ def randSwap(file, perturbations, ncols):
         # Grabs random row from original data set and appends to new data frame
         # Selects random column from new row and takes random value from same column in original data set
         # Appends random value from original data frame and appends to new row column in new data frame
-        for i in range(ncols):
+        for i in range(nvalues):
             
             # Selects random column index
             random_col = random.randint(0, df.shape[1]-2)
