@@ -22,7 +22,7 @@ from sklearn.model_selection import train_test_split
 
 def betterKNN(df, feature_cols, split):
     
-    knn = KNeighborsClassifier(n_neighbors=3)
+    knn = KNeighborsClassifier(n_neighbors=250)
      
     knn.fit(df.iloc[:split, :df.shape[1]-1], df.iloc[:split, df.shape[1]-1])
     
@@ -152,96 +152,96 @@ for i in range(0, 149, 1):
 
 files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"]
 
-pmOneAcc_Gaus = []
-pmOneAcc_Uniform = []
-pmOneDist = [0.1, 0.5, 0.5, 0.75, 1]
+# pmOneAcc_Gaus = []
+# pmOneAcc_Uniform = []
+# pmOneDist = [1, 5, 10]
 
 
-for j in range(len(pmOneDist)):
-    pmOneAcc_Gaus.append(superFunction(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+# for j in range(len(pmOneDist)):
+#     pmOneAcc_Gaus.append(superFunction(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
     
-for j in range(len(pmOneDist)):
-    pmOneAcc_Uniform.append(superFunction(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+# for j in range(len(pmOneDist)):
+#     pmOneAcc_Uniform.append(superFunction(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
 
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+# fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
 
-fig.suptitle("pmOne Augmentation Method")
+# fig.suptitle("pmOne Augmentation Method")
 
-ax[0].plot(pmOneDist, pmOneAcc_Gaus)
-ax[1].plot(pmOneDist, pmOneAcc_Uniform)
+# ax[0].plot(pmOneDist, pmOneAcc_Gaus)
+# ax[1].plot(pmOneDist, pmOneAcc_Uniform)
 
-ax[0].set_title("Gaussian Distribution")
-ax[0].set_ylabel("Accuracy")
-ax[0].set_xlabel("Unit")
-ax[1].set_title("Uniform Distribution")
-ax[1].set_ylabel("Accuracy")
-ax[1].set_xlabel("Unit")
+# ax[0].set_title("Gaussian Distribution")
+# ax[0].set_ylabel("Accuracy")
+# ax[0].set_xlabel("Unit")
+# ax[1].set_title("Uniform Distribution")
+# ax[1].set_ylabel("Accuracy")
+# ax[1].set_xlabel("Unit")
 
-ax[0].set_xticks(pmOneDist)
+# ax[0].set_xticks(pmOneDist)
 
-plt.tight_layout()
+# plt.tight_layout()
 
-plt.show()
+# plt.show()
 
 
-gausNoiseAcc_Gaus = []
-gausNoiseAcc_Uniform = []
-gausNoiseDist = [0.05, 0.25, 0.5, 0.75, 1]
+# gausNoiseAcc_Gaus = []
+# gausNoiseAcc_Uniform = []
+# gausNoiseDist = [1, 10, 25, 50, 100]
 
-for j in range(len(gausNoiseDist)):
-    gausNoiseAcc_Gaus.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+# for j in range(len(gausNoiseDist)):
+#     gausNoiseAcc_Gaus.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
     
-for j in range(len(gausNoiseDist)):
-    gausNoiseAcc_Uniform.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+# for j in range(len(gausNoiseDist)):
+#     gausNoiseAcc_Uniform.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
 
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+# fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
 
-fig.suptitle("gausNoise Augmentation Method")
+# fig.suptitle("gausNoise Augmentation Method")
 
-ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
-ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
+# ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
+# ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
 
-ax[0].set_title("Gaussian Distribution")
-ax[0].set_ylabel("Accuracy")
-ax[0].set_xlabel("Noise %")
-ax[1].set_title("Uniform Distribution")
-ax[1].set_ylabel("Accuracy")
-ax[1].set_xlabel("Noise %")
+# ax[0].set_title("Gaussian Distribution")
+# ax[0].set_ylabel("Accuracy")
+# ax[0].set_xlabel("Noise %")
+# ax[1].set_title("Uniform Distribution")
+# ax[1].set_ylabel("Accuracy")
+# ax[1].set_xlabel("Noise %")
 
-ax[0].set_xticks(gausNoiseDist)
+# ax[0].set_xticks(gausNoiseDist)
 
-plt.tight_layout()
+# plt.tight_layout()
 
-plt.show()
+# plt.show()
 
 
-randSwapAcc_Gaus = []
-randSwapAcc_Uniform = []
-randSwapDist = [1, 15, 30, 50, 75, 100]
+# randSwapAcc_Gaus = []
+# randSwapAcc_Uniform = []
+# randSwapDist = [1, 15, 30, 50, 100, 150]
 
-for j in range(len(randSwapDist)):
-    randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+# for j in range(len(randSwapDist)):
+#     randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
     
-for j in range(len(randSwapDist)):
-    randSwapAcc_Uniform.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+# for j in range(len(randSwapDist)):
+#     randSwapAcc_Uniform.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
     
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+# fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
 
-fig.suptitle("randSwap Augmentation Method")
+# fig.suptitle("randSwap Augmentation Method")
 
-ax[0].plot(randSwapDist, randSwapAcc_Gaus)
-ax[1].plot(randSwapDist, randSwapAcc_Uniform)
+# ax[0].plot(randSwapDist, randSwapAcc_Gaus)
+# ax[1].plot(randSwapDist, randSwapAcc_Uniform)
 
-ax[0].set_title("Gaussian Distribution")
-ax[0].set_ylabel("Accuracy")
-ax[0].set_xlabel("nValues")
-ax[1].set_title("Uniform Distribution")
-ax[1].set_ylabel("Accuracy")
-ax[1].set_xlabel("nValues")
+# ax[0].set_title("Gaussian Distribution")
+# ax[0].set_ylabel("Accuracy")
+# ax[0].set_xlabel("nValues")
+# ax[1].set_title("Uniform Distribution")
+# ax[1].set_ylabel("Accuracy")
+# ax[1].set_xlabel("nValues")
 
-ax[0].set_xticks(randSwapDist)
+# ax[0].set_xticks(randSwapDist)
 
-plt.tight_layout()
+# plt.tight_layout()
 
-plt.show()
+# plt.show()
 
