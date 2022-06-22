@@ -27,7 +27,6 @@ def OkayFunction(data, accuracy=None):
         df = data
         
     dfdrop = df.drop(columns = df.shape[1] - 1)
-    
     # results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
     
     X = dfdrop
@@ -38,7 +37,7 @@ def OkayFunction(data, accuracy=None):
                  X, y, test_size = 0.2, random_state=0)
      
     random.seed(1)
-    knn = KNeighborsClassifier(n_neighbors=7)
+    knn = KNeighborsClassifier(n_neighbors=3)
      
     knn.fit(X_train, y_train)
      
@@ -46,7 +45,7 @@ def OkayFunction(data, accuracy=None):
     predicted_values = knn.predict(X_test)
         
     #Accuracy
-    f1_accuracy = skm.f1_score(y_test, predicted_values)
+    f1_accuracy = skm.f1_score(y_test, predicted_values, zero_division = 0)
         
         
     return f1_accuracy

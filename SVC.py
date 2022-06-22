@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 15 13:12:19 2022
+Created on Wed Jun 22 13:55:27 2022
 
 @author: cdiet
 """
+
 # Import the libraries needed
 import pandas as pd
 import numpy as np
@@ -31,7 +32,7 @@ LogReg Outputs:
 from sklearn.model_selection import train_test_split
 import sklearn.metrics 
 
-def LogReg(dataset, feature_cols, target, split):
+def SVC(dataset, feature_cols, target, split):
         
     # Feature variables
     X = dataset[feature_cols]
@@ -47,30 +48,24 @@ def LogReg(dataset, feature_cols, target, split):
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, shuffle = False,  stratify = None) 
 
     # import the class
-    from sklearn.linear_model import LogisticRegression
+    from sklearn.svm import SVC
     
     # instantiate the model (using the default parameters)
     random.seed(1)
-    logreg = LogisticRegression(max_iter = 10000)
+    svm = SVC(gamma = 2, C = 1, kernel = 'linear', max_iter = 10000, random_state = 0)
     
     # fit the model with data
-    logreg.fit(X_train,y_train)
+    # svm.fit(X_train,y_train)
+    svm.fit(dataset.iloc[:5, :2], dataset.iloc[:5, 2])
+    tmp2 = svm.predict(dataset.iloc[5:, :2])
+    
     
     # create the prediction
-    y_pred= logreg.predict(X_test)
+    # y_pred= svm.predict(X_test)
 
     # Appends predicted labels to NAN
     for i in range(split, dataset.shape[0]):
-        dataset.loc[i, target] = y_pred[i - split]
+        dataset.loc[i, target] = tmp2[i-split]
     
     return dataset
 
-
-## EXAMPLE
-
-# feature_cols = []
-# for i in range(0, 149, 1):
-#     feature_cols.append(i)
-    
-# complete_df = LogReg(dataset = augmented,
-#                feature_cols = feature_cols, target = 150, split = 500)
