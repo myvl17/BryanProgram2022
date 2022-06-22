@@ -226,21 +226,24 @@ def LogReg(dataset, feature_cols, target, split):
 
 from sklearn.neighbors import KNeighborsClassifier
 
+from sklearn.metrics import accuracy_score
+
 def knnClassifier(df, feature_cols, split):
     
-    # X_train, X_test, y_train, y_test = train_test_split(
-    #          X, y, train_size = split)
-
- 
     knn = KNeighborsClassifier(n_neighbors=3)
      
-    knn.fit(df.iloc[:split, :2], df.iloc[:split, 2])
+    knn.fit(df.iloc[:split, :df.shape[1]-1], df.iloc[:split, df.shape[1]-1])
      
     # Predict on dataset which model has not seen before
     
     #print(accuracy_score(df.iloc[split:, df.shape[1]-1], knn.predict(df.iloc[5:, :2])))
     
-    return knn.predict(df.iloc[5:, :2])
+    #print(accuracy_score(df.iloc[split:, df.shape[1]-1], knn.predict(df.iloc[5:, :2])))
+    
+    y_pred = knn.predict(df.iloc[split:, :df.shape[1]-1])
+    
+    
+    return accuracy_score(df.iloc[split:, df.shape[1]-1], y_pred)
 
 
 def accuracy(file, predictions):
@@ -299,7 +302,6 @@ nValues     Distance      Accuracy
 ----------------------------------
 '''
 
-'''
 def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
     
     ##random.seed(1)
@@ -311,7 +313,7 @@ def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, ta
     
     return acc
 
-
+'''
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)

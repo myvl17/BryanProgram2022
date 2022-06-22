@@ -25,16 +25,10 @@ def betterKNN(df, feature_cols, split):
     knn = KNeighborsClassifier(n_neighbors=3)
      
     knn.fit(df.iloc[:split, :df.shape[1]-1], df.iloc[:split, df.shape[1]-1])
-     
-    # Predict on dataset which model has not seen before
-    
-    #print(accuracy_score(df.iloc[split:, df.shape[1]-1], knn.predict(df.iloc[5:, :2])))
-    
-    #print(accuracy_score(df.iloc[split:, df.shape[1]-1], knn.predict(df.iloc[5:, :2])))
     
     y_pred = knn.predict(df.iloc[split:, :df.shape[1]-1])
     
-    
+    #print(f1_score(df.iloc[split:, df.shape[1]-1], y_pred))
     return accuracy_score(df.iloc[split:, df.shape[1]-1], y_pred)
 
     '''
@@ -54,7 +48,7 @@ def betterKNN(df, feature_cols, split):
     '''
 
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
 def svmClassifier(df, split):
     svc = SVC(gamma=2, C=1, kernel='linear')
     
@@ -102,7 +96,7 @@ def betterLogReg(dataset, feature_cols, target, split):
     # Appends predicted labels to NAN
     for i in range(split, dataset.shape[0]):
         dataset.loc[i, target] = y_pred[i-split]
-
+        
     
     return dataset
 
@@ -135,71 +129,119 @@ logReg = betterLogReg(aug, [0,1], 2, 5)
 
 kNNClass = betterKNN(logReg, [0,1], 5)
 '''
+
+
+def superFunction(file, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
+    aug = applyAugmentationMethod(file, method, nrows, nvalues, unit, noise)
+    
+    logReg = betterLogReg(aug, feature_cols, target, split)
+    
+    # plt.scatter(logReg[0], logReg[1], c=logReg[logReg.shape[1]-1])
+    # plt.show()
+    
+    knnClass = betterKNN(logReg, feature_cols, split)
+    
+    return knnClass
+
+
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
+    
+# print(superFunction(file="Generated Gaussian Distribution.txt", method="randSwap", nrows=500, nvalues=100, unit=10, feature_cols=feature_cols, target=150, split=500))
 
-aug = applyAugmentationMethod("Generated Gaussian Distribution.txt", "randSwap", 100, 30, noise=0.1)
+files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"]
 
-logReg = betterLogReg(aug, feature_cols, 150, 500)
-
-knnClass = betterKNN(logReg, feature_cols, 500)
-
-
-
-
+pmOneAcc_Gaus = []
+pmOneAcc_Uniform = []
+pmOneDist = [0.1, 0.5, 0.5, 0.75, 1]
 
 
+for j in range(len(pmOneDist)):
+    pmOneAcc_Gaus.append(superFunction(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(pmOneDist)):
+    pmOneAcc_Uniform.append(superFunction(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("pmOne Augmentation Method")
+
+ax[0].plot(pmOneDist, pmOneAcc_Gaus)
+ax[1].plot(pmOneDist, pmOneAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("Unit")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Unit")
+
+ax[0].set_xticks(pmOneDist)
+
+plt.tight_layout()
+
+plt.show()
 
 
+gausNoiseAcc_Gaus = []
+gausNoiseAcc_Uniform = []
+gausNoiseDist = [0.05, 0.25, 0.5, 0.75, 1]
+
+for j in range(len(gausNoiseDist)):
+    gausNoiseAcc_Gaus.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(gausNoiseDist)):
+    gausNoiseAcc_Uniform.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("gausNoise Augmentation Method")
+
+ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
+ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("Noise %")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Noise %")
+
+ax[0].set_xticks(gausNoiseDist)
+
+plt.tight_layout()
+
+plt.show()
 
 
+randSwapAcc_Gaus = []
+randSwapAcc_Uniform = []
+randSwapDist = [1, 15, 30, 50, 75, 100]
 
+for j in range(len(randSwapDist)):
+    randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(randSwapDist)):
+    randSwapAcc_Uniform.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
 
+fig.suptitle("randSwap Augmentation Method")
 
+ax[0].plot(randSwapDist, randSwapAcc_Gaus)
+ax[1].plot(randSwapDist, randSwapAcc_Uniform)
 
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("nValues")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("nValues")
 
+ax[0].set_xticks(randSwapDist)
 
+plt.tight_layout()
 
-
-
-#from applyAugmentationMethod_distanceMeasuring import LogReg
-
-#logReg = LogReg(aug, [0,1], 2, 5)
-
-
-# predKNN = betterKNN(aug, [0,1], 5)
-
-# acc = betterAcc(logReg, predKNN, 5)
-
-'''
-knn = KNeighborsClassifier(n_neighbors=3)
- 
-knn.fit(df.iloc[:, :2], df.iloc[:, 2])
-
-tmp = knn.predict(aug.iloc[5:, :2])
-
-plt.scatter(aug.iloc[5:, 0], aug.iloc[5:, 1], c=tmp)
-'''
-
-
-# print(skm.accuracy_score(logReg.iloc[5:, logReg.shape[1]-1], predKNN))
-
-'''
-from sklearn.svm import SVC
-svm =  SVC(gamma=2, C=1, kernel='linear')
-
-svm.fit(df.iloc[:, :2], df.iloc[:, 2])
-
-tmp2 = svm.predict(aug.iloc[5:, :2])
-
-plt.scatter(aug.iloc[5:, 0], aug.iloc[5:, 1], c=tmp2)
-'''
-
-
-plt.scatter(x, y, c=labels)
-plt.scatter(aug[0], aug[1], c=aug[2])
-plt.yticks(range(0,4,1))
-plt.xticks(range(0,4,1))
 plt.show()
 
