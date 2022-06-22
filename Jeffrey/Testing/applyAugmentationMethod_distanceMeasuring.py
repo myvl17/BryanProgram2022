@@ -10,7 +10,6 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 
-gausDistribution = "Generated Gaussian Distribution.txt"
 
 def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
     # Reads .txt data frame file
@@ -29,6 +28,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         for k in range(0, nrows, 1):
                    
             # Selects random row index
+            ##random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
             
             # Adds new row from pre-existing random row
@@ -42,9 +42,11 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             for i in range(nvalues):
                 
                 # Selects random column index
+                ##random.seed(i)
                 random_col = random.randint(0, df.shape[1]-2)
                 
                 # Selects random value from original data frame in the same column
+                ##random.seed(i+1)
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
                 
                 # Appends original and old value to keep track of distances
@@ -79,11 +81,13 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         # The sample function takes random rows from the df
         # in this case it take in the nrows and the # of rows
         if (nrows % 2 == 0):
-            sample1 = df1.sample(n = int(nrows / 2))
-            sample2 = df1.sample(n = int(nrows / 2))
+            ##random.seed(1)
+            sample1 = df1.sample(n = int(nrows / 2), random_state=(0))
+            sample2 = df1.sample(n = int(nrows / 2), random_state=(0))
         else:
-            sample1 = df1.sample(n = int((nrows / 2 ) + 0.5))
-            sample2 = df1.sample(n = int((nrows / 2) - 0.5))
+            ##random.seed(0)
+            sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state=(1))
+            sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state=(1))
             
         # Reset the index in each sample so they increase from 0 to nrows        
         sample1real = sample1.reset_index(drop = True)
@@ -92,7 +96,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
     # Create a list of random numbers
         randomlist = []
         for j in range(0, nvalues):
-            n = random.randint(0, 149)
+            ##random.seed(j)
+            n = random.randint(0, df.shape[1]-2)
             randomlist.append(n)
             
     # Select one of the random rows then use the random list to 
@@ -109,7 +114,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                 
                 # Replace the oldvalue with the new value in the
                 # samples set
-                sample1real.replace(to_replace = oldValue, value = newValue)
+                sample1real = sample1real.replace(to_replace = oldValue, value = newValue)
                 
            
         for i in range(len(sample2real)):
@@ -122,7 +127,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                 augmented_points.append(newValue)
                 
                 
-                sample2real.replace(to_replace = oldValue, value = newValue)
+                sample2real = sample2real.replace(to_replace = oldValue, value = newValue)
                 
             
 
@@ -142,7 +147,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         
     elif method == "gausNoise":
     #Create a noise matrix
-       noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, 150)))
+       ##random.seed(1)
+       noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
        #Add noise to dataset if equal length
       
        
@@ -151,9 +157,10 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
       
        #add noise to random rows matrix from data set
        else:
+           ##random.seed(0)
            data_portion = df.sample(n = nrows, ignore_index=True)
            
-           added_noise = data_portion.add(noise_matrix, fill_value = 0)
+           added_noise = data_portion.add(noise_matrix, fill_value = None)
                    
            data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
            
@@ -199,6 +206,8 @@ def LogReg(dataset, feature_cols, target, split):
     # import the class
     from sklearn.linear_model import LogisticRegression
     
+    ##random.seed(1)
+    
     # instantiate the model (using the default parameters)
     logreg = LogisticRegression(max_iter = 10000)
     
@@ -222,6 +231,7 @@ def knnClassifier(dataframe, feature_cols, target):
     X = dataframe[feature_cols]
     y = dataframe[target]
      
+    ##random.seed(1)
     knn = KNeighborsClassifier(n_neighbors=7)
      
     knn.fit(X, y)
@@ -289,6 +299,8 @@ nValues     Distance      Accuracy
 '''
 def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
     
+    ##random.seed(1)
+    
     logReg = LogReg(dataset = applyAugmentationMethod(dataset, method, nrows, nvalues, unit, noise), feature_cols = feature_cols, target = target, split = split)
     
     predictions = knnClassifier(logReg, feature_cols, target)
@@ -296,12 +308,103 @@ def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, ta
     
     return acc
 
+'''
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
+    
+files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"]
 
-pm1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=0.1, feature_cols = feature_cols, target = 150, split = 500)
+pmOneAcc_Gaus = []
+pmOneAcc_Uniform = []
+pmOneDist = [0.05, 0.25, 0.5, 0.75, 1]
 
-pm2 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "pmOne", nrows = 100, nvalues = 30, unit=100, feature_cols = feature_cols, target = 150, split = 500)
 
-rs1 = distanceAccuracyComparison("Generated Gaussian Distribution.txt", "randSwap", nrows = 100, nvalues = 30, feature_cols = feature_cols, target = 150, split = 500)
+for j in range(len(pmOneDist)):
+    pmOneAcc_Gaus.append(distanceAccuracyComparison(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(pmOneDist)):
+    pmOneAcc_Uniform.append(distanceAccuracyComparison(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
+
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("pmOne Augmentation Method")
+
+ax[0].plot(pmOneDist, pmOneAcc_Gaus)
+ax[1].plot(pmOneDist, pmOneAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("Unit")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Unit")
+
+ax[0].set_xticks(pmOneDist)
+
+plt.tight_layout()
+
+plt.show()
+
+
+gausNoiseAcc_Gaus = []
+gausNoiseAcc_Uniform = []
+gausNoiseDist = [0.05, 0.25, 0.5, 0.75, 1]
+
+for j in range(len(gausNoiseDist)):
+    gausNoiseAcc_Gaus.append(distanceAccuracyComparison(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(gausNoiseDist)):
+    gausNoiseAcc_Uniform.append(distanceAccuracyComparison(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
+
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("gausNoise Augmentation Method")
+
+ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
+ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("Noise %")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Noise %")
+
+ax[0].set_xticks(gausNoiseDist)
+
+plt.tight_layout()
+
+plt.show()
+
+
+randSwapAcc_Gaus = []
+randSwapAcc_Uniform = []
+randSwapDist = [1, 15, 30, 50, 75, 100]
+
+for j in range(len(randSwapDist)):
+    randSwapAcc_Gaus.append(distanceAccuracyComparison(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+for j in range(len(randSwapDist)):
+    randSwapAcc_Uniform.append(distanceAccuracyComparison(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+
+fig.suptitle("randSwap Augmentation Method")
+
+ax[0].plot(randSwapDist, randSwapAcc_Gaus)
+ax[1].plot(randSwapDist, randSwapAcc_Uniform)
+
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("nValues")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("nValues")
+
+ax[0].set_xticks(randSwapDist)
+
+plt.tight_layout()
+
+plt.show()
+'''

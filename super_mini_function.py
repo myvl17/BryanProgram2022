@@ -95,7 +95,7 @@ def OkayFunction(data, classifier, accuracy=None):
         X = dfdrop
         Y = df[df.shape[1] - 1]
         
-        X_train,X_test,Y_train,Y_test = train_test_split(
+        X_train,X_test,Y_train,y_test = train_test_split(
             X,Y,test_size=0.2,random_state=0)
         
         sc = StandardScaler()
@@ -150,5 +150,5 @@ def OkayFunction(data, classifier, accuracy=None):
     return results_df
     
     
-df = OkayFunction("Gaussian_Distribution.txt", classifier= "K_cluster", accuracy= "og")
+df = OkayFunction("Generated Gaussian Distribution.txt", classifier= "ANN")
 print(df)
