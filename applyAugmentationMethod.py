@@ -42,11 +42,11 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
              for i in range(nvalues):
                  
                  # Selects random column index
-                 random.seed(i)
+                 # random.seed(i)
                  random_col = random.randint(0, df.shape[1]-2)
                  
                  # Selects random value from original data frame in the same column
-                 random.seed(i+1)
+                 # random.seed(i+1)
                  rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col] # BREAKS THINGS
                  
                  # Appends rand_value to new column
@@ -72,12 +72,12 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          # in this case it take in the nrows and the # of rows
          if (nrows % 2 == 0):
              random.seed(1)
-             sample1 = df1.sample(n = int(nrows / 2))
-             sample2 = df1.sample(n = int(nrows / 2))
+             sample1 = df1.sample(n = int(nrows / 2), random_state = 0)
+             sample2 = df1.sample(n = int(nrows / 2), random_state = 1)
          else:
              random.seed(0)
-             sample1 = df1.sample(n = int((nrows / 2 ) + 0.5))
-             sample2 = df1.sample(n = int((nrows / 2) - 0.5))
+             sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state = 1)
+             sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state = 1)
              
          # Reset the index in each sample so they increase from 0 to nrows        
          sample1real = sample1.reset_index(drop = True)
@@ -87,9 +87,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          randomlist = []
          for j in range(0, nvalues):
              random.seed(j)
-             n = random.randint(0, 149)
+             n = random.randint(0, df1.shape[1])
              randomlist.append(n)
-             
      # Select one of the random rows then use the random list to 
      # pinpoint one specfic number in the dataframe and add or 
      # subtract the unit specified in the function
@@ -99,13 +98,13 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                  newValue = oldValue + unit
                  # Replace the oldvalue with the new value in the
                  # samples set
-                 sample1real.replace(to_replace = oldValue, value = newValue)
-            
+                 sample1real = sample1real.replace(to_replace = oldValue, value = newValue)
+                 
          for i in range(len(sample2real)):
              for j in randomlist:
                  oldValue = (sample2real.iloc[i, j])
                  newValue = oldValue - unit
-                 sample2real.replace(to_replace = oldValue, value = newValue)
+                 sample2real = sample2real.replace(to_replace = oldValue, value = newValue)
          
  
          # Put the two samples together and mix them

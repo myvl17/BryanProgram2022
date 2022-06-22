@@ -12,6 +12,8 @@ np.savetxt("Uniform_Data_1.0_Unit.txt", generateRawData(500, 150, 1.5, "uniform"
 
 np.savetxt("Uniform_Data_0.6_Unit.txt", generateRawData(500, 150, 0.6, "uniform"))
 
+np.savetxt("Uniform_Data_0.05_Unit.txt", generateRawData(500, 150, 0.05, "uniform"))
+
 np.savetxt("Uniform_Data_0.15_Unit.txt", generateRawData(500, 150, 0.15, "uniform"))
 
 np.savetxt("Gaussian_Data_1.5_Unit.txt", generateRawData(500, 150, 1.5, "gaussian"))
@@ -19,6 +21,8 @@ np.savetxt("Gaussian_Data_1.5_Unit.txt", generateRawData(500, 150, 1.5, "gaussia
 np.savetxt("Gaussian_Data_1.0_Unit.txt", generateRawData(500, 150, 1.0, "gaussian"))
 
 np.savetxt("Gaussian_Data_0.5_Unit.txt", generateRawData(500, 150, 0.5, "gaussian"))
+
+np.savetxt("Gaussian_Data_0.05_Unit.txt", generateRawData(500, 150, 0.05, "gaussian"))
 
 from applyAugmentationMethod import applyAugmentationMethod
 
@@ -33,3 +37,4 @@ applyAugmentationMethod('synthetic_data_with_labels.txt', "randSwap", 200, 30)
 applyAugmentationMethod('synthetic_data_with_labels.txt', "pmOne", 200, 30, unit = 0.1)
 
 applyAugmentationMethod('synthetic_data_with_labels.txt', "gausNoise", 200, 30, noise = 0.05)
+
