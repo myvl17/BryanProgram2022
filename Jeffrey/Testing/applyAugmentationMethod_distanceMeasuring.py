@@ -200,7 +200,7 @@ def LogReg(dataset, feature_cols, target, split):
     # Splitting the sets
     # Test_size indicates the ratio of testing to training data ie 0.25:0.75
     # Random_state indicates to select data randomly
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, shuffle = False,  stratify = None) 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, test_size=dataset.shape[0]-split, shuffle = False,  stratify = None) 
     
     
     # import the class
@@ -214,32 +214,33 @@ def LogReg(dataset, feature_cols, target, split):
     # fit the model with data
     logreg.fit(X_train,y_train)
     
+    
     # create the prediction
     y_pred= logreg.predict(X_test)
     
     
     # Appends predicted labels to NAN
     for i in range(split, dataset.shape[0]):
-        dataset.loc[i, target] = y_pred[split-i]
-    
-    return dataset
+        dataset.loc[i, target] = y_pred[i-split]
 
 
 from sklearn.neighbors import KNeighborsClassifier
 
-def knnClassifier(dataframe, feature_cols, target):
-    X = dataframe[feature_cols]
-    y = dataframe[target]
+def knnClassifier(df, feature_cols, split):
+    
+    # X_train, X_test, y_train, y_test = train_test_split(
+    #          X, y, train_size = split)
+
+ 
+    knn = KNeighborsClassifier(n_neighbors=3)
      
-    ##random.seed(1)
-    knn = KNeighborsClassifier(n_neighbors=7)
-     
-    knn.fit(X, y)
+    knn.fit(df.iloc[:split, :2], df.iloc[:split, 2])
      
     # Predict on dataset which model has not seen before
-    predictions = knn.predict(X)
     
-    return predictions
+    #print(accuracy_score(df.iloc[split:, df.shape[1]-1], knn.predict(df.iloc[5:, :2])))
+    
+    return knn.predict(df.iloc[5:, :2])
 
 
 def accuracy(file, predictions):
@@ -297,18 +298,20 @@ nValues     Distance      Accuracy
 
 ----------------------------------
 '''
+
+'''
 def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
     
     ##random.seed(1)
     
     logReg = LogReg(dataset = applyAugmentationMethod(dataset, method, nrows, nvalues, unit, noise), feature_cols = feature_cols, target = target, split = split)
     
-    predictions = knnClassifier(logReg, feature_cols, target)
+    predictions = knnClassifier(logReg, feature_cols, split)
     acc = accuracy(logReg, predictions)
     
     return acc
 
-'''
+
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
