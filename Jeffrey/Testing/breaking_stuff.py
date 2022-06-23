@@ -20,9 +20,9 @@ np.savetxt("breaking.txt", df)
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 
-def betterKNN(df, feature_cols, split):
+def betterKNN(df, feature_cols, split, kNeigh):
     
-    knn = KNeighborsClassifier(n_neighbors=250)
+    knn = KNeighborsClassifier(n_neighbors=kNeigh)
      
     knn.fit(df.iloc[:split, :df.shape[1]-1], df.iloc[:split, df.shape[1]-1])
     
@@ -131,7 +131,7 @@ kNNClass = betterKNN(logReg, [0,1], 5)
 '''
 
 
-def superFunction(file, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
+def superFunction(file, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None, kNeigh=None or 100):
     aug = applyAugmentationMethod(file, method, nrows, nvalues, unit, noise)
     
     logReg = betterLogReg(aug, feature_cols, target, split)
@@ -139,7 +139,7 @@ def superFunction(file, method, nrows, nvalues, feature_cols, target, split, uni
     # plt.scatter(logReg[0], logReg[1], c=logReg[logReg.shape[1]-1])
     # plt.show()
     
-    knnClass = betterKNN(logReg, feature_cols, split)
+    knnClass = betterKNN(logReg, feature_cols, split, kNeigh)
     
     return knnClass
 
@@ -148,7 +148,7 @@ feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
     
-# print(superFunction(file="Generated Gaussian Distribution.txt", method="randSwap", nrows=500, nvalues=100, unit=10, feature_cols=feature_cols, target=150, split=500))
+# print(superFunction(file="Generated Gaussian Distribution.txt", method="randSwap", nrows=500, nvalues=100, unit=10, feature_cols=feature_cols, target=150, split=500, kNeigh=100))
 
 files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"]
 
@@ -215,33 +215,33 @@ files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"
 # plt.show()
 
 
-# randSwapAcc_Gaus = []
-# randSwapAcc_Uniform = []
-# randSwapDist = [1, 15, 30, 50, 100, 150]
+randSwapAcc_Gaus = []
+randSwapAcc_Uniform = []
+randSwapDist = [1, 15, 30, 50, 100, 150]
 
-# for j in range(len(randSwapDist)):
-#     randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+for j in range(len(randSwapDist)):
+    randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
     
-# for j in range(len(randSwapDist)):
-#     randSwapAcc_Uniform.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+for j in range(len(randSwapDist)):
+    randSwapAcc_Uniform.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
     
-# fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
 
-# fig.suptitle("randSwap Augmentation Method")
+fig.suptitle("randSwap Augmentation Method")
 
-# ax[0].plot(randSwapDist, randSwapAcc_Gaus)
-# ax[1].plot(randSwapDist, randSwapAcc_Uniform)
+ax[0].plot(randSwapDist, randSwapAcc_Gaus)
+ax[1].plot(randSwapDist, randSwapAcc_Uniform)
 
-# ax[0].set_title("Gaussian Distribution")
-# ax[0].set_ylabel("Accuracy")
-# ax[0].set_xlabel("nValues")
-# ax[1].set_title("Uniform Distribution")
-# ax[1].set_ylabel("Accuracy")
-# ax[1].set_xlabel("nValues")
+ax[0].set_title("Gaussian Distribution")
+ax[0].set_ylabel("Accuracy")
+ax[0].set_xlabel("nValues")
+ax[1].set_title("Uniform Distribution")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("nValues")
 
-# ax[0].set_xticks(randSwapDist)
+ax[0].set_xticks(randSwapDist)
 
-# plt.tight_layout()
+plt.tight_layout()
 
-# plt.show()
+plt.show()
 
