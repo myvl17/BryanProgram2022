@@ -219,11 +219,13 @@ randSwapAcc_Gaus = []
 randSwapAcc_Uniform = []
 randSwapDist = [1, 15, 30, 50, 100, 150]
 
+kNeigh = 200
+
 for j in range(len(randSwapDist)):
-    randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500, kNeigh=kNeigh))
     
 for j in range(len(randSwapDist)):
-    randSwapAcc_Uniform.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
+    randSwapAcc_Uniform.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500, kNeigh=kNeigh))
     
 fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
 
