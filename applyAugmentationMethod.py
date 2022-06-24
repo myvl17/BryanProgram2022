@@ -15,7 +15,7 @@ gausDistribution = "Generated Gaussian Distribution.txt"
 
 def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
     # Seed so same random
-     random.seed(1)
+     # random.seed(1)
     # Reads .txt data frame file
      df = pd.read_table(file, delimiter=" ", header=None)
      
@@ -28,6 +28,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          for k in range(0, nrows, 1):
                     
              # Selects random row index
+             random.seed(k)
              random_row = random.randint(0, df.shape[0]-1)
              
              # Adds new row from pre-existing random row
@@ -41,9 +42,11 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
              for i in range(nvalues):
                  
                  # Selects random column index
+                 # random.seed(i)
                  random_col = random.randint(0, df.shape[1]-2)
                  
                  # Selects random value from original data frame in the same column
+                 # random.seed(i+1)
                  rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col] # BREAKS THINGS
                  
                  # Appends rand_value to new column
@@ -68,11 +71,13 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          # The sample function takes random rows from the df
          # in this case it take in the nrows and the # of rows
          if (nrows % 2 == 0):
-             sample1 = df1.sample(n = int(nrows / 2))
-             sample2 = df1.sample(n = int(nrows / 2))
+             random.seed(1)
+             sample1 = df1.sample(n = int(nrows / 2), random_state = 0)
+             sample2 = df1.sample(n = int(nrows / 2), random_state = 1)
          else:
-             sample1 = df1.sample(n = int((nrows / 2 ) + 0.5))
-             sample2 = df1.sample(n = int((nrows / 2) - 0.5))
+             random.seed(0)
+             sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state = 1)
+             sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state = 1)
              
          # Reset the index in each sample so they increase from 0 to nrows        
          sample1real = sample1.reset_index(drop = True)
@@ -81,9 +86,9 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
      # Create a list of random numbers
          randomlist = []
          for j in range(0, nvalues):
-             n = random.randint(0, 149)
+             random.seed(j)
+             n = random.randint(0, df1.shape[1])
              randomlist.append(n)
-             
      # Select one of the random rows then use the random list to 
      # pinpoint one specfic number in the dataframe and add or 
      # subtract the unit specified in the function
@@ -93,13 +98,13 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                  newValue = oldValue + unit
                  # Replace the oldvalue with the new value in the
                  # samples set
-                 sample1real.replace(to_replace = oldValue, value = newValue)
-            
+                 sample1real = sample1real.replace(to_replace = oldValue, value = newValue)
+                 
          for i in range(len(sample2real)):
              for j in randomlist:
                  oldValue = (sample2real.iloc[i, j])
                  newValue = oldValue - unit
-                 sample2real.replace(to_replace = oldValue, value = newValue)
+                 sample2real = sample2real.replace(to_replace = oldValue, value = newValue)
          
  
          # Put the two samples together and mix them
@@ -112,6 +117,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          
      elif method == "gausNoise":
      #Create a noise matrix
+        random.seed(1)
         noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, 150)))
         #Add noise to dataset if equal length
         if len(df) == nrows:
@@ -119,6 +125,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
        
         #add noise to random rows matrix from data set
         else:
+            random.seed(0)
             data_portion = df.sample(n = nrows, ignore_index=True)
             
             data_portion.add(noise_matrix, fill_value = 0)
@@ -132,19 +139,19 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          return None
      
     
-randSwap = applyAugmentationMethod("Generated Gaussian Distribution.txt", "randSwap", 100, 30)
-plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
-plt.scatter(randSwap[0], randSwap[1], c="r", alpha=0.2)
-plt.show()
+# randSwap = applyAugmentationMethod("Generated Gaussian Distribution.txt", "randSwap", 100, 30)
+# plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
+# plt.scatter(randSwap[0], randSwap[1], c="r", alpha=0.2)
+# plt.show()
 
-pmOne = applyAugmentationMethod("Generated Gaussian Distribution.txt", "pmOne", 100, 30, 0.1)
-plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
-plt.scatter(pmOne[0], pmOne[1], c="r", alpha=0.4)
-plt.show()
+# pmOne = applyAugmentationMethod("Generated Gaussian Distribution.txt", "pmOne", 100, 30, 0.1)
+# plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
+# plt.scatter(pmOne[0], pmOne[1], c="r", alpha=0.4)
+# plt.show()
 
-gausNoise = applyAugmentationMethod("Generated Gaussian Distribution.txt", "gausNoise", 100, 30, noise=0.05)
-plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
-plt.scatter(gausNoise[0], gausNoise[1], c="r", alpha=0.4)
-plt.show()
+# gausNoise = applyAugmentationMethod("Generated Gaussian Distribution.txt", "gausNoise", 100, 30, noise=0.05)
+# plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
+# plt.scatter(gausNoise[0], gausNoise[1], c="r", alpha=0.4)
+# plt.show()
 
 
