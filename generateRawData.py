@@ -13,7 +13,7 @@ import pandas as pd
 # program runs
 np.random.seed(1)
 
-def generateRawData(nrows, ncolumns, distance, distribution):
+def generateRawData(nrows, ncolumns, distance, distribution, name):
     if distribution == "uniform":
         
         # The first points will always be between 0 and 1
@@ -40,7 +40,7 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         dfreal = pd.DataFrame(perm)
         
         # Save the dataframe to a text file if others want to use
-        np.savetxt('synthetic_data', dfreal)
+        np.savetxt(name, dfreal)
         
         fig, ax = plt.subplots()
         plt.scatter(df[0], df[1])
@@ -73,9 +73,9 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         plt.show()
         
         # Saves generated Gaussian distribution in same folder as file
-        np.savetxt("Generated Gaussian Distribution.txt", shuffled_df)
+        np.savetxt(name, shuffled_df)
         
         return shuffled_df
 
-raw_uniform = generateRawData(500, 150, 2, "uniform")
-raw_gaussian = generateRawData(500, 150, -10, "gaussian")
+# raw_uniform = generateRawData(500, 150, 2, "uniform")
+# raw_gaussian = generateRawData(500, 150, -10, "gaussian")
