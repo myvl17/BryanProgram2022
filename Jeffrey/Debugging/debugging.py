@@ -9,12 +9,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-from generateRawData import generateRawData
-
-generateRawData(100, 50, -2, 'gaussian')
-
-
 x = [0.25, 0.5, 0.75, 3.25, 3.75]
 y = [0.25, 0.75, 0.5, 2.5, 2.25]
 labels = [0,0,0,1,1]
@@ -33,10 +27,6 @@ def betterKNN(df, feature_cols, split, kNeigh):
     knn.fit(df.iloc[:split, :df.shape[1]-1], df.iloc[:split, df.shape[1]-1])
     
     y_pred = knn.predict(df.iloc[split:, :df.shape[1]-1])
-    
-    # knn.fit(df.iloc[:, :df.shape[1]-1], df.iloc[:, df.shape[1]-1])
-    
-    # y_pred = knn.predict(df.iloc[:, :df.shape[1]-1])
     
     #print(f1_score(df.iloc[split:, df.shape[1]-1], y_pred))
     return accuracy_score(df.iloc[split:, df.shape[1]-1], y_pred)
@@ -153,6 +143,8 @@ def superFunction(file, method, nrows, nvalues, feature_cols, target, split, uni
     
     return knnClass
 
+superFunction()
+
 
 feature_cols = []
 for i in range(0, 149, 1):
@@ -194,44 +186,42 @@ files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"
 # plt.show()
 
 
-gausNoiseAcc_Gaus = []
-gausNoiseAcc_Uniform = []
-gausNoiseDist = [1, 10, 25, 50, 75, 100]
+# gausNoiseAcc_Gaus = []
+# gausNoiseAcc_Uniform = []
+# gausNoiseDist = [1, 10, 25, 50, 100]
 
-kNeigh = 16
-
-for j in range(len(gausNoiseDist)):
-    gausNoiseAcc_Gaus.append(superFunction(files[0], "gausNoise", nrows=499, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500, kNeigh=kNeigh))
+# for j in range(len(gausNoiseDist)):
+#     gausNoiseAcc_Gaus.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
     
-for j in range(len(gausNoiseDist)):
-    gausNoiseAcc_Uniform.append(superFunction(files[0], "gausNoise", nrows=499, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500, kNeigh=kNeigh))
+# for j in range(len(gausNoiseDist)):
+#     gausNoiseAcc_Uniform.append(superFunction(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
 
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
+# fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
 
-fig.suptitle("gausNoise Augmentation Method")
+# fig.suptitle("gausNoise Augmentation Method")
 
-ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
-ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
+# ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
+# ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
 
-ax[0].set_title("Gaussian Distribution")
-ax[0].set_ylabel("Accuracy")
-ax[0].set_xlabel("Noise")
-ax[1].set_title("Uniform Distribution")
-ax[1].set_ylabel("Accuracy")
-ax[1].set_xlabel("Noise")
+# ax[0].set_title("Gaussian Distribution")
+# ax[0].set_ylabel("Accuracy")
+# ax[0].set_xlabel("Noise %")
+# ax[1].set_title("Uniform Distribution")
+# ax[1].set_ylabel("Accuracy")
+# ax[1].set_xlabel("Noise %")
 
-ax[0].set_xticks(gausNoiseDist)
+# ax[0].set_xticks(gausNoiseDist)
 
-plt.tight_layout()
+# plt.tight_layout()
 
-plt.show()
+# plt.show()
 
 
 # randSwapAcc_Gaus = []
 # randSwapAcc_Uniform = []
 # randSwapDist = [1, 15, 30, 50, 100, 150]
 
-# kNeigh = None
+# kNeigh = 200
 
 # for j in range(len(randSwapDist)):
 #     randSwapAcc_Gaus.append(superFunction(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500, kNeigh=kNeigh))
