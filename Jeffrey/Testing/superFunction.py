@@ -49,13 +49,13 @@ def generateRawData(nrows, ncolumns, distance, distribution, name):
         return dfreal
     else:
         # Creates first Gaussian distribution
-        label1 = pd.DataFrame(np.random.normal(-5, (10 - distance)/(4), size=(int(nrows/2), ncolumns)))
+        label1 = pd.DataFrame(np.random.normal(-5, (10 - distance)/(2), size=(int(nrows/2), ncolumns)))
         # Adds new column for label
         label1['label'] = 0
         
         
         # Creates second Gaussian distribution
-        label2 = pd.DataFrame(np.random.normal(5, (10 - distance)/(4), size=(int(nrows/2), ncolumns)))
+        label2 = pd.DataFrame(np.random.normal(5, (10 - distance)/(2), size=(int(nrows/2), ncolumns)))
         # Adds new column for label
         label2['label'] = 1
         
@@ -303,11 +303,11 @@ def runClassifier(df, classifier, accuracy=None):
         
         # Split into training and test set
         X_train, X_test, y_train, y_test = train_test_split(
-                     X, Y, test_size = 0.1, random_state=42)
+                     X, Y, test_size = 0.2, random_state=42)
          
-        knn = KNeighborsClassifier(n_neighbors=50)
+        knn = KNeighborsClassifier(n_neighbors=3, weights = 'distance')
          
-        knn.fit(X_train, y_train)
+        knn = knn.fit(X_train, y_train)
          
         # Predict on dataset which model has not seen before
         predicted_values = knn.predict(X_test)
@@ -432,9 +432,8 @@ def superFunction(file, method, nrows, nvalues, feature_cols, target, split, cla
     print(classifier)
     
     
-data = generateRawData(100, 50, -5, 'gaussian', 'test')
+data = generateRawData(16, 2, -3, 'gaussian', 'test')
 
-print(runClassifier(data, 'Naive_bayes', 'f1'))
 
 feature_cols = []
 for i in range(0, 149, 1):
