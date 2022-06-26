@@ -76,9 +76,9 @@ def generateRawData(nrows, ncolumns, distance, distribution, name):
         return shuffled_df
 
 
-def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
+def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
     # Reads .txt data frame file
-    df = pd.read_table(file, delimiter=" ", header=None)
+    # df = pd.read_table(file, delimiter=" ", header=None)
     
     # Vector of original and augmented points
     original_points = []
@@ -135,6 +135,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         return finished_df
         
     elif method == "pmOne":
+        random.seed(1)
+        
         # Reads in the dataset needed, dropping whatever column contains
         # the labels/status
 
@@ -145,23 +147,44 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         # if statement to determine if the number of rows entered is odd
         # The sample function takes random rows from the df
         # in this case it take in the nrows and the # of rows
+        
+        sample1 = pd.DataFrame()
+        sample2 = pd.DataFrame()
+        
         if (nrows % 2 == 0):
             ##random.seed(1)
+            '''
             sample1 = df1.sample(n = int(nrows / 2), random_state=(0))
             sample2 = df1.sample(n = int(nrows / 2), random_state=(0))
+            '''
+            
+            for i in range(int(nrows/2)):
+                random.seed(i)
+                sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
+                sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
+            
+            
         else:
             ##random.seed(0)
-            sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state=(1))
-            sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state=(1))
+            
+            # sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state=(1))
+            # sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state=(1))
+            
+            
+            for k in range(int(nrows / 2 + .5)):
+                random.seed(k)
+                sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
+                sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
         # Reset the index in each sample so they increase from 0 to nrows        
         sample1real = sample1.reset_index(drop = True)
         sample2real = sample2.reset_index(drop = True)
         
+        
     # Create a list of random numbers
         randomlist = []
         for j in range(0, nvalues):
-            ##random.seed(j)
+            random.seed(j)
             n = random.randint(0, df.shape[1]-2)
             randomlist.append(n)
             
@@ -170,7 +193,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
     # subtract the unit specified in the function
         for i in range(len(sample1real)):
             for j in randomlist:
-                oldValue = (sample1real.iloc[i, j])
+    
+                oldValue = sample1real.iloc[i, j]
                 newValue = oldValue + unit
                 
                 # Appends old and new values to augmented_points vector to keep track for distance
@@ -424,26 +448,29 @@ def runClassifier(df, classifier, accuracy=None):
 def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
     augmentation = applyAugmentationMethod(file, method, nrows, nvalues, unit=unit, noise=noise)
     
-    print(augmentation)
-    
     logRegression = logReg(augmentation, feature_cols, target, split)
     classifier = runClassifier(logRegression, classifier)
     
     print(classifier)
     
     
-data = generateRawData(16, 2, -3, 'gaussian', 'test')
+# data = generateRawData(16, 2, -3, 'gaussian', 'test')
+# print(runClassifier(data, 'kNN'))
 
+# save = np.savetxt('small_df.txt', data)
 
-feature_cols = []
-for i in range(0, 149, 1):
-    feature_cols.append(i)
+# feature_cols = []
+# for i in range(0, 149, 1):
+#     feature_cols.append(i)
+    
+# print(runClassifier(df, 'kNN'))
+    
+# plsBreak = superFunction(file=df, method='pmOne', nrows=10, nvalues=1, feature_cols=[0,1], target=2, split=16, unit=0.1, classifier='kNN')
     
 # test = superFunction(file='Generated Gaussian Distribution.txt', method='pmOne', nrows=500, nvalues=150, unit=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
 
 # test = superFunction(file='Generated Gaussian Distribution.txt', method='randSwap', nrows=100, nvalues=50, noise=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
-
-
-
+df = pd.read_table('breaking.txt', delimiter=" ", header=None)
+test = applyAugmentationMethod(df, 'pmOne', 10, 1, unit=0.1)
