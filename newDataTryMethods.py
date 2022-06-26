@@ -24,17 +24,30 @@ np.savetxt("Gaussian_Data_0.5_Unit.txt", generateRawData(500, 150, 0.5, "gaussia
 
 np.savetxt("Gaussian_Data_0.05_Unit.txt", generateRawData(500, 150, 0.05, "gaussian"))
 
+np.savetxt("Uniform_Data_0.0001_Unit.txt", generateRawData(500, 150, 0.0001, "uniform"))
+
+np.savetxt("Gaussian_Data_0.0001_Unit.txt", generateRawData(500, 150, 0.0001, "gaussian"))
+
+np.savetxt("Uniform_Data_10e-10_Unit.txt", generateRawData(500, 150, 0.0000000001, "uniform"))
+
+np.savetxt("Gaussian_Data_-5_Unit.txt", generateRawData(500, 150, -5, "gaussian"))
+
+np.savetxt("Uniform_Data_10e-30_Unit.txt", generateRawData(500, 150, 10**-30, "uniform"))
+
+np.savetxt("Gaussian_Data_-10_Unit.txt", generateRawData(500, 150, -10, "gaussian"))
+
+
 from applyAugmentationMethod import applyAugmentationMethod
 
-applyAugmentationMethod('Generated Gaussian Distribution.txt', "randSwap", 200, 30)
+# applyAugmentationMethod('Generated Gaussian Distribution.txt', "randSwap", 200, 30)
 
-applyAugmentationMethod('Generated Gaussian Distribution.txt', "pmOne", 200, 30, unit = 0.1)
+# applyAugmentationMethod('Generated Gaussian Distribution.txt', "pmOne", 200, 30, unit = 0.1)
 
-applyAugmentationMethod('Generated Gaussian Distribution.txt', "gausNoise", 200, 30, noise = 0.05)
+# applyAugmentationMethod('Generated Gaussian Distribution.txt', "gausNoise", 200, 30, noise = 0.05)
 
-applyAugmentationMethod('synthetic_data_with_labels.txt', "randSwap", 200, 30)
+# applyAugmentationMethod('synthetic_data_with_labels.txt', "randSwap", 200, 30)
 
-applyAugmentationMethod('synthetic_data_with_labels.txt', "pmOne", 200, 30, unit = 0.1)
+# applyAugmentationMethod('synthetic_data_with_labels.txt', "pmOne", 200, 30, unit = 0.1)
 
-applyAugmentationMethod('synthetic_data_with_labels.txt', "gausNoise", 200, 30, noise = 0.05)
+# applyAugmentationMethod('synthetic_data_with_labels.txt', "gausNoise", 200, 30, noise = 0.05)
 

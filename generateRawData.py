@@ -40,7 +40,7 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         dfreal = pd.DataFrame(perm)
         
         # Save the dataframe to a text file if others want to use
-        np.savetxt('synthetic_data', dfreal)
+        # np.savetxt('synthetic_data_with_labels.txt', dfreal)
         
         fig, ax = plt.subplots()
         plt.scatter(df[0], df[1])
@@ -73,7 +73,7 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         plt.show()
         
         # Saves generated Gaussian distribution in same folder as file
-        np.savetxt("Generated Gaussian Distribution.txt", shuffled_df)
+        # np.savetxt("Generated Gaussian Distribution.txt", shuffled_df)
         
         return shuffled_df
 

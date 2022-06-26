@@ -57,6 +57,10 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          
          finished_df = pd.concat([df, augmented_df], ignore_index=True)
          
+         plt.scatter(df[0], df[1], c="b")
+         plt.scatter(finished_df[0], finished_df[1] , c="r")
+         plt.show()
+         
          return finished_df
          
      elif method == "pmOne":
@@ -113,6 +117,10 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          
          finished_df = pd.concat([df, dfreal], ignore_index=True)
          
+         plt.scatter(df[0], df[1], c="b", alpha=0.4)
+         plt.scatter(finished_df[0], finished_df[1] , c="r", alpha=0.2)
+         plt.show()
+         
          return finished_df
          
      elif method == "gausNoise":
@@ -122,7 +130,10 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         #Add noise to dataset if equal length
         if len(df) == nrows:
             return (df.add(noise_matrix, fill_value = 0))
-       
+            plt.scatter(df[0], df[1], c="b", alpha=0.4)
+            plt.scatter(finished_df[0], finished_df[1] , c="r", alpha=0.2)
+            plt.show()
+        
         #add noise to random rows matrix from data set
         else:
             random.seed(0)
@@ -133,12 +144,16 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
             
             finished_df = pd.concat([df, data_portion], ignore_index=True)
-            
+
+            plt.scatter(df[0], df[1], c="b", alpha=0.4)
+            plt.scatter(finished_df[0], finished_df[1] , c="r", alpha=0.2)
+            plt.show()
+                             
             return finished_df
      else:
          return None
      
-    
+
 # randSwap = applyAugmentationMethod("Generated Gaussian Distribution.txt", "randSwap", 100, 30)
 # plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
 # plt.scatter(randSwap[0], randSwap[1], c="r", alpha=0.2)
