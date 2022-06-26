@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun 17 13:47:40 2022
+Created on Fri Jun 24 14:33:06 2022
 
 @author: jeffr
 """
@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import sklearn.metrics as skm
 
 
 def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
@@ -180,16 +181,11 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
     else:
         return None
     
-def norm1Distance(original_points, augmented_points):
-    return np.mean(np.abs(np.array(original_points) - np.array(augmented_points)))
-
-
+  
 from sklearn.model_selection import train_test_split
-import sklearn.metrics 
-
-def LogReg(dataset, feature_cols, target, split):
+def logReg(dataset, feature_cols, target, split):
         
-    # Feature variables
+   # Feature variables
     X = dataset[feature_cols]
     
     # Target variable
@@ -200,216 +196,186 @@ def LogReg(dataset, feature_cols, target, split):
     # Splitting the sets
     # Test_size indicates the ratio of testing to training data ie 0.25:0.75
     # Random_state indicates to select data randomly
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, test_size=dataset.shape[0]-split, shuffle = False,  stratify = None) 
-    
-    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, shuffle = False,  stratify = None) 
+
     # import the class
     from sklearn.linear_model import LogisticRegression
     
-    ##random.seed(1)
-    
     # instantiate the model (using the default parameters)
+    random.seed(1)
     logreg = LogisticRegression(max_iter = 10000)
     
     # fit the model with data
-    logreg.fit(X_train,y_train)
     
+    #print(y_train)
+    logreg.fit(X_train,y_train)
     
     # create the prediction
     y_pred= logreg.predict(X_test)
-    
-    
+
     # Appends predicted labels to NAN
     for i in range(split, dataset.shape[0]):
-        dataset.loc[i, target] = y_pred[i-split]
+        dataset.loc[i, target] = y_pred[i - split]
+    
+    return dataset
 
 
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.cluster import KMeans
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import StandardScaler
+import tensorflow as tf
 
-from sklearn.metrics import accuracy_score
-
-def knnClassifier(df, feature_cols, split):
+def runClassifier(df, classifier, accuracy=None):
+    dfdrop = df.drop(columns = df.shape[1] - 1)
     
-    knn = KNeighborsClassifier(n_neighbors=3)
+    results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
+    
+    if classifier == "kNN":
      
-    knn.fit(df.iloc[:split, :df.shape[1]-1], df.iloc[:split, df.shape[1]-1])
-     
-    # Predict on dataset which model has not seen before
+        X = dfdrop
+        Y = df[df.shape[1] - 1]
+        
+        # Split into training and test set
+        X_train, X_test, y_train, y_test = train_test_split(
+                     X, Y, test_size = 0.2, random_state=42)
+         
+        knn = KNeighborsClassifier(n_neighbors=7)
+         
+        knn.fit(X_train, y_train)
+         
+        # Predict on dataset which model has not seen before
+        predicted_values = knn.predict(X_test)
     
-    #print(accuracy_score(df.iloc[split:, df.shape[1]-1], knn.predict(df.iloc[5:, :2])))
+    elif classifier == "D_tree":
+        
+        X = dfdrop
+        Y = df.df[df.shape[1] - 1]
+        
+        X_train, X_test, y_train, y_test = train_test_split( 
+    X, Y, test_size = 0.3, random_state = 100)
+        
+        clf_gini = DecisionTreeClassifier(criterion = "gini",
+            random_state = 100,max_depth=3, min_samples_leaf=5)
+        
+        clf_gini.fit(X_train, y_train)
+        
+        predicted_values = clf_gini.predict(X_test)
+        
+    elif classifier == "K_cluster":
+        
+        x = df.iloc[:,1:len(df.columns) - 1] 
+
+        kmeans = KMeans(2)
+        kmeans.fit(x)
+
+        predicted_values = kmeans.fit_predict(x)
+
+        
+    elif classifier == "Naive_bayes":
+        
+        X = dfdrop
+        Y = df.df[df.shape[1] - 1]
+        
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, Y, test_size = 0.20, random_state = 0)
+        
+        classifier = GaussianNB()
+        classifier.fit(X_train, y_train)
+        
+        predicted_values  =  classifier.predict(X_test)
     
-    #print(accuracy_score(df.iloc[split:, df.shape[1]-1], knn.predict(df.iloc[5:, :2])))
+    elif classifier == "ANN":
+        
+        X = dfdrop
+        Y = df.df[df.shape[1] - 1]
+        
+       #Splitting dataset into training and testing dataset
+        X_train,X_test,Y_train,Y_test = train_test_split(X,Y,test_size=5,random_state=42, shuffle= False)
+
+        #Performing Feature Scaling
+        sc = StandardScaler()
+        X_train = sc.fit_transform(X_train)
+        X_test = sc.transform(X_test)
+
+        #Initialising Artificial Neural Network
+        ann = tf.keras.models.Sequential()
+
+        #Adding Hidden Layers
+        ann.add(tf.keras.layers.Dense(units=6,activation="relu"))
+        ann.add(tf.keras.layers.Dense(units=6,activation="relu"))
+        
+        #Adding output layers
+        ann.add(tf.keras.layers.Dense(units=1,activation="sigmoid"))
+
+        #compiling the Artificial Neural Network
+        ann.compile(optimizer="adam",loss="binary_crossentropy",metrics=['accuracy'])
+
+        #Fitting the Artificial Neural Network
+        ann.fit(X_train,Y_train,batch_size=32,epochs = 100)
+
+        #Generate the predicted labels
+        first_predicted_values = ann.predict(X_test)
+        second_predicted_labels = first_predicted_values > .5
+        final_predicted_labels  = second_predicted_labels* 1
+        predicted_values = final_predicted_labels
     
-    y_pred = knn.predict(df.iloc[split:, :df.shape[1]-1])
+    #Accuracy
+    if (accuracy == "og"): 
+        acc = skm.accuracy_score(y_test, predicted_values)
+        results_df = results_df.append({'Accuracy' : acc}, ignore_index=True)
+        
+    elif (accuracy == "mae"):
+        mae_accuracy = skm.mean_absolute_error(y_test, predicted_values)
+        results_df = results_df.append({'Mean Absolute Error' : mae_accuracy}, ignore_index=True)
+
     
+    elif (accuracy == "rmse"):
+        rmse_accuracy = skm.mean_squared_error(y_test, predicted_values,
+                                                    squared=False)
+        results_df = results_df.append({'Rooted Mean Square Error' : rmse_accuracy}, ignore_index=True)
+
     
-    return accuracy_score(df.iloc[split:, df.shape[1]-1], y_pred)
+    elif(accuracy == "f1"):
+        f1_accuracy = skm.f1_score(y_test, predicted_values)
+        results_df = results_df.append({'F1 Score' : f1_accuracy}, ignore_index=True)
 
+        
+    else:
+        acc = skm.accuracy_score(y_test, predicted_values)
+        mae_accuracy = skm.mean_absolute_error(y_test, predicted_values)
+        rmse_accuracy = skm.mean_squared_error(y_test, predicted_values,
+                                                    squared=False)
+        f1_accuracy = skm.f1_score(y_test, predicted_values)
+        
+        results_df = results_df.append({'Accuracy' : acc, 
+                           'Mean Absolute Error':mae_accuracy,
+                           'Rooted Mean Square Error':rmse_accuracy,
+                           'F1 Score':f1_accuracy}, ignore_index=True)
+        
+        
+    return results_df
 
-def accuracy(file, predictions):
-    # Grabs last column containing labels
-    return sklearn.metrics.accuracy_score(file[150], predictions)
+def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
+    augmentation = applyAugmentationMethod(file, method, nrows, nvalues, unit=unit, noise=noise)
     
-''' 
-# randSwap = applyAugmentationMethod("Generated Gaussian Distribution.txt", "randSwap", 10, 30)
-# plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
-# plt.scatter(randSwap[0], randSwap[1], c="r", alpha=0.2)
-# plt.show()
-
-# pmOne = applyAugmentationMethod("Generated Gaussian Distribution.txt", "pmOne", 100, 30, 0.1)
-# plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
-# plt.scatter(pmOne[0], pmOne[1], c="r", alpha=0.4)
-# plt.show()
-
-# gausNoise = applyAugmentationMethod("Generated Gaussian Distribution.txt", "gausNoise", 1, 30, noise=.05)
-# plt.scatter(pd.read_table(gausDistribution, delimiter=" ", header=None)[0], pd.read_table(gausDistribution, delimiter=" ", header=None)[1], c="b", alpha=0.4)
-# plt.scatter(gausNoise[0], gausNoise[1], c="r", alpha=0.4)
-# plt.show()
-'''
-
-'''
-pmOne
-===================================
-Units       Distance       Accuracy
-1
-.5
-.25
-0.1
-0.05
------------------------------------
-
-gausNoise
-==================================
-%noise      Distance      Accuracy
-1.00
-.75
-.50
-.30
-.10
-0.05
-
-----------------------------------
-
-randSwap
-==================================
-nValues     Distance      Accuracy
-100
-10
-30
-50
-1
-
-----------------------------------
-'''
-
-def distanceAccuracyComparison(dataset, method, nrows, nvalues, feature_cols, target, split, unit=None, noise=None):
+    print(augmentation)
     
-    ##random.seed(1)
+    logRegression = logReg(augmentation, feature_cols, target, split)
+    classifier = runClassifier(logRegression, classifier)
     
-    logReg = LogReg(dataset = applyAugmentationMethod(dataset, method, nrows, nvalues, unit, noise), feature_cols = feature_cols, target = target, split = split)
+    print(classifier)
     
-    predictions = knnClassifier(logReg, feature_cols, split)
-    acc = accuracy(logReg, predictions)
-    
-    return acc
-
-'''
 feature_cols = []
 for i in range(0, 149, 1):
     feature_cols.append(i)
     
-files = ["Generated Gaussian Distribution.txt", "synthetic_data_with_labels.txt"]
-
-pmOneAcc_Gaus = []
-pmOneAcc_Uniform = []
-pmOneDist = [0.05, 0.25, 0.5, 0.75, 1]
+# test = superFunction(file='Generated Gaussian Distribution.txt', method='pmOne', nrows=500, nvalues=150, unit=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
 
-for j in range(len(pmOneDist)):
-    pmOneAcc_Gaus.append(distanceAccuracyComparison(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
-    
-for j in range(len(pmOneDist)):
-    pmOneAcc_Uniform.append(distanceAccuracyComparison(files[0], "pmOne", nrows=100, nvalues=30, unit=pmOneDist[j], feature_cols=feature_cols, target=150, split=500))
-
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
-
-fig.suptitle("pmOne Augmentation Method")
-
-ax[0].plot(pmOneDist, pmOneAcc_Gaus)
-ax[1].plot(pmOneDist, pmOneAcc_Uniform)
-
-ax[0].set_title("Gaussian Distribution")
-ax[0].set_ylabel("Accuracy")
-ax[0].set_xlabel("Unit")
-ax[1].set_title("Uniform Distribution")
-ax[1].set_ylabel("Accuracy")
-ax[1].set_xlabel("Unit")
-
-ax[0].set_xticks(pmOneDist)
-
-plt.tight_layout()
-
-plt.show()
+test = superFunction(file='Generated Gaussian Distribution.txt', method='randSwap', nrows=100, nvalues=50, noise=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
 
-gausNoiseAcc_Gaus = []
-gausNoiseAcc_Uniform = []
-gausNoiseDist = [0.05, 0.25, 0.5, 0.75, 1]
-
-for j in range(len(gausNoiseDist)):
-    gausNoiseAcc_Gaus.append(distanceAccuracyComparison(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
-    
-for j in range(len(gausNoiseDist)):
-    gausNoiseAcc_Uniform.append(distanceAccuracyComparison(files[0], "gausNoise", nrows=100, nvalues=30, noise=gausNoiseDist[j], feature_cols=feature_cols, target=150, split=500))
-
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
-
-fig.suptitle("gausNoise Augmentation Method")
-
-ax[0].plot(gausNoiseDist, gausNoiseAcc_Gaus)
-ax[1].plot(gausNoiseDist, gausNoiseAcc_Uniform)
-
-ax[0].set_title("Gaussian Distribution")
-ax[0].set_ylabel("Accuracy")
-ax[0].set_xlabel("Noise %")
-ax[1].set_title("Uniform Distribution")
-ax[1].set_ylabel("Accuracy")
-ax[1].set_xlabel("Noise %")
-
-ax[0].set_xticks(gausNoiseDist)
-
-plt.tight_layout()
-
-plt.show()
 
 
-randSwapAcc_Gaus = []
-randSwapAcc_Uniform = []
-randSwapDist = [1, 15, 30, 50, 75, 100]
-
-for j in range(len(randSwapDist)):
-    randSwapAcc_Gaus.append(distanceAccuracyComparison(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
-    
-for j in range(len(randSwapDist)):
-    randSwapAcc_Uniform.append(distanceAccuracyComparison(files[0], "randSwap", nrows=100, nvalues=randSwapDist[j], feature_cols=feature_cols, target=150, split=500))
-    
-fig, ax = plt.subplots(1, 2, sharex=True, sharey=True)
-
-fig.suptitle("randSwap Augmentation Method")
-
-ax[0].plot(randSwapDist, randSwapAcc_Gaus)
-ax[1].plot(randSwapDist, randSwapAcc_Uniform)
-
-ax[0].set_title("Gaussian Distribution")
-ax[0].set_ylabel("Accuracy")
-ax[0].set_xlabel("nValues")
-ax[1].set_title("Uniform Distribution")
-ax[1].set_ylabel("Accuracy")
-ax[1].set_xlabel("nValues")
-
-ax[0].set_xticks(randSwapDist)
-
-plt.tight_layout()
-
-plt.show()
-'''
