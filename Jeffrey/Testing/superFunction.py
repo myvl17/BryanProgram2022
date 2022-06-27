@@ -330,9 +330,9 @@ def runClassifier(df, classifier, accuracy=None):
         
         # Split into training and test set
         X_train, X_test, y_train, y_test = train_test_split(
-                     X, Y, test_size = 0.2, random_state=42)
+                     X, Y, test_size = 0.1, random_state=42)
          
-        knn = KNeighborsClassifier(n_neighbors=2, weights = 'distance')
+        knn = KNeighborsClassifier(n_neighbors=200, weights = 'distance')
          
         knn = knn.fit(X_train, y_train)
          
@@ -490,7 +490,7 @@ plt.scatter(df2[0], df2[1], c=df2[150], alpha=0.5)
 plt.show()
 
 # test = superFunction(file=df2, method='randSwap', nrows=400, nvalues=30, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
-test = applyAugmentationMethod(df=df2, method='randSwap', nrows=1000, nvalues=150)
+test = applyAugmentationMethod(df=df2, method='pmOne', unit=10, nrows=200, nvalues=75)
 test2 = logReg(test, feature_cols, 150, 500)
 
 plt.scatter(test2[0], test2[1], c=test2[150], alpha=0.4)
