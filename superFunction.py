@@ -357,6 +357,32 @@ def runClassifier(df, classifier, accuracy=None):
         
     return results_df
 
+
+"""
+superFunction applies all methods from the flowchart augmentation, logistic 
+regression, classifier and accuracy, taking all inputs from these functions and
+outputs the accuracy of the augmented data.
+
+Inputs:
+    file: A text file containing all raw data with the labels
+    method: The augmentation method the user wants to use for the data
+    nrows: How many output augmentation rows are wanted
+    nvalues: The number of values in each row that need to be augmented
+    feature_cols: The name/number of every column that is NOT the labels column
+    target: The name/number of the column that contains the labels
+    split: The number of rows that contain original data
+    classifier: The classifier the user wants to use
+    accuracy(optional): Which type of accuracy the user would like to use,
+    the default is to output a row of all accuracy measures
+    unit(optional): Only for the pmOne augmentation method and is the unit the 
+    augmented data will differ from original data by
+    noise(optional): Only for the gausNoise augmentation method and denotes the
+    percent by which the augmented data varies from original data
+    
+    
+Outputs:
+    Gives a row of accuracy measures or the accuracy measure chosen by the user
+"""
 def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
     augmentation = applyAugmentationMethod(file, method, nrows, nvalues, unit=unit, noise=noise)
     
