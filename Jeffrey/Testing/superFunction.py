@@ -135,7 +135,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
         return finished_df
         
     elif method == "pmOne":
-        random.seed(1)
+        ##random.seed(1)
         
         # Reads in the dataset needed, dropping whatever column contains
         # the labels/status
@@ -159,7 +159,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             '''
             
             for i in range(int(nrows/2)):
-                random.seed(i)
+                ##random.seed(i)
                 sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
                 sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
@@ -172,7 +172,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             
             
             for k in range(int(nrows / 2 + .5)):
-                random.seed(k)
+                ##random.seed(k)
                 sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
                 sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
@@ -184,7 +184,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
     # Create a list of random numbers
         randomlist = []
         for j in range(0, nvalues):
-            random.seed(j)
+            ##random.seed(j)
             n = random.randint(0, df.shape[1]-2)
             randomlist.append(n)
             
@@ -269,6 +269,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
     else:
         return None
     
+    
   
 from sklearn.model_selection import train_test_split
 def logReg(dataset, feature_cols, target, split):
@@ -290,7 +291,7 @@ def logReg(dataset, feature_cols, target, split):
     from sklearn.linear_model import LogisticRegression
     
     # instantiate the model (using the default parameters)
-    random.seed(1)
+    ##random.seed(1)
     logreg = LogisticRegression(max_iter = 10000)
     
     # fit the model with data
@@ -315,6 +316,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 
+from sklearn import svm
+
 def runClassifier(df, classifier, accuracy=None):
     dfdrop = df.drop(columns = df.shape[1] - 1)
     
@@ -329,12 +332,15 @@ def runClassifier(df, classifier, accuracy=None):
         X_train, X_test, y_train, y_test = train_test_split(
                      X, Y, test_size = 0.2, random_state=42)
          
-        knn = KNeighborsClassifier(n_neighbors=3, weights = 'distance')
+        knn = KNeighborsClassifier(n_neighbors=2, weights = 'distance')
          
         knn = knn.fit(X_train, y_train)
          
         # Predict on dataset which model has not seen before
         predicted_values = knn.predict(X_test)
+        
+        clf = svm.SVC(kernel='linear', C=1).fit(X_train, y_train)
+        print(clf.score(X_test, y_test))
     
     elif classifier == "D_tree":
         
@@ -472,5 +478,23 @@ def superFunction(file, method, nrows, nvalues, feature_cols, target, split, cla
 
 # test = superFunction(file='Generated Gaussian Distribution.txt', method='randSwap', nrows=100, nvalues=50, noise=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
-df = pd.read_table('breaking.txt', delimiter=" ", header=None)
-test = applyAugmentationMethod(df, 'pmOne', 10, 1, unit=0.1)
+# df = pd.read_table('breaking.txt', delimiter=" ", header=None)
+# test = applyAugmentationMethod(df, 'pmOne', 10, 1, unit=0.1)
+
+feature_cols = []
+for i in range(0, 150, 1):
+    feature_cols.append(i)
+    
+df2 = pd.read_table('Gaussian_Data_-5_Unit.txt', delimiter=' ', header=None)
+plt.scatter(df2[0], df2[1], c=df2[150], alpha=0.5)
+plt.show()
+
+# test = superFunction(file=df2, method='randSwap', nrows=400, nvalues=30, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
+test = applyAugmentationMethod(df=df2, method='randSwap', nrows=1000, nvalues=150)
+test2 = logReg(test, feature_cols, 150, 500)
+
+plt.scatter(test2[0], test2[1], c=test2[150], alpha=0.4)
+plt.show()
+
+test3 = runClassifier(test2, 'kNN')
+print(test3)
