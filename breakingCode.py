@@ -18,7 +18,7 @@ import random
 
 # rawData1 = [0.25, 3.47, 0.74, 0.56, 3.20]
 # rawData2 = [0.42, 3.85, 0.89, 0.17, 3.98]
-# labels = [0, 1, 0, 0, 1]
+# labels = [0, 1, 0, 1, 0]
 
 
 
@@ -26,12 +26,14 @@ import random
 # table = table.reset_index(drop = True)
 # np.savetxt('rawData.txt', table)
 
-from applyAugmentationMethod import applyAugmentationMethod
+from generateRawData import generateRawData
+from fixingRandomness import applyAugmentationMethod
 from SVC import SVC
-from LogisticRegressionReal import LogReg
+from superFunction import logReg
 from FunctionReturnsF1 import OkayFunction
 from superFunction import superFunction
 
+np.savetxt('smallGausDist.txt', generateRawData(500, 2, -10, 'gaussian'))
 
 # print(SVC((applyAugmentationMethod('rawData.txt', 'pmOne', 5, 1, unit = 0.1)), 
 #         [0, 1], 2, 5))
@@ -41,10 +43,15 @@ from superFunction import superFunction
 #                     feature_cols = [0, 1], target = 2, split = 4, classifier = 
 #                     'kNN', noise = 0.05))
 
-df = (LogReg((applyAugmentationMethod('rawData.txt', 'pmOne', 5, 1, unit = -2)), 
-        [0, 1], 2, 5))
-    
+augment = (applyAugmentationMethod(df = 'smallGausDist.txt', method = "gausNoise", nrows = 500, nvalues = 2, noise = 0.05)), 
 
+df = logReg(augment, feature_cols = [0, 1], target = 2, split = 500)
+    
+df2 = pd.read_table('smallGausDist.txt', delimiter = " ", header = None) 
+
+plt.scatter(df2[0], df2[1], c = df2[df2.shape[1] - 1])
+plt.show()
+plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
         
 dfdrop = df.drop(columns = df.shape[1] - 1)
 
@@ -67,7 +74,7 @@ print( y_train)
 print(y_test)
 
 random.seed(1)
-knn = KNeighborsClassifier(n_neighbors=3)
+knn = KNeighborsClassifier(n_neighbors=1)
  
 knn.fit(X_train, y_train)
  
@@ -80,3 +87,4 @@ acc = skm.accuracy_score(y_test, predicted_values)
 
 print(acc)
 
+    
