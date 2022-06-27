@@ -14,7 +14,7 @@ import sklearn.metrics as skm
 
 def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
     # Reads .txt data frame file
-    df = pd.read_table(df, delimiter=" ", header=None)
+    # df = pd.read_table(df, delimiter=" ", header=None)
     
     # Vector of original and augmented points
     original_points = []
