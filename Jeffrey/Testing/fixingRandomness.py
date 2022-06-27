@@ -29,7 +29,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
         for k in range(0, nrows, 1):
                    
             # Selects random row index
-            random.seed(k)
+            #random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
             
             # Adds new row from pre-existing random row
@@ -43,7 +43,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             for i in range(nvalues):
                 
                 # Selects random column index
-                random.seed(i)
+                #random.seed(i)
                 random_col = random.randint(0, df.shape[1]-2)
                 
                 # Selects random value from original data frame in the same column
@@ -103,7 +103,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             # sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state=(1))
             
             
-            for k in range(int(nrows / 2 + .5)):
+            for k in range(int(nrows / 2 + .5)): 
                 random.seed(k)
                 sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
                 sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
@@ -119,6 +119,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             random.seed(j)
             n = random.randint(0, df.shape[1]-2)
             randomlist.append(n)
+        print(n)
             
     # Select one of the random rows then use the random list to 
     # pinpoint one specfic number in the dataframe and add or 
@@ -162,7 +163,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
         dffinaltest = pd.concat([sample1real, sample2real])
         dfreal = pd.DataFrame(np.random.permutation(dffinaltest))
         
-        finished_df = pd.concat([df, dfreal], ignore_index=True)
+        finished_df = pd.concat([df, dffinaltest], ignore_index=True)
         
         return finished_df
         
@@ -216,8 +217,9 @@ plt.show()
 
 from superFunction import logReg
 
-df2 = applyAugmentationMethod(df, 'randSwap', 2, 1)
-#df2 = logReg(df2, [0,1], 2, 5)
+df2 = applyAugmentationMethod(df, 'gausNoise', 500, 2, noise=0.05)
+df2 = logReg(df2, [0,1], 2, 5)
+print(df2)
 
 plt.scatter(df2[0], df2[1])
 plt.show()

@@ -176,7 +176,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
            noise_matrix = pd.concat([noise_matrix, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
       
       
-       if len(df) == nrows:
+       if (1 == 0):
            return (df.add(noise_matrix, fill_value = 0))
       
        #add noise to random rows matrix from data set
@@ -190,6 +190,8 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
                data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
            
            added_noise = data_portion.add(noise_matrix, fill_value = None)
+           
+           print("HELLO WORLD")
                    
            data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
            
@@ -221,3 +223,5 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
 
 # plt.scatter(df2[0], df2[1])
 # plt.show()
+
+augment = applyAugmentationMethod(df = 'smallGausDist.txt', method = "gausNoise", nrows = 500, nvalues = 2, noise = 0.05)

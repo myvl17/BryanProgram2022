@@ -332,7 +332,7 @@ def runClassifier(df, classifier, accuracy=None):
         X_train, X_test, y_train, y_test = train_test_split(
                      X, Y, test_size = 0.1, random_state=42)
          
-        knn = KNeighborsClassifier(n_neighbors=200, weights = 'distance')
+        knn = KNeighborsClassifier(n_neighbors=32, weights = 'distance')
          
         knn = knn.fit(X_train, y_train)
          
@@ -459,7 +459,8 @@ def superFunction(file, method, nrows, nvalues, feature_cols, target, split, cla
     
     print(classifier)
     
-    
+  
+
 # data = generateRawData(16, 2, -3, 'gaussian', 'test')
 # print(runClassifier(data, 'kNN'))
 
@@ -481,20 +482,23 @@ def superFunction(file, method, nrows, nvalues, feature_cols, target, split, cla
 # df = pd.read_table('breaking.txt', delimiter=" ", header=None)
 # test = applyAugmentationMethod(df, 'pmOne', 10, 1, unit=0.1)
 
-feature_cols = []
-for i in range(0, 150, 1):
-    feature_cols.append(i)
+# feature_cols = []
+# for i in range(0, 150, 1):
+#     feature_cols.append(i)
     
-df2 = pd.read_table('Gaussian_Data_-5_Unit.txt', delimiter=' ', header=None)
-plt.scatter(df2[0], df2[1], c=df2[150], alpha=0.5)
-plt.show()
+# df2 = pd.read_table('Gaussian_Data_-5_Unit.txt', delimiter=' ', header=None)
+# test4 = runClassifier(df2, 'kNN')
+# print(test4)
 
-# test = superFunction(file=df2, method='randSwap', nrows=400, nvalues=30, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
-test = applyAugmentationMethod(df=df2, method='pmOne', unit=10, nrows=200, nvalues=75)
-test2 = logReg(test, feature_cols, 150, 500)
+# plt.scatter(df2[0], df2[1], c=df2[150], alpha=0.5)
+# plt.show()
 
-plt.scatter(test2[0], test2[1], c=test2[150], alpha=0.4)
-plt.show()
+# # test = superFunction(file=df2, method='randSwap', nrows=400, nvalues=30, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
+# test = applyAugmentationMethod(df=df2, method='pmOne', unit=10, nrows=200, nvalues=75)
+# test2 = logReg(test, feature_cols, 150, 500)
 
-test3 = runClassifier(test2, 'kNN')
-print(test3)
+# plt.scatter(test2[0], test2[1], c=test2[150], alpha=0.4)
+# plt.show()
+
+# test3 = runClassifier(test2, 'kNN')
+# print(test3)
