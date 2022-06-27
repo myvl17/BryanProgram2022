@@ -191,7 +191,6 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
            
            added_noise = data_portion.add(noise_matrix, fill_value = None)
            
-           print("HELLO WORLD")
                    
            data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
            
@@ -224,4 +223,4 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
 # plt.scatter(df2[0], df2[1])
 # plt.show()
 
-augment = applyAugmentationMethod(df = 'smallGausDist.txt', method = "gausNoise", nrows = 500, nvalues = 2, noise = 0.05)
+# augment = applyAugmentationMethod(df = 'smallGausDist.txt', method = "gausNoise", nrows = 500, nvalues = 2, noise = 0.05)
