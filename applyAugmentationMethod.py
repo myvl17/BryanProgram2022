@@ -57,10 +57,6 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          
          finished_df = pd.concat([df, augmented_df], ignore_index=True)
          
-         plt.scatter(df[0], df[1], c="b")
-         plt.scatter(finished_df[0], finished_df[1] , c="r")
-         plt.show()
-         
          return finished_df
          
      elif method == "pmOne":
@@ -75,7 +71,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          # The sample function takes random rows from the df
          # in this case it take in the nrows and the # of rows
          if (nrows % 2 == 0):
-             random.seed(1)
+             random.seed(0)
              sample1 = df1.sample(n = int(nrows / 2), random_state = 0)
              sample2 = df1.sample(n = int(nrows / 2), random_state = 1)
          else:
@@ -116,10 +112,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
          dfreal = pd.DataFrame(np.random.permutation(dffinaltest))
          
          finished_df = pd.concat([df, dfreal], ignore_index=True)
-         
-         plt.scatter(df[0], df[1], c="b", alpha=0.4)
-         plt.scatter(finished_df[0], finished_df[1] , c="r", alpha=0.2)
-         plt.show()
+
          
          return finished_df
          
@@ -130,9 +123,6 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         #Add noise to dataset if equal length
         if len(df) == nrows:
             return (df.add(noise_matrix, fill_value = 0))
-            plt.scatter(df[0], df[1], c="b", alpha=0.4)
-            plt.scatter(finished_df[0], finished_df[1] , c="r", alpha=0.2)
-            plt.show()
         
         #add noise to random rows matrix from data set
         else:
@@ -144,10 +134,6 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
             
             finished_df = pd.concat([df, data_portion], ignore_index=True)
-
-            plt.scatter(df[0], df[1], c="b", alpha=0.4)
-            plt.scatter(finished_df[0], finished_df[1] , c="r", alpha=0.2)
-            plt.show()
                              
             return finished_df
      else:

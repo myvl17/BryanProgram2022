@@ -37,14 +37,14 @@ def OkayFunction(data, accuracy=None):
                  X, y, test_size = 0.2, random_state=0)
      
     random.seed(1)
-    knn = KNeighborsClassifier(n_neighbors=16)
+    knn = KNeighborsClassifier(n_neighbors=3)
      
     knn.fit(X_train, y_train)
      
     # Predict on dataset which model has not seen before
     predicted_values = knn.predict(X_test)
         
-    plt.scatter(x = df[0], y = df[1], c = predicted_values)
+    # plt.scatter(x = df[0], y = df[1], c = predicted_values)
     
     #Accuracy
     f1_accuracy = skm.f1_score(y_test, predicted_values, zero_division = 0)

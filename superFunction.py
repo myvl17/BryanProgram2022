@@ -241,7 +241,7 @@ def runClassifier(df, classifier, accuracy=None):
         X_train, X_test, y_train, y_test = train_test_split(
                      X, Y, test_size = 0.2, random_state=42)
          
-        knn = KNeighborsClassifier(n_neighbors=7)
+        knn = KNeighborsClassifier(n_neighbors=2)
          
         knn.fit(X_train, y_train)
          
@@ -354,7 +354,6 @@ def runClassifier(df, classifier, accuracy=None):
                            'Rooted Mean Square Error':rmse_accuracy,
                            'F1 Score':f1_accuracy}, ignore_index=True)
         
-        
     return results_df
 
 
@@ -393,14 +392,14 @@ def superFunction(file, method, nrows, nvalues, feature_cols, target, split, cla
     
     print(classifier)
     
-feature_cols = []
-for i in range(0, 149, 1):
-    feature_cols.append(i)
+# feature_cols = []
+# for i in range(0, 149, 1):
+#     feature_cols.append(i)
     
-# test = superFunction(file='Generated Gaussian Distribution.txt', method='pmOne', nrows=500, nvalues=150, unit=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
+# # test = superFunction(file='Generated Gaussian Distribution.txt', method='pmOne', nrows=500, nvalues=150, unit=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
 
-test = superFunction(file='Generated Gaussian Distribution.txt', method='randSwap', nrows=100, nvalues=50, noise=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
+# test = superFunction(file='Generated Gaussian Distribution.txt', method='randSwap', nrows=100, nvalues=50, noise=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
 
 
