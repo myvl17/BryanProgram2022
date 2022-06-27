@@ -42,10 +42,10 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         # Save the dataframe to a text file if others want to use
         # np.savetxt('synthetic_data_with_labels.txt', dfreal)
         
-        fig, ax = plt.subplots()
-        plt.scatter(df[0], df[1])
-        plt.title("Random Uniform Distribution")
-        plt.show()
+        # fig, ax = plt.subplots()
+        # plt.scatter(df[0], df[1])
+        # plt.title("Random Uniform Distribution")
+        # plt.show()
         
         return dfreal
     else:
@@ -68,14 +68,14 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         shuffled_df = pd.DataFrame(np.random.permutation(df))
         
         # Creates historgram of Gaussian distributions
-        plt.scatter(shuffled_df[0], shuffled_df[1])
-        plt.title("Random Gaussian Distribution")
-        plt.show()
+        # plt.scatter(shuffled_df[0], shuffled_df[1])
+        # plt.title("Random Gaussian Distribution")
+        # plt.show()
         
         # Saves generated Gaussian distribution in same folder as file
         # np.savetxt("Generated Gaussian Distribution.txt", shuffled_df)
         
         return shuffled_df
 
-raw_uniform = generateRawData(500, 150, 2, "uniform")
-raw_gaussian = generateRawData(500, 150, 2, "gaussian")
+# raw_uniform = generateRawData(500, 150, 2, "uniform")
+# raw_gaussian = generateRawData(500, 150, 2, "gaussian")

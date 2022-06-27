@@ -43,48 +43,48 @@ np.savetxt('smallGausDist.txt', generateRawData(500, 2, -10, 'gaussian'))
 #                     feature_cols = [0, 1], target = 2, split = 4, classifier = 
 #                     'kNN', noise = 0.05))
 
-augment = applyAugmentationMethod(df = 'smallGausDist.txt', method = "gausNoise", nrows = 500, nvalues = 2, noise = 0.05)
+augment = applyAugmentationMethod(df = 'smallGausDist.txt', method = "randSwap", nrows = 500, nvalues = 2, unit = 0.1)
 
 df = logReg(augment, feature_cols = [0, 1], target = 2, split = 500)
     
 df2 = pd.read_table('smallGausDist.txt', delimiter = " ", header = None) 
 
-plt.scatter(df2[0], df2[1], c = df2[df2.shape[1] - 1])
-plt.show()
+# plt.scatter(df2[0], df2[1], c = df2[df2.shape[1] - 1])
+# plt.show()
 plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
         
-# dfdrop = df.drop(columns = df.shape[1] - 1)
+dfdrop = df.drop(columns = df.shape[1] - 1)
 
-# print(dfdrop)
-# # results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
+print(dfdrop)
+# results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
 
-# X = dfdrop
-# y = df[df.shape[1] - 1]
+X = dfdrop
+y = df[df.shape[1] - 1]
 
-# print(X)
-# print(y)
+print(X)
+print(y)
 
-# # Split into training and test set
-# X_train, X_test, y_train, y_test = train_test_split(
-#              X, y, test_size = 0.5, random_state=0)
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(
+              X, y, test_size = 0.5, random_state=0)
  
-# print(X_train)
-# print(X_test )
-# print( y_train)
-# print(y_test)
+print(X_train)
+print(X_test )
+print( y_train)
+print(y_test)
 
-# random.seed(1)
-# knn = KNeighborsClassifier(n_neighbors=1)
+random.seed(1)
+knn = KNeighborsClassifier(n_neighbors=1)
  
-# knn.fit(X_train, y_train)
+knn.fit(X_train, y_train)
  
-# # Predict on dataset which model has not seen before
-# predicted_values = knn.predict(X_test)
+# Predict on dataset which model has not seen before
+predicted_values = knn.predict(X_test)
 
-# print(predicted_values)
+print(predicted_values)
 
-# acc = skm.accuracy_score(y_test, predicted_values)
+acc = skm.accuracy_score(y_test, predicted_values)
 
-# print(acc)
+print(acc)
 
     

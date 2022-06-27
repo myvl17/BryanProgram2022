@@ -14,12 +14,12 @@ import sklearn.metrics as skm
 
 def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
     # Reads .txt data frame file
-    df = pd.read_table(file, delimiter=" ", header=None)
-    
+    # df = pd.read_table(file, delimiter=" ", header=None)
+    df = file
+
     # Vector of original and augmented points
     original_points = []
     augmented_points = []
-    
     
     if method == "randSwap":
         
@@ -29,7 +29,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         for k in range(0, nrows, 1):
                    
             # Selects random row index
-            ##random.seed(k)
+            # random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
             
             # Adds new row from pre-existing random row
@@ -43,11 +43,10 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             for i in range(nvalues):
                 
                 # Selects random column index
-                ##random.seed(i)
+                # random.seed(i)
                 random_col = random.randint(0, df.shape[1]-2)
                 
                 # Selects random value from original data frame in the same column
-                ##random.seed(i+1)
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
                 
                 # Appends original and old value to keep track of distances
@@ -71,6 +70,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         return finished_df
         
     elif method == "pmOne":
+        
         # Reads in the dataset needed, dropping whatever column contains
         # the labels/status
 
@@ -81,23 +81,42 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         # if statement to determine if the number of rows entered is odd
         # The sample function takes random rows from the df
         # in this case it take in the nrows and the # of rows
+        
+        sample1 = pd.DataFrame()
+        sample2 = pd.DataFrame()
+        
         if (nrows % 2 == 0):
-            ##random.seed(1)
+            '''
             sample1 = df1.sample(n = int(nrows / 2), random_state=(0))
             sample2 = df1.sample(n = int(nrows / 2), random_state=(0))
+            '''
+            
+            for i in range(int(nrows/2)):
+                random.seed(i)
+                sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
+                sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
+            
+            
         else:
-            ##random.seed(0)
-            sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state=(1))
-            sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state=(1))
+            
+            # sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state=(1))
+            # sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state=(1))
+            
+            
+            for k in range(int(nrows / 2 + .5)):
+                random.seed(k)
+                sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
+                sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
         # Reset the index in each sample so they increase from 0 to nrows        
         sample1real = sample1.reset_index(drop = True)
         sample2real = sample2.reset_index(drop = True)
         
+        
     # Create a list of random numbers
         randomlist = []
         for j in range(0, nvalues):
-            ##random.seed(j)
+            random.seed(j)
             n = random.randint(0, df.shape[1]-2)
             randomlist.append(n)
             
@@ -106,7 +125,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
     # subtract the unit specified in the function
         for i in range(len(sample1real)):
             for j in randomlist:
-                oldValue = (sample1real.iloc[i, j])
+    
+                oldValue = sample1real.iloc[i, j]
                 newValue = oldValue + unit
                 
                 # Appends old and new values to augmented_points vector to keep track for distance
@@ -139,8 +159,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         
 
         # Put the two samples together and mix them
-        dffinaltest = pd.concat([sample1real, sample2real])
-        dfreal = pd.DataFrame(np.random.permutation(dffinaltest))
+        dfreal = pd.concat([sample1real, sample2real])
+        # dfreal = pd.DataFrame(np.random.permutation(dffinaltest))
         
         finished_df = pd.concat([df, dfreal], ignore_index=True)
         
@@ -148,20 +168,29 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         
     elif method == "gausNoise":
     #Create a noise matrix
-       ##random.seed(1)
-       noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
-       #Add noise to dataset if equal length
-      
+       # noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
+       noise_matrix = pd.DataFrame()
        
-       if len(df) == nrows:
+       for k in range(nrows):
+           random.seed(k)
+           noise_matrix = pd.concat([noise_matrix, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
+      
+      
+       if (1 == 0):
            return (df.add(noise_matrix, fill_value = 0))
       
        #add noise to random rows matrix from data set
        else:
-           ##random.seed(0)
-           data_portion = df.sample(n = nrows, ignore_index=True)
+           
+           # data_portion = df.sample(n = nrows, ignore_index=True)
+           
+           data_portion = pd.DataFrame()
+           for i in range(nrows):
+               random.seed(i)
+               data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
            
            added_noise = data_portion.add(noise_matrix, fill_value = None)
+           
                    
            data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
            
@@ -180,6 +209,8 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
            return finished_df
     else:
         return None
+    
+
     
   
 from sklearn.model_selection import train_test_split
@@ -216,7 +247,9 @@ def logReg(dataset, feature_cols, target, split):
     # Appends predicted labels to NAN
     for i in range(split, dataset.shape[0]):
         dataset.loc[i, target] = y_pred[i - split]
+        
     
+    plt.scatter(dataset[0], dataset[1], c = dataset[dataset.shape[1] - 1])
     return dataset
 
 
@@ -383,14 +416,19 @@ Outputs:
     Gives a row of accuracy measures or the accuracy measure chosen by the user
 """
 def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
-    augmentation = applyAugmentationMethod(file, method, nrows, nvalues, unit=unit, noise=noise)
+    df = pd.read_table(file, delimiter=" ", header=None)
     
-    print(augmentation)
+    plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
+    plt.show()
+    augmentation = applyAugmentationMethod(df, method, nrows, nvalues, unit=unit, noise=noise)
     
     logRegression = logReg(augmentation, feature_cols, target, split)
+    
+    plt.scatter(logRegression[0], logRegression[1],
+                c = logRegression[logRegression.shape[1] - 1])
     classifier = runClassifier(logRegression, classifier)
     
-    print(classifier)
+    return classifier
     
 # feature_cols = []
 # for i in range(0, 149, 1):
