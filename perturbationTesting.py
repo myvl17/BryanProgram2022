@@ -163,7 +163,11 @@ def runClassifier(df, classifier, accuracy=None):
     return results_df
 
 if 1 == 0:
+<<<<<<< Updated upstream
     data = generateRawData(10, 3, -2, 'gaussian')
+=======
+    data = generateRawData(500, 5, -2, 'gaussian')
+>>>>>>> Stashed changes
 else:
     None
 
@@ -172,12 +176,20 @@ for i in range(0, data.shape[1]-1):
     feature_cols.append(i)
         
 
+<<<<<<< Updated upstream
 pmUnit = [0, 0.1, 0.5, 1, 10, 20]
+=======
+pmUnit = [0.1, 0.5, 1, 10, 20, 100]
+>>>>>>> Stashed changes
 accuracy = []
 
 
 for i in range(len(pmUnit)):
+<<<<<<< Updated upstream
     augmented = applyAugmentationMethod(df=data, method='pmOne', nrows=500, nvalues=3, unit=pmUnit[i])
+=======
+    augmented = applyAugmentationMethod(df=data, method='gausNoise', nrows=500, nvalues=pmUnit[i], noise=pmUnit[i])
+>>>>>>> Stashed changes
     
     labels = logReg(augmented, feature_cols=feature_cols, target=augmented.shape[1]-1, split=500)
     
@@ -187,7 +199,11 @@ for i in range(len(pmUnit)):
     
 print(accuracy)
 
+<<<<<<< Updated upstream
 plt.show()
 plt.plot(pmUnit, accuracy)
 plt.show()
+=======
+plt.plot(pmUnit, accuracy)
+>>>>>>> Stashed changes
 
