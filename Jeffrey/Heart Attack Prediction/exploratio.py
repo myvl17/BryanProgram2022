@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+<<<<<<< Updated upstream
 df = pd.read_csv('datasets/heart.csv')
 
 # Rename columns to understandable names
@@ -72,3 +73,19 @@ print(positive.describe())
 print(negative.describe())
 
 plt.box(positive, x='cholesterol', y='target')
+=======
+
+df = pd.read_csv('datasets/heart.csv')
+
+print(df.describe())
+
+corrMatrix = df.corr()
+
+sns.heatmap(corrMatrix, vmin=corrMatrix.values.min(), vmax=1, square=True, linewidths=0.1, annot=True, annot_kws={"fontsize":5})  
+
+plt.tight_layout()
+plt.show()
+
+
+sns.regplot(x=df['thalachh'], y=df['output'], data=df, logistic=True, ci=None)
+>>>>>>> Stashed changes
