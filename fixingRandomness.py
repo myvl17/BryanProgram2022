@@ -44,7 +44,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
                 
                 # Selects random column index
                 # random.seed(i)
-                random_col = random.randint(0, df.shape[1]-2)
+                random_col = random.randint(0, df.shape[1]-1)
                 
                 # Selects random value from original data frame in the same column
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
@@ -54,13 +54,15 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
                 augmented_points.append(rand_value)
                 
                 # Appends rand_value to new column
-                augmented_df.iloc[-1][random_col] = rand_value
+                augmented_df.iloc[-1, random_col] = rand_value
                 
                 
                 
                 
         # Removes label column
         augmented_df.drop(df.columns[-1], axis=1, inplace=True)
+        
+        print(augmented_df)
         
         finished_df = pd.concat([df, augmented_df], ignore_index=True)
         
@@ -168,6 +170,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
         
     elif method == "gausNoise":
     #Create a noise matrix
+       np.random.seed(0)
        noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
        
        #noise_matrix = pd.DataFrame()
@@ -189,10 +192,9 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
            
            data_portion = pd.DataFrame()
            for i in range(nrows):
-               #random.seed(i)
+               random.seed(i)
                data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
             
-           print(data_portion)
            
            added_noise = data_portion.add(noise_matrix, fill_value = None)
            
@@ -217,7 +219,6 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
     else:
         return None
     
-print("HELLO")
 
 # df = pd.read_table('breaking.txt', delimiter=' ', header=None)
 # plt.scatter(df[0], df[1], c=df[2])
