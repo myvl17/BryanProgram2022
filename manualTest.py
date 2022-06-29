@@ -55,18 +55,19 @@ knn.fit(X_train, y_train)
 predicted_values = knn.predict(X_test)
 
 from sklearn.metrics import f1_score
+from sklearn.metrics import accuracy_score
 
-print(f1_score(y_test, predicted_values))
-
+(f1_score(y_test, predicted_values))
+print(accuracy_score(y_test, predicted_values))
 
 from fixingRandomness import applyAugmentationMethod
 
-augmented = applyAugmentationMethod(df=df, method='pmOne', nrows=4, nvalues=1, unit=0.1)
+augmented = applyAugmentationMethod(df=df, method='pmOne', nrows=4, nvalues=1, unit=1)
 
 from superFunction import logReg
+from SVC import SVC
 
 labels = logReg(augmented, [0,1], 2, 10)
-
 
 test = [2,3,6,8,9,10,11,12,13]
 
@@ -76,23 +77,41 @@ y_train = labels.iloc[training, 2]
 X_test = labels.iloc[test, :2]
 y_test = labels.iloc[test, 2]
 
-knn = KNeighborsClassifier(n_neighbors=2)
- 
-knn.fit(X_train, y_train)
- 
-# Predict on dataset which model has not seen before
-predicted_values = knn.predict(X_test)
 
-print(f1_score(y_test, predicted_values))
-    
+# knn = KNeighborsClassifier(n_neighbors=2)
+ 
+# knn.fit(X_train, y_train)
+
+from sklearn.svm import SVC
+import random
+
+# instantiate the model (using the default parameters)
+random.seed(1)
+svm = SVC(gamma = 2, C = 1, kernel = 'linear', max_iter = 10000, random_state = 0)
+
+# fit the model with data
+# svm.fit(X_train,y_train)
+svm.fit(X_train, y_train)
+predicted_values = svm.predict(X_test)
+
+ 
+# # Predict on dataset which model has not seen before
+# predicted_values = knn.predict(X_test)
+
+
+
+
+
+(f1_score(y_test, predicted_values))
+print(accuracy_score(y_test, predicted_values))    
     
 plt.scatter(labels[0], labels[1], c=labels[2])
-plt.show()
+# plt.show()
 
-plt.scatter(X_test[0], X_test[1], c=y_test-predicted_values)
+plt.scatter(X_test[0], X_test[1], c=predicted_values)
     
     
-    
+# +(np.random.normal(size = X_test[0].shape)) * 0.05
     
     
     
