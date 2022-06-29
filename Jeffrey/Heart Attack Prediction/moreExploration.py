@@ -87,17 +87,17 @@ plt.show()
 
 # Exploration graphs
 fig, ax = plt.subplots(2,2, sharex=True, sharey=True)
-sns.histplot(df, x='target', hue='sex', multiple='dodge', ax=ax[0,0])
+sns.histplot(df, x='target', hue='sex', multiple='dodge', ax=ax[0,0]).set(title='gender')
 
 
-sns.histplot(df, x='target', hue='chest_pain', multiple='dodge', ax=ax[0,1])
+sns.histplot(df, x='target', hue='chest_pain', multiple='dodge', ax=ax[0,1]).set(title='chest pain')
 
 
-sns.histplot(df, x='target', hue='angina', multiple='dodge', ax=ax[1,0])
+sns.histplot(df, x='target', hue='angina', multiple='dodge', ax=ax[1,0]).set(title='angina')
 
 
 
-sns.histplot(df, x='target', hue='vessels', multiple='dodge', ax=ax[1,1])
+sns.histplot(df, x='target', hue='vessels', multiple='dodge', ax=ax[1,1]).set(title='vessels')
 
 plt.tight_layout()
 plt.show()
@@ -117,8 +117,8 @@ print("\n FEMALE")
 print(positive_filtered[positive_filtered['sex'] == 0].describe().T)
 print(negative_filtered[negative_filtered['sex'] == 0].describe().T)
 
-sns.boxplot(data=df, x='target', y='cholestoral', hue='sex').set(title='Positive')
+sns.boxplot(data=df, x='target', y='cholestoral', hue='sex').set(title='Cholestoral')
 plt.show()
-sns.boxplot(data=df, x='target', y='blood_pressure', hue='sex').set(title='Positive')
+sns.boxplot(data=df, x='target', y='blood_pressure', hue='sex').set(title='Blood Pressure')
 
 
