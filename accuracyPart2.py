@@ -18,8 +18,8 @@ from FunctionReturnsF1 import OkayFunction
 #               target = 7, split = 500, classifier = 'kNN', unit = 0.1)
 
 # Ticks for plots
-distancesGaussian = [10**-30, 0.0000000001, 0.0001, 0.05, 0.5, 1.0, 1.5, 2.0]
-distancesUniform = [10**-30, 0.0000000001, 0.0001, 0.05, 0.15, 0.6, 1.0, 2.0]
+distancesGaussian = [-10, -5, -2, 0, 0.5, 1.0, 1.5, 2.0]
+distancesUniform = [-10, -5, -2, 0, 0.5, 1.0, 1.5, 2.0]
 
 
 
@@ -34,14 +34,14 @@ Gaussian4 = []
 uniform4 = []
 
 
-filesG = ["Gaussian_Data_0.05_Unit.txt", 'Gaussian_Data_0.5_Unit.txt',
-          'Gaussian_Data_1.0_Unit.txt', 'Gaussian_Data_1.5_Unit.txt',
-          'Gaussian_Data_2.0_Unit.txt', 'Gaussian_Data_0.0001_Unit.txt',
-          'Gaussian_Data_-5_Unit.txt', 'Gaussian_Data_-10_Unit.txt']
-filesU = ["Uniform_Data_0.05_Unit.txt", 'Uniform_Data_0.6_Unit.txt',
-          'Uniform_Data_1.0_Unit.txt', 'Uniform_Data_0.15_Unit.txt',
-          'Uniform_Data_2.0_Unit.txt', 'Uniform_Data_0.0001_Unit.txt',
-          'Uniform_Data_10e-10_Unit.txt', 'Uniform_Data_10e-30_Unit.txt']
+filesG = ["Gaussian_Data_-10_Unit.txt", "Gaussian_Data_-5_Unit.txt",
+          "Gaussian_Data_-1_Unit.txt", "Gaussian_Data_0_Unit.txt",
+         "Gaussian_Data_0.5_Unit.txt", "Gaussian_Data_1.0_Unit.txt",
+          "Gaussian_Data_1.5_Unit.txt", 'Gaussian_Data_2.0_Unit.txt']
+filesU = ["Uniform_Data_-10_Unit.txt", "Uniform_Data_-5_Unit.txt",
+          "Uniform_Data_-1_Unit.txt", "Uniform_Data_0_Unit.txt",
+         "Uniform_Data_0.5_Unit.txt", "Uniform_Data_1.0_Unit.txt",
+          "Uniform_Data_1.5_Unit.txt", 'Uniform_Data_2.0_Unit.txt']
 
 for file in filesG:
     Gaussian.append(OkayFunction(file))

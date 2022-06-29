@@ -43,7 +43,11 @@ np.savetxt('smallGausDist.txt', generateRawData(500, 2, -10, 'gaussian'))
 #                     feature_cols = [0, 1], target = 2, split = 4, classifier = 
 #                     'kNN', noise = 0.05))
 
+<<<<<<< Updated upstream
 augment = applyAugmentationMethod(df = 'smallGausDist.txt', method = "randSwap", nrows = 500, nvalues = 2, unit = 0.1)
+=======
+augment = applyAugmentationMethod(df = 'smallGausDist.txt', method = "gausNoise", nrows = 500, nvalues = 2, noise = 0.05) 
+>>>>>>> Stashed changes
 
 df = logReg(augment, feature_cols = [0, 1], target = 2, split = 500)
     

@@ -8,14 +8,14 @@ Created on Fri Jun 17 14:44:40 2022
 import numpy as np
 
 from generateRawData import generateRawData
-np.savetxt("Uniform_Data_1.0_Unit.txt", generateRawData(500, 7, 1.5, "uniform"))
+np.savetxt("Uniform_Data_1.0_Unit.txt", generateRawData(500, 7, 1.0, "uniform"))
 np.savetxt("Uniform_Data_2.0_Unit.txt", generateRawData(500, 7, 2.0, "uniform"))
 
-np.savetxt("Uniform_Data_0.6_Unit.txt", generateRawData(500, 7, 0.6, "uniform"))
+np.savetxt("Uniform_Data_-10_Unit.txt", generateRawData(500, 7, -10, "uniform"))
 
-np.savetxt("Uniform_Data_0.05_Unit.txt", generateRawData(500, 7, 0.05, "uniform"))
+np.savetxt("Uniform_Data_0.5_Unit.txt", generateRawData(500, 7, 0.5, "uniform"))
 
-np.savetxt("Uniform_Data_0.15_Unit.txt", generateRawData(500, 7, 0.15, "uniform"))
+np.savetxt("Uniform_Data_1.5_Unit.txt", generateRawData(500, 7, 1.5, "uniform"))
 
 np.savetxt("Gaussian_Data_1.5_Unit.txt", generateRawData(500, 7, 1.5, "gaussian"))
 
@@ -23,17 +23,17 @@ np.savetxt("Gaussian_Data_1.0_Unit.txt", generateRawData(500, 7, 1.0, "gaussian"
 
 np.savetxt("Gaussian_Data_0.5_Unit.txt", generateRawData(500, 7, 0.5, "gaussian"))
 
-np.savetxt("Gaussian_Data_0.05_Unit.txt", generateRawData(500, 7, 0.05, "gaussian"))
+np.savetxt("Gaussian_Data_0_Unit.txt", generateRawData(500, 7, 0, "gaussian"))
 
-np.savetxt("Uniform_Data_0.0001_Unit.txt", generateRawData(500, 7, 0.0001, "uniform"))
+np.savetxt("Uniform_Data_0_Unit.txt", generateRawData(500, 7, 0, "uniform"))
 
-np.savetxt("Gaussian_Data_0.0001_Unit.txt", generateRawData(500, 7, 0.0001, "gaussian"))
+np.savetxt("Gaussian_Data_-1_Unit.txt", generateRawData(500, 7, -1, "gaussian"))
 
-np.savetxt("Uniform_Data_10e-10_Unit.txt", generateRawData(500, 7, 0.0000000001, "uniform"))
+np.savetxt("Uniform_Data_-1_Unit.txt", generateRawData(500, 7, -1, "uniform"))
 
 np.savetxt("Gaussian_Data_-5_Unit.txt", generateRawData(500, 7, -5, "gaussian"))
 
-np.savetxt("Uniform_Data_10e-30_Unit.txt", generateRawData(500, 7, 10**-30, "uniform"))
+np.savetxt("Uniform_Data_-5_Unit.txt", generateRawData(500, 7, -5, "uniform"))
 
 np.savetxt("Gaussian_Data_-10_Unit.txt", generateRawData(500, 7, -10, "gaussian"))
 
