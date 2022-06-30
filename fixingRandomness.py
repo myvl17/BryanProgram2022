@@ -54,13 +54,15 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
                 augmented_points.append(rand_value)
                 
                 # Appends rand_value to new column
-                augmented_df.iloc[-1][random_col] = rand_value
+                augmented_df.iloc[-1, random_col] = rand_value
                 
                 
                 
                 
         # Removes label column
         augmented_df.drop(df.columns[-1], axis=1, inplace=True)
+        
+        print(augmented_df)
         
         finished_df = pd.concat([df, augmented_df], ignore_index=True)
         
@@ -93,7 +95,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             '''
             
             for i in range(int(nrows/2)):
-                random.seed(i)
+                ##random.seed(i)
                 sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
                 sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
@@ -105,7 +107,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             
             
             for k in range(int(nrows / 2 + .5)):
-                random.seed(k)
+                ##random.seed(k)
                 sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
                 sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
@@ -117,7 +119,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
     # Create a list of random numbers
         randomlist = []
         for j in range(0, nvalues):
-            random.seed(j)
+            ##random.seed(j)
             n = random.randint(0, df.shape[1]-2)
             randomlist.append(n)
             
@@ -169,12 +171,16 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
         
     elif method == "gausNoise":
     #Create a noise matrix
-       # noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
-       noise_matrix = pd.DataFrame()
+       np.random.seed(0)
+       noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
        
-       for k in range(nrows):
-           random.seed(k)
-           noise_matrix = pd.concat([noise_matrix, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
+       #noise_matrix = pd.DataFrame()
+       
+       # for k in range(nrows):
+       #     #random.seed(k)
+       #     noise_matrix = pd.concat([noise_matrix, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
+           
+       # print(noise_matrix)
       
       
        if (1 == 0):
@@ -189,8 +195,10 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
            for i in range(nrows):
                random.seed(i)
                data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
+            
            
            added_noise = data_portion.add(noise_matrix, fill_value = None)
+           
            
                    
            data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
@@ -206,6 +214,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
            # Norm 1 distance 
            #print(norm1Distance(original_points, augmented_points))
                    
+           # print(finished_df)
                    
            return finished_df
     else:
