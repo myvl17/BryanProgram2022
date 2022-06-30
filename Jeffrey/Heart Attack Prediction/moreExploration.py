@@ -12,31 +12,31 @@ import seaborn as sns
 
 
 '''
-1. age - age in years
+1. age - age in years (CONT)
 
-2. sex - sex (1 = male; 0 = female)
+2. sex - sex (1 = male; 0 = female) (DISCRETE)
 
-3. cp - chest pain type (0 = asymptomatic, 1 = typical angina; 2 = atypical angina; 3 = non-anginal pain)
+3. cp - chest pain type (0 = asymptomatic, 1 = typical angina; 2 = atypical angina; 3 = non-anginal pain) (DISCRETE)
 
-4. trestbps - resting blood pressure (in mm Hg on admission to the hospital)
+4. trestbps - resting blood pressure (in mm Hg on admission to the hospital) (CONT)
 
-5. chol - serum cholestoral in mg/dl
+5. chol - serum cholesterol in mg/dl (CONT)
 
-6. fbs - fasting blood sugar > 120 mg/dl (1 = true; 0 = false)
+6. fbs - fasting blood sugar > 120 mg/dl (1 = true; 0 = false) (DISCRETE)
 
-7. restecg - resting electrocardiographic results (1 = normal; 2 = having ST-T wave abnormality; 0 = hypertrophy)
+7. restecg - resting electrocardiographic results (1 = normal; 2 = having ST-T wave abnormality; 0 = hypertrophy) (DISCRETE)
 
-8. thalach - maximum heart rate achieved
+8. thalach - maximum heart rate achieved (CONT)
 
-9. exang - exercise induced angina (1 = yes; 0 = no)
+9. exang - exercise induced angina (1 = yes; 0 = no) (DISCRETE)
 
-10. oldpeak - ST depression induced by exercise relative to rest
+10. oldpeak - ST depression induced by exercise relative to rest (CONT)
 
-11. slope - the slope of the peak exercise ST segment (2 = upsloping; 1 = flat; 0 = downsloping)
+11. slope - the slope of the peak exercise ST segment (2 = upsloping; 1 = flat; 0 = downsloping) (DISCRETE)
 
-12. ca - number of major vessels (0-3) colored by flourosopy
+12. ca - number of major vessels (0-3) colored by flourosopy (DISCRETE)
 
-13. thal - 2 = normal; 1 = fixed defect; 3 = reversable defect
+13. thal - 2 = normal; 1 = fixed defect; 3 = reversable defect (DISCRETE)
 
 14. num - the predicted attribute - diagnosis of heart disease (angiographic disease status) (Value 0 = < diameter narrowing; Value 1 = > 50% diameter narrowing)
 '''
@@ -53,7 +53,7 @@ cols = ['age',
         'sex', 
         'chest_pain', 
         'blood_pressure', 
-        'cholestoral', 
+        'cholesterol', 
         'fasting_blood_sugar', 
         'ecg', 
         'heart_rate', 
@@ -90,7 +90,7 @@ plt.show()
 
 # Exploration graphs
 fig, ax = plt.subplots(2,2, sharex=False, sharey=False)
-g = sns.histplot(df, x='sex', hue='target', multiple='stack', stat='probability', ax=ax[0,0]).set(title='gender')
+g = sns.histplot(df, x='sex', hue='target', multiple='stack', stat='count', ax=ax[0,0]).set(title='gender')
 
 sns.histplot(df, hue='target', x='chest_pain', multiple='dodge', ax=ax[0,1]).set(title='chest pain')
 
@@ -105,8 +105,8 @@ plt.show()
 positive = df[df['target'] == 1]
 negative = df[df['target'] == 0]
 
-positive_filtered = positive.filter(['age', 'sex', 'blood_pressure', 'cholestoral', 'heart_rate', 'st_depression', 'target'])
-negative_filtered = negative.filter(['age', 'sex', 'blood_pressure', 'cholestoral', 'heart_rate', 'st_depression', 'target'])
+positive_filtered = positive.filter(['age', 'sex', 'blood_pressure', 'cholesterol', 'heart_rate', 'st_depression', 'target'])
+negative_filtered = negative.filter(['age', 'sex', 'blood_pressure', 'cholesterol', 'heart_rate', 'st_depression', 'target'])
 
 print("OVERVIEW")
 print(df[df['target'] == 1].describe().T)
@@ -120,7 +120,7 @@ print("\n FEMALE")
 print(positive_filtered[positive_filtered['sex'] == 0].describe().T)
 print(negative_filtered[negative_filtered['sex'] == 0].describe().T)
 
-sns.boxplot(data=df, x='target', y='cholestoral', hue='sex').set(title='Cholestoral')
+sns.boxplot(data=df, x='target', y='cholesterol', hue='sex').set(title='cholesterol')
 plt.show()
 sns.boxplot(data=df, x='target', y='blood_pressure', hue='sex').set(title='Blood Pressure')
 plt.show()
@@ -131,7 +131,7 @@ sns.histplot(data=df, x='age', hue='target', multiple='stack', ax=ax[0,0])
 
 sns.histplot(data=df, x='blood_pressure', hue='target', multiple='stack', ax=ax[0,1])
 
-sns.histplot(df, x='cholestoral', hue='target', multiple='stack', ax=ax[1,0])
+sns.histplot(df, x='cholesterol', hue='target', multiple='stack', ax=ax[1,0])
 
 sns.histplot(df, x='heart_rate', hue='target', multiple='stack', ax=ax[1,1])
 
