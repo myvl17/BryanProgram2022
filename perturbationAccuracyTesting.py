@@ -18,6 +18,8 @@ labels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
 
 df = pd.DataFrame({0:x, 1:y, 2:labels})
 
+plt.scatter(df[0], df[1], c=df[2])
+plt.show()
 
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -63,7 +65,7 @@ print(accuracy_score(y_test, predicted_values))
 from fixingRandomness import applyAugmentationMethod
 
 
-pmUnits = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 2]
+pmUnits = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 2]
 accuracy = []
 
 
@@ -79,8 +81,10 @@ for i in range(len(pmUnits)):
     
     titleStr = 'pmOne Accuracy with unit of ' + str(pmUnits[i])
     
-    plt.scatter(labels.iloc[:10, 0], labels.iloc[:9, 1], c=labels.iloc[:10, 2], marker='o')
+    plt.scatter(labels.iloc[:10, 0], labels.iloc[:10, 1], c=labels.iloc[:10, 2], marker='o')
     plt.scatter(labels.iloc[10:, 0], labels.iloc[10:, 1], c=labels.iloc[10:, 2], marker='x', s=250)
+    plt.xlim(-4, 4)
+    plt.ylim(0, 4)
     plt.title(label=titleStr)
     plt.show()
     
@@ -118,7 +122,7 @@ plt.xlabel("Unit")
 plt.ylabel("Accuracy Percent")
 plt.show()
 
-# gausNoise = [0.05, .1, .25, .50, .75, 1, 10, 10.5]
+# gausNoise = [0.05, .1, .25, .50, .75, 1]
 # accuracy=[]
 
 # for i in range(len(gausNoise)):
@@ -134,6 +138,7 @@ plt.show()
 #     plt.scatter(labels.iloc[:10, 0], labels.iloc[:10, 1], c=labels.iloc[:10, 2], marker='o')
 #     plt.scatter(labels.iloc[10:, 0], labels.iloc[10:, 1], c=labels.iloc[10:, 2], marker='x', s=250)
 #     plt.title(label=titleStr)
+#     plt.xlim(-1, 3)
 #     plt.show()
     
 #     test = [2,3,6,8,9,10,11,12,13]
