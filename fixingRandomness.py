@@ -31,10 +31,10 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
             # Selects random row index
             # random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
-            
+
             # Adds new row from pre-existing random row
             augmented_df = pd.concat([augmented_df, df.iloc[[random_row]]], ignore_index=True)
-            
+        
             
             # Actual Data Augmentation Method:
             # Grabs random row from original data set and appends to new data frame
@@ -44,7 +44,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
                 
                 # Selects random column index
                 # random.seed(i)
-                random_col = random.randint(0, df.shape[1]-2)
+                random_col = random.randint(0, df.shape[1]-1)
                 
                 # Selects random value from original data frame in the same column
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
@@ -67,6 +67,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
         # Norm 1 distance 
         #print(norm1Distance(original_points, augmented_points))
         
+        print(finished_df)
         return finished_df
         
     elif method == "pmOne":

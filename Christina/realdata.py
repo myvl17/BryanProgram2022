@@ -30,7 +30,7 @@ cols = ['CRKUS30A',  # Number of days used crack in past month, between 1 and 30
     "METHAMEVR" # 1 = yes, 2 = no
 ]
 
-df = pd.read_csv('NSDUH_2015_Tab.tsv', sep = '\t', usecols = cols)
+df = pd.read_csv('NSDUH_2015_Tab.tsv', sep = '\t')
 
 df = df.loc[(df['DIABETEVR'] == 1) | (df['DIABETEVR'] == 2)]
 
@@ -38,21 +38,117 @@ descrip = df.describe()
 
 # plt.hist(x = df['IRMARITSTAT'], bins = [-9, -8, 1, 2, 3, 4, 5, 98, 99], rwidth = 0.5)
 
-df = df.loc[(df['METHAMEVR'] == 1) | (df['METHAMEVR'] == 2)]
-df = df[(df['CRKUS30A'] <= 30) | (df['CRKUS30A'] == 91)]
-df = df[(df['COCUS30A'] <= 30) | (df['COCUS30A'] == 91) ]
-df = df[(df['COCUS30A'] <= 30) | (df['COCUS30A'] == 91)]
-df = df[(df['CIG30USE'] <= 30) | (df['CIG30USE'] == 91)]
-df = df[(df['IRWRKSTAT'] <= 3) | (df['IRWRKSTAT'] == 99)]
-df = df[(df['MRDAYPYR'] <= 366) | (df['MRDAYPYR'] == 991)]
-df = df[(df['WRKDHRSWK2'] <= 61)]
+# df = df.loc[(df['METHAMEVR'] == 1) | (df['METHAMEVR'] == 2)]
+# df = df[(df['CRKUS30A'] <= 30) | (df['CRKUS30A'] == 91)]
+# df = df[(df['COCUS30A'] <= 30) | (df['COCUS30A'] == 91) ]
+# df = df[(df['COCUS30A'] <= 30) | (df['COCUS30A'] == 91)]
+# df = df[(df['CIG30USE'] <= 30) | (df['CIG30USE'] == 91)]
+# df = df[(df['IRWRKSTAT'] <= 3) | (df['IRWRKSTAT'] == 99)]
+# df = df[(df['MRDAYPYR'] <= 366) | (df['MRDAYPYR'] == 991)]
+# df = df[(df['WRKDHRSWK2'] <= 61)]
 df = df.replace(to_replace =  (df['DIABETEVR'] == 2), value = 1)
 
 plt.scatter(x = df["WRKDHRSWK2"], y = df['CIG30USE'])
 
+cols = ['IRALCFY','WRKDHRSWK2']
+
+# Function that cleans continuous numerical data counting by year
+def cont_clean_data(x):
+
+    # Survey codes for "Bad Data", Don't Know, Skip, Refused, or Blank
+    if (x == -9):
+        return np.nan
+    if (x == 985):
+        return np.nan
+    if (x == 989):
+        return np.nan
+    if ((x >= 994) & (x < 1000)):
+        return np.nan
+
+    # Codes for "Have never done..." or "Have not done in the past X days"
+    # Equivalent to 0 for numbered questions
+    if ((x == 991) | 
+    (x == 993)):
+        return 0
+
+    # Ignore value if conditions don't match
+    return x 
+
+df[cols] = df[cols].applymap(cont_clean_data)
 
 
-print(df.corr())
+# # Function that cleans all other special data codes
+# def ord_clean_data(x):
+
+#     # Survey codes for "Bad Data", Don't Know, Skip, Refused, or Blank
+#     if ((x == -9) |
+#     ((x >= 94) & (x < 100)) |
+#     (x == 85) |
+#     (x == 89)):
+#         return np.nan
+
+#     # Codes for "Have never done..." or "Have not done in the past X days"
+#     # Equivalent to 0 for numbered questions
+#     if ((x == 91) |
+#     (x == 93)):
+#         return 0
+
+#     # Ignore value if conditions don't match
+#     return x 
+
+# # Changes for wrkdhrsw2
+# df[(df['IRWRKSTAT'] == 3) | (df['IRWRKSTAT'] == 4), "WRKDHRSWK2"] = 0
+# df.loc[df['WRKDHRSWK2'] == 61, "WRKDHRSWK2"] = np.nan
+
+# # Changes for binary categorical variables
+# df.loc[(df['COCEVER'] == 2), "COCEVER"] = 0
+# df.loc[(df['CRKEVR'] == 2), "CRKEVR"] = 0
+# df.loc[(df['IRSEX'] == 2), "IRSEX"] = 0
+
+# Apply clean_data functions
+# df[cont_cols] = df[cont_cols].applymap(cont_clean_data)
+# df[ord_cols] = df[ord_cols].applymap(ord_clean_data)
+
+df
+
+
+import seaborn as sns
+# Function for easily plotting sns barplots on a grid
+def plot_bar(data, grid, x, y, xlabel, ylabel, title, xticklabels, rotation=0):
+    ax = fig.add_subplot(grid[0], grid[1], grid[2])
+    sns.barplot(data=data, x=x, y=y, 
+    estimator=(lambda x: sum(x)/len(x)), ax=ax).set_title(title)
+    ax.set(xlabel=xlabel, ylabel=ylabel)
+    ax.set_xticklabels(xticklabels, rotation=rotation)
+
+# Set figure parameters
+plt.rcParams['figure.figsize'] = [16, 12]
+plt.rcParams['figure.subplot.wspace'] = 0.3
+plt.rcParams['figure.subplot.hspace'] = 0.7
+fig = plt.figure()
+
+# Call plot_bar to plot bar graphs for various variables
+plot_bar(df,[2, 2, 1], 'DIABETEVR', 'IRALCFY', 'Diabetes Diagnosis', 'Days Consumed Alcohol', 
+"Average # Days Consumed Alcohol\nin a Year vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+
+# plot_bar(df,[2, 2, 2], 'DIABETEVR', 'WRKDHRSWK2', 'Diabetes Diagnosis', 'Hours Worked', 
+# "Average # Hours Worked in a\nWeek vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+
+plot_bar(df,[2, 2, 2], 'DIABETEVR', 'IRPINC3', 'Diabetes Diagnosis', 'Income Range', 
+"Average Income Range\n vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+
+plot_bar(df,[2, 2, 3], 'DIABETEVR', 'IRSEX', 'Diabetes Diagnosis', 'Sex', 
+"Sex vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+
+plot_bar(df,[2, 2, 4], 'DIABETEVR', 'CATAG3', 'Diabetes Diagnosis', 'Age Group', 
+"Average Age Group\n vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+
+plt.tight_layout()
+# plot_bar(df,[2, 2, 2], 'ireduhighst2', 'coccrkever', 'Highest Completed Education', 'Proportion of People Who\nHave Used Crk/Cocaine', 
+# "Proportion of People who have\nUsed Crk/Coc by Highest Completed Education",
+# ["5th or less", "6th", "7th", "8th", "9th", "10th", "11th/12th,\nno diploma,", 
+# "High school\ndiploma/GED", "Some college,\nno degree", "Associate's Deg.", "College Grad\nor Higher"], 90)
+# print(df.corr())
 
 # X = df.drop(df["DIABETEVR"])   #Feature Matrix
 # y = df["DIABETEVR"]          #Target Variable
