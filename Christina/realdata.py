@@ -48,7 +48,7 @@ descrip = df.describe()
 # df = df[(df['WRKDHRSWK2'] <= 61)]
 df = df.replace(to_replace =  (df['DIABETEVR'] == 2), value = 1)
 
-plt.scatter(x = df["WRKDHRSWK2"], y = df['CIG30USE'])
+# plt.scatter(x = df["WRKDHRSWK2"], y = df['CIG30USE'])
 
 cols = ['IRALCFY','WRKDHRSWK2']
 
@@ -109,41 +109,49 @@ df[cols] = df[cols].applymap(cont_clean_data)
 # df[cont_cols] = df[cont_cols].applymap(cont_clean_data)
 # df[ord_cols] = df[ord_cols].applymap(ord_clean_data)
 
-df
 
 
 import seaborn as sns
-# Function for easily plotting sns barplots on a grid
-def plot_bar(data, grid, x, y, xlabel, ylabel, title, xticklabels, rotation=0):
-    ax = fig.add_subplot(grid[0], grid[1], grid[2])
-    sns.barplot(data=data, x=x, y=y, 
-    estimator=(lambda x: sum(x)/len(x)), ax=ax).set_title(title)
-    ax.set(xlabel=xlabel, ylabel=ylabel)
-    ax.set_xticklabels(xticklabels, rotation=rotation)
+# # Function for easily plotting sns barplots on a grid
+# def plot_bar(data, grid, x, y, xlabel, ylabel, title, xticklabels, rotation=0):
+#     ax = fig.add_subplot(grid[0], grid[1], grid[2])
+#     sns.barplot(data=data, x=x, y=y, 
+#     estimator=(lambda x: sum(x)/len(x)), ax=ax).set_title(title)
+#     ax.set(xlabel=xlabel, ylabel=ylabel)
+#     ax.set_xticklabels(xticklabels, rotation=rotation)
 
-# Set figure parameters
-plt.rcParams['figure.figsize'] = [16, 12]
-plt.rcParams['figure.subplot.wspace'] = 0.3
-plt.rcParams['figure.subplot.hspace'] = 0.7
-fig = plt.figure()
+# # Set figure parameters
+# plt.rcParams['figure.figsize'] = [16, 12]
+# plt.rcParams['figure.subplot.wspace'] = 0.3
+# plt.rcParams['figure.subplot.hspace'] = 0.7
+# fig = plt.figure()
 
-# Call plot_bar to plot bar graphs for various variables
-plot_bar(df,[2, 2, 1], 'DIABETEVR', 'IRALCFY', 'Diabetes Diagnosis', 'Days Consumed Alcohol', 
-"Average # Days Consumed Alcohol\nin a Year vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+# # Call plot_bar to plot bar graphs for various variables
+# plot_bar(df,[2, 2, 1], 'DIABETEVR', 'IRALCFY', 'Diabetes Diagnosis', 'Days Consumed Alcohol', 
+# "Average # Days Consumed Alcohol\nin a Year vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
 
-# plot_bar(df,[2, 2, 2], 'DIABETEVR', 'WRKDHRSWK2', 'Diabetes Diagnosis', 'Hours Worked', 
-# "Average # Hours Worked in a\nWeek vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+# # plot_bar(df,[2, 2, 2], 'DIABETEVR', 'WRKDHRSWK2', 'Diabetes Diagnosis', 'Hours Worked', 
+# # "Average # Hours Worked in a\nWeek vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
 
-plot_bar(df,[2, 2, 2], 'DIABETEVR', 'IRPINC3', 'Diabetes Diagnosis', 'Income Range', 
-"Average Income Range\n vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+# plot_bar(df,[2, 2, 2], 'DIABETEVR', 'IRPINC3', 'Diabetes Diagnosis', 'Income Range', 
+# "Average Income Range\n vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
 
-plot_bar(df,[2, 2, 3], 'DIABETEVR', 'IRSEX', 'Diabetes Diagnosis', 'Sex', 
-"Sex vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+# plot_bar(df,[2, 2, 3], 'DIABETEVR', 'IRSEX', 'Diabetes Diagnosis', 'Sex', 
+# "Sex vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
 
-plot_bar(df,[2, 2, 4], 'DIABETEVR', 'CATAG3', 'Diabetes Diagnosis', 'Age Group', 
-"Average Age Group\n vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+# plot_bar(df,[2, 2, 4], 'DIABETEVR', 'CATAG3', 'Diabetes Diagnosis', 'Age Group', 
+# "Average Age Group\n vs Diabetes Diagnosis", ["Has Diabetes", "Does Not Have Diabetes"])
+
+# Stolen from Jeff
+# Exploration graphs
+fig, ax = plt.subplots(2, sharey=False)
+g = sns.histplot(df, x='IRSEX', hue='DIABETEVR', multiple='dodge', ax=ax[0],hist_kws={'alpha': 1}).set(title='Sex', xlabel = 'Sex')
+
+sns.histplot(df, hue='DIABETEVR', x='CATAG3', multiple='dodge', ax=ax[1],hist_kws={'alpha': 1}).set(title='Age Category', xlabel = 'Age')
 
 plt.tight_layout()
+plt.show()
+
 # plot_bar(df,[2, 2, 2], 'ireduhighst2', 'coccrkever', 'Highest Completed Education', 'Proportion of People Who\nHave Used Crk/Cocaine', 
 # "Proportion of People who have\nUsed Crk/Coc by Highest Completed Education",
 # ["5th or less", "6th", "7th", "8th", "9th", "10th", "11th/12th,\nno diploma,", 
