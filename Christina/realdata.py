@@ -145,9 +145,9 @@ import seaborn as sns
 # Stolen from Jeff
 # Exploration graphs
 fig, ax = plt.subplots(2, sharey=False)
-g = sns.histplot(df, x='IRSEX', hue='DIABETEVR', multiple='dodge', ax=ax[0],hist_kws={'alpha': 1}).set(title='Sex', xlabel = 'Sex')
+g = sns.histplot(df, x='IRSEX', hue='DIABETEVR', multiple='dodge', ax=ax[0]).set(title='Sex', xlabel = 'Sex')
 
-sns.histplot(df, hue='DIABETEVR', x='CATAG3', multiple='dodge', ax=ax[1],hist_kws={'alpha': 1}).set(title='Age Category', xlabel = 'Age')
+sns.histplot(df, color = ['blue', 'red'], hue='DIABETEVR', x='CATAG3', multiple='dodge', ax=ax[1]).set(title='Age Category', xlabel = 'Age')
 
 plt.tight_layout()
 plt.show()
