@@ -14,7 +14,8 @@ y = [.3, .2, .75, .6, .75, .5, .75, .9, 1, 1.1]
 
 labels = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
 
-# plt.scatter(x, y, c=labels)
+plt.scatter(x, y, c=labels)
+plt.show()
 
 df = pd.DataFrame({0:x, 1:y, 2:labels})
 
@@ -38,11 +39,28 @@ import tensorflow as tf
 '''
     
 training = [0,1,4,5,7,9]
+training_x = []
+training_y = []
+training_labels = []
+for i in training:
+    training_x.append(x[i])
+    training_y.append(y[i])
+    training_labels.append(labels[i])
+
 test = [2,3,6,8]
+testing_x = []
+testing_y = []
+testing_labels = []
+for i in test:
+    testing_x.append(x[i])
+    testing_y.append(y[i])
+    testing_labels.append(labels[i])
 
 
-plt.scatter(training, [.3, .2, .75, .5, .9, 1.1], c=[0,0,0,1,1,1], marker='*', label='training')
-plt.scatter(test, [.75, .6, .75, 1], c=[0,0,1,1], marker='v', label='testing')
+# plt.scatter(training, [.3, .2, .75, .5, .9, 1.1], c=[0,0,0,1,1,1], marker='*', label='training')
+# plt.scatter(test, [.75, .6, .75, 1], c=[0,0,1,1], marker='v', label='testing')
+plt.scatter(training_x, training_y, c=training_labels, marker='*', label='training', cmap='winter')
+plt.scatter(testing_x, testing_y, c=testing_labels, marker='D', label='testing', cmap='winter')
 plt.legend()
 plt.show()
 
