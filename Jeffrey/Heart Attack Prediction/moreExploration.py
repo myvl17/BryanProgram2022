@@ -90,13 +90,13 @@ plt.show()
 
 # Exploration graphs
 fig, ax = plt.subplots(2,2, sharex=False, sharey=False)
-g = sns.histplot(df, x='sex', hue='target', multiple='stack', stat='count', ax=ax[0,0]).set(title='gender')
+g = sns.histplot(df, x='sex', hue='target', multiple='dodge', stat='count', ax=ax[0,0]).set(title='sex')
 
 sns.histplot(df, hue='target', x='chest_pain', multiple='dodge', ax=ax[0,1]).set(title='chest pain')
 
 sns.histplot(df, hue='target', x='angina', multiple='dodge', ax=ax[1,0]).set(title='angina')
 
-sns.histplot(df, hue='target', x='vessels', multiple='dodge', ax=ax[1,1]).set(title='vessels')
+# sns.histplot(df, hue='target', x='vessels', multiple='dodge', ax=ax[1,1]).set(title='vessels')
 
 plt.tight_layout()
 plt.show()
