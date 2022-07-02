@@ -7,6 +7,8 @@ Created on Fri Jul  1 14:25:27 2022
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 data = pd.read_csv('MI.data', sep=',', header=None)
 
@@ -40,3 +42,25 @@ col_names = ['ID', 'AGE', 'SEX', 'INF_ANAM', 'STENOK_AN', 'FK_STENOK', 'IBS_POST
              'FIBR_PREDS', 'PREDS_TAH', 'JELUD_TAH', 'FIBR_JELUD', 'A_V_BLOK', 'OTEK_LANC', 'RAZRIV', 'DRESSLER', 'ZSN', 'REC_IM', 'P_IM_STEN', 'LET_IS']
 
 data.columns = col_names
+
+
+
+
+chronic = data.drop(['FIBR_PREDS', 'PREDS_TAH', 'JELUD_TAH', 'FIBR_JELUD', 'A_V_BLOK', 'OTEK_LANC', 'RAZRIV', 'DRESSLER', 'REC_IM', 'P_IM_STEN', 'LET_IS'], axis=1)
+
+pd.options.display.max_columns = chronic.shape[1]
+
+# Finds all '?' and replaces with Na
+for i in range(chronic.shape[0]):
+    for j in range(chronic.shape[1]):
+        if chronic.iloc[i, j] == '?':
+            chronic.iloc[i, j] = None
+            
+            
+print(chronic.dtypes)
+
+# chronic_corrMatrix = chronic.corr()
+# sns.heatmap(chronic_corrMatrix, annot=False)
+# plt.show()
+
+
