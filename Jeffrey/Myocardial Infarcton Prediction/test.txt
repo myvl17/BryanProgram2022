@@ -1,0 +1,25 @@
+1. Record ID (ID): Unique identifier. Cannot be related to participant. It can be used for reference only.
+2. Age (AGE): Real. Age of patient.
+3. Gender (SEX): Nominal:
+Cases Fraction
+0: female 635 37.35%
+1: male 1065 62.65%
+Missing 0 0%
+4. Quantity of myocardial infarctions in the anamnesis (INF_ANAM): Ordinal
+Cases Fraction
+0: zero 1060 62.35%
+1: one 410 24.12%
+2: two 147 8.65%
+3: three and more 79 4.65%
+Missing 4 0.24%
+5. Exertional angina pectoris in the anamnesis (STENOK_AN): Ordinal
+Cases Fraction
+0: never 661 38.88%
+1: during the last year 146 8.59%
+2: one year ago 137 8.06%
+3: two years ago 117 6.88%
+4: three years ago 76 4.47%
+5: 4-5 years ago 125 7.35%
+6: more than 5 years ago 332 19.53%
+Missing 106 6.24%
+6. Functional class (FC) of angina pectoris in the last year (FK_STENOK): Ordinal
