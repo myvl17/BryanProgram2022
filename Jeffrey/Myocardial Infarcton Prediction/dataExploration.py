@@ -46,7 +46,12 @@ data.columns = col_names
 
 
 
-chronic = data.drop(['FIBR_PREDS', 'PREDS_TAH', 'JELUD_TAH', 'FIBR_JELUD', 'A_V_BLOK', 'OTEK_LANC', 'RAZRIV', 'DRESSLER', 'REC_IM', 'P_IM_STEN', 'LET_IS'], axis=1)
+# chronic = data.drop(['FIBR_PREDS', 'PREDS_TAH', 'JELUD_TAH', 'FIBR_JELUD', 'A_V_BLOK', 'OTEK_LANC', 'RAZRIV', 'DRESSLER', 'REC_IM', 'P_IM_STEN', 'LET_IS'], axis=1)
+
+chronic = data.drop(['FIBR_PREDS', 'PREDS_TAH', 'JELUD_TAH', 'FIBR_JELUD', 'A_V_BLOK', 'OTEK_LANC', 'RAZRIV', 'DRESSLER', 'REC_IM', 'P_IM_STEN', 'LET_IS',
+                    'IBS_NASL', 'R_AB_3_n', 
+                    'GIPO_K', 'K_BLOOD', 'NA_KB', 'NOT_NA_KB', 'LID_KB',
+                    'S_AD_KBRIG', 'D_AD_KBRIG', 'KFK_BLOOD', ], axis=1)
 
 pd.options.display.max_columns = chronic.shape[1]
 
@@ -56,6 +61,9 @@ for i in range(chronic.shape[0]):
         if chronic.iloc[i, j] == '?':
             chronic.iloc[i, j] = None
             
+# Replace all missing values
+chronic = chronic.replace(to_replace='None', value=np.nan).dropna()
+chronic = chronic.reset_index()
             
 print(chronic.dtypes)
 
