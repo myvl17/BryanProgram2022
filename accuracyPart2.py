@@ -47,30 +47,30 @@ for file in filesG:
     Gaussian.append(OkayFunction(file))
     #pmOne
     Gaussian2.append(superFunction(file, "pmOne", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'kNN', unit = 0.1).iloc[0, 3])
+                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
     Gaussian3.append(superFunction(file, "randSwap", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'kNN').iloc[0, 3])
+                  target = 7, split = 500, classifier = 'SVM').iloc[0, 3])
 
     #gausNoise
     Gaussian4.append(superFunction(file, "gausNoise", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'kNN', noise = 0.05).iloc[0, 3])
+                  target = 7, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
 
     
 for file in filesU:
     uniform.append(OkayFunction(file))
     #pmOne
     uniform2.append(superFunction(file, "pmOne", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'kNN', unit = 0.1).iloc[0, 3])
+                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
     uniform3.append(superFunction(file, "randSwap", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'kNN', unit = 0.1).iloc[0, 3])
+                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #gausNoise
     uniform4.append(superFunction(file, "gausNoise", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'kNN', noise = 0.05).iloc[0, 3])
+                  target = 7, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
 
 
 fig, ax = plt.subplots(2, 2)

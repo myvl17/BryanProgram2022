@@ -259,6 +259,7 @@ from sklearn.cluster import KMeans
 from sklearn.naive_bayes import GaussianNB
 from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
+from sklearn.svm import SVC
 
 def runClassifier(df, classifier, accuracy=None):
     dfdrop = df.drop(columns = df.shape[1] - 1)
@@ -353,6 +354,24 @@ def runClassifier(df, classifier, accuracy=None):
         second_predicted_labels = first_predicted_values > .5
         final_predicted_labels  = second_predicted_labels* 1
         predicted_values = final_predicted_labels
+        
+    #SVM
+    elif classifier == "SVM":
+        X = dfdrop
+        Y = df[df.shape[1] - 1]
+        
+        # Split into training and test set
+        X_train, X_test, y_train, y_test = train_test_split(
+                     X, Y, test_size = 0.2, random_state=42)
+     
+        random.seed(1)
+        svm = SVC(gamma = 2, C = 1, kernel = 'linear', max_iter = 10000, random_state = 0)
+        
+        # fit the model with data
+        # svm.fit(X_train,y_train)
+        svm.fit(X_train, y_train)
+        predicted_values = svm.predict(X_test)
+    
     
     #Accuracy
     if (accuracy == "og"): 

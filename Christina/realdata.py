@@ -34,7 +34,7 @@ df = pd.read_csv('NSDUH_2015_Tab.tsv', sep = '\t')
 
 df = df.loc[(df['DIABETEVR'] == 1) | (df['DIABETEVR'] == 2)]
 
-descrip = df.describe()
+# descrip = df.describe()
 
 # plt.hist(x = df['IRMARITSTAT'], bins = [-9, -8, 1, 2, 3, 4, 5, 98, 99], rwidth = 0.5)
 
@@ -147,7 +147,7 @@ import seaborn as sns
 fig, ax = plt.subplots(2, sharey=False)
 g = sns.histplot(df, x='IRSEX', hue='DIABETEVR', multiple='dodge', ax=ax[0]).set(title='Sex', xlabel = 'Sex')
 
-sns.histplot(df, color = ['blue', 'red'], hue='DIABETEVR', x='CATAG3', multiple='dodge', ax=ax[1]).set(title='Age Category', xlabel = 'Age')
+sns.histplot(df, hue='DIABETEVR', x='CATAG3', multiple='dodge', ax=ax[1]).set(title='Age Category', xlabel = 'Age')
 
 plt.tight_layout()
 plt.show()
