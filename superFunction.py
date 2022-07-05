@@ -31,10 +31,10 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             # Selects random row index
             # random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
-            
+
             # Adds new row from pre-existing random row
             augmented_df = pd.concat([augmented_df, df.iloc[[random_row]]], ignore_index=True)
-            
+        
             
             # Actual Data Augmentation Method:
             # Grabs random row from original data set and appends to new data frame
@@ -44,7 +44,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                 
                 # Selects random column index
                 # random.seed(i)
-                random_col = random.randint(0, df.shape[1]-2)
+                random_col = random.randint(0, df.shape[1]-1)
                 
                 # Selects random value from original data frame in the same column
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
@@ -54,7 +54,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                 augmented_points.append(rand_value)
                 
                 # Appends rand_value to new column
-                augmented_df.iloc[-1][random_col] = rand_value
+                augmented_df.iloc[-1, random_col] = rand_value
                 
                 
                 
@@ -62,11 +62,14 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         # Removes label column
         augmented_df.drop(df.columns[-1], axis=1, inplace=True)
         
+        # print(augmented_df)
+        
         finished_df = pd.concat([df, augmented_df], ignore_index=True)
         
         # Norm 1 distance 
         #print(norm1Distance(original_points, augmented_points))
         
+        # print(finished_df)
         return finished_df
         
     elif method == "pmOne":
@@ -92,7 +95,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             '''
             
             for i in range(int(nrows/2)):
-                random.seed(i)
+                ##random.seed(i)
                 sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
                 sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
@@ -104,7 +107,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             
             
             for k in range(int(nrows / 2 + .5)):
-                random.seed(k)
+                ##random.seed(k)
                 sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
                 sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
             
@@ -116,7 +119,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
     # Create a list of random numbers
         randomlist = []
         for j in range(0, nvalues):
-            random.seed(j)
+            ##random.seed(j)
             n = random.randint(0, df.shape[1]-2)
             randomlist.append(n)
             
@@ -168,12 +171,16 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         
     elif method == "gausNoise":
     #Create a noise matrix
-       # noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
-       noise_matrix = pd.DataFrame()
+       np.random.seed(0)
+       noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
        
-       for k in range(nrows):
-           random.seed(k)
-           noise_matrix = pd.concat([noise_matrix, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
+       #noise_matrix = pd.DataFrame()
+       
+       # for k in range(nrows):
+       #     #random.seed(k)
+       #     noise_matrix = pd.concat([noise_matrix, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
+           
+       # print(noise_matrix)
       
       
        if (1 == 0):
@@ -188,8 +195,10 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
            for i in range(nrows):
                random.seed(i)
                data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
+            
            
            added_noise = data_portion.add(noise_matrix, fill_value = None)
+           
            
                    
            data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
@@ -205,12 +214,11 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
            # Norm 1 distance 
            #print(norm1Distance(original_points, augmented_points))
                    
+           # print(finished_df)
                    
            return finished_df
     else:
         return None
-    
-
     
   
 from sklearn.model_selection import train_test_split
@@ -249,7 +257,7 @@ def logReg(dataset, feature_cols, target, split):
         dataset.loc[i, target] = y_pred[i - split]
         
     
-    plt.scatter(dataset[0], dataset[1], c = dataset[dataset.shape[1] - 1])
+    # plt.scatter(dataset[0], dataset[1], c = dataset[dataset.shape[1] - 1])
     return dataset
 
 
@@ -437,16 +445,15 @@ Outputs:
 def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
     df = pd.read_table(file, delimiter=" ", header=None)
     
-    plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
-    plt.show()
+    # plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
+    # plt.show()
     augmentation = applyAugmentationMethod(df, method, nrows, nvalues, unit=unit, noise=noise)
     
     logRegression = logReg(augmentation, feature_cols, target, split)
     
-    plt.scatter(logRegression[0], logRegression[1],
-                c = logRegression[logRegression.shape[1] - 1])
+    # plt.scatter(logRegression[0], logRegression[1],
+    #             c = logRegression[logRegression.shape[1] - 1])
     classifier = runClassifier(logRegression, classifier)
-    
     return classifier
     
 # feature_cols = []

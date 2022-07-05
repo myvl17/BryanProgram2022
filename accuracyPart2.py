@@ -18,8 +18,8 @@ from FunctionReturnsF1 import OkayFunction
 #               target = 7, split = 500, classifier = 'kNN', unit = 0.1)
 
 # Ticks for plots
-distancesGaussian = [-10, -5, -2, 0, 0.5, 1.0, 1.5, 2.0]
-distancesUniform = [-10, -5, -2, 0, 0.5, 1.0, 1.5, 2.0]
+distancesGaussian = [-10, -5, -2, -1, -0.75, -0.5, 0, 0.5, 1.0, 1.5, 2.0]
+distancesUniform = [-10, -5, -2, -1, -0.75, -0.5, 0, 0.5, 1.0, 1.5, 2.0]
 
 
 
@@ -35,42 +35,49 @@ uniform4 = []
 
 
 filesG = ["Gaussian_Data_-10_Unit.txt", "Gaussian_Data_-5_Unit.txt",
-          "Gaussian_Data_-1_Unit.txt", "Gaussian_Data_0_Unit.txt",
+          "Gaussian_Data_-2_Unit.txt","Gaussian_Data_-1_Unit.txt",
+          "Gaussian_Data_-0.75_Unit.txt", "Gaussian_Data_-0.5_Unit.txt","Gaussian_Data_0_Unit.txt",
          "Gaussian_Data_0.5_Unit.txt", "Gaussian_Data_1.0_Unit.txt",
           "Gaussian_Data_1.5_Unit.txt", 'Gaussian_Data_2.0_Unit.txt']
 filesU = ["Uniform_Data_-10_Unit.txt", "Uniform_Data_-5_Unit.txt",
-          "Uniform_Data_-1_Unit.txt", "Uniform_Data_0_Unit.txt",
+          "Uniform_Data_-2_Unit.txt", "Uniform_Data_-1_Unit.txt", "Uniform_Data_-0.75_Unit.txt",
+         "Uniform_Data_-0.5_Unit.txt", "Uniform_Data_0_Unit.txt",
          "Uniform_Data_0.5_Unit.txt", "Uniform_Data_1.0_Unit.txt",
           "Uniform_Data_1.5_Unit.txt", 'Uniform_Data_2.0_Unit.txt']
+
+
+feature_cols = []
+for i in range(0, 149, 1):
+    feature_cols.append(i)
 
 for file in filesG:
     Gaussian.append(OkayFunction(file))
     #pmOne
-    Gaussian2.append(superFunction(file, "pmOne", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+    Gaussian2.append(superFunction(file, "pmOne", 200, 30, feature_cols = feature_cols,
+                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
-    Gaussian3.append(superFunction(file, "randSwap", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'SVM').iloc[0, 3])
+    Gaussian3.append(superFunction(file, "randSwap", 200, 30, feature_cols = feature_cols,
+                  target = 150, split = 500, classifier = 'SVM').iloc[0, 3])
 
     #gausNoise
-    Gaussian4.append(superFunction(file, "gausNoise", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
+    Gaussian4.append(superFunction(file, "gausNoise", 200, 30, feature_cols = feature_cols,
+                  target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
 
     
 for file in filesU:
     uniform.append(OkayFunction(file))
     #pmOne
-    uniform2.append(superFunction(file, "pmOne", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+    uniform2.append(superFunction(file, "pmOne", 200, 30, feature_cols = feature_cols,
+                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
-    uniform3.append(superFunction(file, "randSwap", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+    uniform3.append(superFunction(file, "randSwap", 200, 30, feature_cols = feature_cols,
+                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #gausNoise
-    uniform4.append(superFunction(file, "gausNoise", 500, 3, feature_cols = [0, 1, 2, 3, 4, 5, 6],
-                  target = 7, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
+    uniform4.append(superFunction(file, "gausNoise", 200, 30, feature_cols = feature_cols,
+                  target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
 
 
 fig, ax = plt.subplots(2, 2)
@@ -136,3 +143,4 @@ ax3[1, 1].set_title("Uniform Augment Data Accuracy")
 ax3[1, 1].set_xlabel("Distance Between Clusters")
 
 plt.tight_layout()
+
