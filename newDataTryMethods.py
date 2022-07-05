@@ -51,6 +51,10 @@ np.savetxt("Uniform_Data_-0.75_Unit.txt", generateRawData(500, 150, -0.75, "unif
 
 np.savetxt("Gaussian_Data_-0.75_Unit.txt", generateRawData(500, 150, -0.75, "gaussian"))
 
+np.savetxt("Uniform_Data_-1.1_Unit.txt", generateRawData(500, 150, -1.1, "uniform"))
+
+np.savetxt("Gaussian_Data_-1.1_Unit.txt", generateRawData(500, 150, -1.1, "gaussian"))
+
 from applyAugmentationMethod import applyAugmentationMethod
 
 # applyAugmentationMethod('Generated Gaussian Distribution.txt', "randSwap", 200, 30)
