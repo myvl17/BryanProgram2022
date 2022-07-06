@@ -13,12 +13,12 @@ import random
 from generateRawData import generateRawData
 # from superFunction import runClassifier
 
-
+'''
 data = generateRawData(500, 1000, .5, 'uniform')
 
 plt.scatter(data[0], data[1], c=data[data.shape[1]-1])
 plt.show()
-
+'''
 
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
@@ -83,7 +83,7 @@ def runClassifier(df, classifier, accuracy=None):
     return results_df
 
 
-
+'''
 numCols = []
 # for i in range(1, 500, 10):
 #     numCols.append(i)
@@ -103,4 +103,4 @@ for i in range(len(numCols)):
 
 plt.plot(numCols, accMes, marker='o')
 plt.show()
-    
+'''
