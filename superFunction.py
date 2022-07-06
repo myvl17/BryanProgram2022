@@ -445,14 +445,14 @@ Outputs:
 def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
     df = pd.read_table(file, delimiter=" ", header=None)
     
-    # plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
-    # plt.show()
+    plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
+    plt.show()
     augmentation = applyAugmentationMethod(df, method, nrows, nvalues, unit=unit, noise=noise)
     
     logRegression = logReg(augmentation, feature_cols, target, split)
     
-    # plt.scatter(logRegression[0], logRegression[1],
-    #             c = logRegression[logRegression.shape[1] - 1])
+    plt.scatter(logRegression[0], logRegression[1],
+                c = logRegression[logRegression.shape[1] - 1])
     classifier = runClassifier(logRegression, classifier)
     return classifier
     

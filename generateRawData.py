@@ -22,8 +22,8 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         
         # Second set of points is a either 0 or 1, the distance between points,
         # and 1 added together
-        c = a + distance + 1
-        d = b + distance + 1 
+        c = a + distance 
+        d = b + distance 
 
         # Create two separate dataframes that fit in two different 
         # ranges on a uniform distribution
@@ -50,13 +50,13 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         return dfreal
     else:
         # Creates first Gaussian distribution
-        label1 = pd.DataFrame(np.random.normal(-5, (distance - 10)/(-4), size=(int(nrows/2), ncolumns)))
+        label1 = pd.DataFrame(np.random.normal(5, (distance - 10)/(-4), size=(int(nrows/2), ncolumns)))
         # Adds new column for label
         label1['label'] = 0
         
         
         # Creates second Gaussian distribution
-        label2 = pd.DataFrame(np.random.normal(5, (distance - 10)/(-4), size=(int(nrows/2), ncolumns)))
+        label2 = pd.DataFrame(np.random.normal(5 + distance, (distance - 10)/(-4), size=(int(nrows/2), ncolumns)))
         # Adds new column for label
         label2['label'] = 1
         

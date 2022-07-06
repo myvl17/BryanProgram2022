@@ -11,6 +11,7 @@ import pandas as pd
 from superFunction import superFunction
 from generateRawData import generateRawData
 from FunctionReturnsF1 import OkayFunction
+from superFunction import runClassifier
 
 # df =  generateRawData(500, 7, -5, "gaussian")
 
@@ -18,8 +19,8 @@ from FunctionReturnsF1 import OkayFunction
 #               target = 7, split = 500, classifier = 'kNN', unit = 0.1)
 
 # Ticks for plots
-distancesGaussian = [-10, -5, -2, -1.1, -1, -0.75, -0.5, 0, 0.5, 1.0, 1.5, 2.0]
-distancesUniform = [-10, -5, -2, -1.1, -1, -0.75, -0.5, 0, 0.5, 1.0, 1.5, 2.0]
+distancesGaussian = [0, 0.5, 0.75, 0.90, 1.0, 1.1, 1.25, 1.5, 2.0]
+distancesUniform = [0, 0.5, 0.75, 0.90, 1.0, 1.1, 1.25, 1.5, 2.0]
 
 
 
@@ -34,16 +35,14 @@ Gaussian4 = []
 uniform4 = []
 
 
-filesG = ["Gaussian_Data_-10_Unit.txt", "Gaussian_Data_-5_Unit.txt",
-          "Gaussian_Data_-2_Unit.txt","Gaussian_Data_-1_Unit.txt", "Gaussian_Data_-1.1_Unit.txt",
-          "Gaussian_Data_-0.75_Unit.txt", "Gaussian_Data_-0.5_Unit.txt","Gaussian_Data_0_Unit.txt",
-         "Gaussian_Data_0.5_Unit.txt", "Gaussian_Data_1.0_Unit.txt",
+filesG = ["Gaussian_Data_0_Unit.txt",
+         "Gaussian_Data_0.5_Unit.txt", "Gaussian_Data_0.75_Unit.txt", "Gaussian_Data_0.90_Unit.txt",
+        "Gaussian_Data_1.0_Unit.txt",
+         "Gaussian_Data_1.1_Unit.txt", "Gaussian_Data_1.25_Unit.txt",
           "Gaussian_Data_1.5_Unit.txt", 'Gaussian_Data_2.0_Unit.txt']
-filesU = ["Uniform_Data_-10_Unit.txt", "Uniform_Data_-5_Unit.txt", 
-          "Uniform_Data_-2_Unit.txt", "Uniform_Data_-1.1_Unit.txt", 
-          "Uniform_Data_-1_Unit.txt", "Uniform_Data_-0.75_Unit.txt",
-         "Uniform_Data_-0.5_Unit.txt", "Uniform_Data_0_Unit.txt",
-         "Uniform_Data_0.5_Unit.txt", "Uniform_Data_1.0_Unit.txt",
+filesU = ["Uniform_Data_0_Unit.txt",
+         "Uniform_Data_0.5_Unit.txt", "Uniform_Data_0.75_Unit.txt", "Uniform_Data_0.90_Unit.txt", "Uniform_Data_1.0_Unit.txt",
+         "Uniform_Data_1.1_Unit.txt", "Uniform_Data_1.25_Unit.txt",
           "Uniform_Data_1.5_Unit.txt", 'Uniform_Data_2.0_Unit.txt']
 
 
@@ -52,7 +51,9 @@ for i in range(0, 149, 1):
     feature_cols.append(i)
 
 for file in filesG:
-    Gaussian.append(OkayFunction(file))
+    df = pd.read_table(file, delimiter = " ", header = None)
+    
+    Gaussian.append(runClassifier(df, 'SVM').iloc[0, 3])
     #pmOne
     Gaussian2.append(superFunction(file, "pmOne", 200, 30, feature_cols = feature_cols,
                   target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
@@ -67,7 +68,9 @@ for file in filesG:
 
     
 for file in filesU:
-    uniform.append(OkayFunction(file))
+    df = pd.read_table(file, delimiter = " ", header = None)
+    
+    uniform.append(runClassifier(df, 'SVM').iloc[0, 3])
     #pmOne
     uniform2.append(superFunction(file, "pmOne", 200, 30, feature_cols = feature_cols,
                   target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
