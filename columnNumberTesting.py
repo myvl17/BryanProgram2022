@@ -14,7 +14,7 @@ from generateRawData import generateRawData
 # from superFunction import runClassifier
 
 
-data = generateRawData(500, 1000, 0, 'uniform')
+data = generateRawData(500, 1000, -1.1, 'uniform')
 
 plt.scatter(data[0], data[1], c=data[data.shape[1]-1])
 plt.show()
