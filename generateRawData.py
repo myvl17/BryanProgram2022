@@ -50,13 +50,13 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         return dfreal
     else:
         # Creates first Gaussian distribution
-        label1 = pd.DataFrame(np.random.normal(5, (distance - 10)/(-4), size=(int(nrows/2), ncolumns)))
+        label1 = pd.DataFrame(np.random.normal(5 + distance, 1, size=(int(nrows/2), ncolumns)))
         # Adds new column for label
         label1['label'] = 0
         
         
         # Creates second Gaussian distribution
-        label2 = pd.DataFrame(np.random.normal(5 + distance, (distance - 10)/(-4), size=(int(nrows/2), ncolumns)))
+        label2 = pd.DataFrame(np.random.normal(5, 1, size=(int(nrows/2), ncolumns)))
         # Adds new column for label
         label2['label'] = 1
         

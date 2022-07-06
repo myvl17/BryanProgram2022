@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun 24 14:33:06 2022
+Created on Wed Jul  6 11:25:24 2022
 
-@author: jeffr
+@author: cdiet
 """
-
 import pandas as pd
 import numpy as np
 import random
@@ -193,7 +192,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
            
            data_portion = pd.DataFrame()
            for i in range(nrows):
-               random.seed(i + 1)
+               random.seed(i)
                data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
             
            
@@ -366,7 +365,20 @@ def runClassifier(df, classifier, accuracy=None):
     #SVM
     elif classifier == "SVM":
         
-        X = dfdrop
+        
+        def make_meshgrid(x, y, h=.02):
+            x_min, x_max = x.min() - 1, x.max() + 1
+            y_min, y_max = y.min() - 1, y.max() + 1
+            xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+            return xx, yy
+        
+        def plot_contours(ax, clf, xx, yy, **params):
+            Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+            Z = Z.reshape(xx.shape)
+            out = ax.contourf(xx, yy, Z, **params)
+            return out
+        
+        X = dfdrop.iloc[:, :2]
         y = df[df.shape[1] - 1]
         
         # Split into training and test set
@@ -378,9 +390,25 @@ def runClassifier(df, classifier, accuracy=None):
         
         # fit the model with data
         # svm.fit(X_train,y_train)
-        svm.fit(X_train, y_train)
+        clf = svm.fit(X_train, y_train)
         predicted_values = svm.predict(X_test)
         
+        fig, ax = plt.subplots()
+        # title for the plots
+        title = ('Decision surface of linear SVC ')
+        # Set-up grid for plotting.
+        X0, X1 = X[0], X[1]
+        xx, yy = make_meshgrid(X0, X1)
+        
+        plot_contours(ax, clf, xx, yy, cmap=plt.cm.coolwarm, alpha=0.8)
+        ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
+        ax.set_ylabel('y label here')
+        ax.set_xlabel('x label here')
+        ax.set_xticks(())
+        ax.set_yticks(())
+        ax.set_title(title)
+        ax.legend()
+        plt.show()
 
     
     
@@ -446,16 +474,18 @@ Outputs:
     Gives a row of accuracy measures or the accuracy measure chosen by the user
 """
 def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
-    df = pd.read_table(file, delimiter=" ", header=None)
+    # df = pd.read_table(file, delimiter=" ", header=None)
+    
+    df = file
 
-    plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
-    plt.show()
+    # plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
+    # plt.show()
     augmentation = applyAugmentationMethod(df, method, nrows, nvalues, unit=unit, noise=noise)
     
     logRegression = logReg(augmentation, feature_cols, target, split)
     
-    plt.scatter(logRegression[0], logRegression[1],
-                c = logRegression[logRegression.shape[1] - 1])
+    # plt.scatter(logRegression[0], logRegression[1],
+    #             c = logRegression[logRegression.shape[1] - 1])
     classifier = runClassifier(logRegression, classifier)
     
     return classifier

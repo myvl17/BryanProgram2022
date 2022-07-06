@@ -46,25 +46,26 @@ filesU = ["Uniform_Data_0_Unit.txt",
           "Uniform_Data_1.5_Unit.txt", 'Uniform_Data_2.0_Unit.txt']
 
 
-feature_cols = []
-for i in range(0, 149, 1):
-    feature_cols.append(i)
+feature_cols = [0, 1, 2, 3, 4, 5, 6]
+# for i in range(0, 149, 1):
+#     feature_cols.append(i)
+
 
 for file in filesG:
     df = pd.read_table(file, delimiter = " ", header = None)
     
     Gaussian.append(runClassifier(df, 'SVM').iloc[0, 3])
     #pmOne
-    Gaussian2.append(superFunction(file, "pmOne", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+    Gaussian2.append(superFunction(file, "pmOne", 500, 2, feature_cols = feature_cols,
+                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
-    Gaussian3.append(superFunction(file, "randSwap", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM').iloc[0, 3])
+    Gaussian3.append(superFunction(file, "randSwap", 500, 2, feature_cols = feature_cols,
+                  target = 7, split = 500, classifier = 'SVM').iloc[0, 3])
 
     #gausNoise
-    Gaussian4.append(superFunction(file, "gausNoise", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
+    Gaussian4.append(superFunction(file, "gausNoise", 500, 2, feature_cols = feature_cols,
+                  target = 7, split = 500, classifier = 'SVM', noise = 0).iloc[0, 3])
 
     
 for file in filesU:
@@ -72,16 +73,16 @@ for file in filesU:
     
     uniform.append(runClassifier(df, 'SVM').iloc[0, 3])
     #pmOne
-    uniform2.append(superFunction(file, "pmOne", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+    uniform2.append(superFunction(file, "pmOne", 500, 2, feature_cols = feature_cols,
+                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
-    uniform3.append(superFunction(file, "randSwap", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+    uniform3.append(superFunction(file, "randSwap", 500, 2, feature_cols = feature_cols,
+                  target = 7, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #gausNoise
-    uniform4.append(superFunction(file, "gausNoise", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
+    uniform4.append(superFunction(file, "gausNoise", 500, 2, feature_cols = feature_cols,
+                  target = 7, split = 500, classifier = 'SVM', noise = 0).iloc[0, 3])
 
 
 fig, ax = plt.subplots(2, 2)
