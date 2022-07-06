@@ -27,38 +27,45 @@ df = pd.read_csv("Binary_epilepsy.csv")
 
 df_1 = df.drop(columns = ['Unnamed: 0', 'Unnamed: 0.1'])
               
-df_2 = df_1.loc[df_1['y'] == 1].sample(n = 4)
+# df_2 = df_1.loc[df_1['y'] == 1].sample(n = 4)
 
-print(df_2)
+# print(df_2)
 
-df_3 = df_1[df_1['y'] != 1]
+# df_3 = df_1[df_1['y'] != 1]
 
-df_4 = pd.concat([df_2, df_3])
+# df_4 = pd.concat([df_2, df_3])
 
-print(df_4)
+# print(df_4)
 
-"""
-X = df_1.iloc[:, 0:178]
-Y = df_1['y']
+numCols = []
+acc = []
+for i in range(2,178):
+    numCols.append(i)
 
+for i in range(len(numCols)):
+    X = df_1.iloc[:, 0:numCols[i]]
+    Y = df_1['y']
+    
+    
+    
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,Y,test_size=.2,random_state=42, shuffle= True)
+    
+    
+    
+    # knn = KNeighborsClassifier(metric='dtw')
+    # knn.fit(X_train, y_train)
+    
+    # knn.score(X_test, y_test)
+    
+    
+    clf = TimeSeriesForest(random_state=43)
+    clf.fit(X_train, y_train)
+    
+    acc.append(clf.score(X_test, y_test))
 
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X,Y,test_size=.2,random_state=42, shuffle= True)
-
-
-
-knn = KNeighborsClassifier(metric='dtw')
-knn.fit(X_train, y_train)
-
-knn.score(X_test, y_test)
-
-
-clf = TimeSeriesForest(random_state=43)
-clf.fit(X_train, y_train)
-
-clf.score(X_test, y_test)
-"""
+    plt.plot(numCols[:i+1], acc)
+    plt.show()
 
 
 
