@@ -14,7 +14,7 @@ from generateRawData import generateRawData
 # from superFunction import runClassifier
 
 
-data = generateRawData(500, 1000, -1, 'uniform')
+data = generateRawData(500, 1000, .5, 'uniform')
 
 plt.scatter(data[0], data[1], c=data[data.shape[1]-1])
 plt.show()
@@ -85,9 +85,10 @@ def runClassifier(df, classifier, accuracy=None):
 
 
 numCols = []
-for i in range(1, 100):
-    numCols.append(i)
+# for i in range(1, 500, 10):
+#     numCols.append(i)
 
+numCols = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 accMes = []
 
 
@@ -95,9 +96,11 @@ for i in range(len(numCols)):
     df = data.drop(data.columns[numCols[i]:data.shape[1]-1], axis=1)
     acc = runClassifier(df=df, classifier='SVM')
 
-    accMes.append(acc.iloc[0,0])
+    accMes.append(acc.iloc[0,3])
+    
+    print(acc)
     
 
-plt.plot(numCols, accMes)
+plt.plot(numCols, accMes, marker='o')
 plt.show()
     
