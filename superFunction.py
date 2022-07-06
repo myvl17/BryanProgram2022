@@ -31,6 +31,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             # Selects random row index
             # random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
+            # random_row = random.sample(range(0, df.shape[0]-1), 1)
 
             # Adds new row from pre-existing random row
             augmented_df = pd.concat([augmented_df, df.iloc[[random_row]]], ignore_index=True)
@@ -45,6 +46,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                 # Selects random column index
                 # random.seed(i)
                 random_col = random.randint(0, df.shape[1]-1)
+                # random_col = random.sample(range(0, df.shape[1]-1), 1)
                 
                 # Selects random value from original data frame in the same column
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]

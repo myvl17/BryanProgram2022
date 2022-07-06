@@ -10,51 +10,111 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from generateRawData import generateRawData
-from fixingRandomness import applyAugmentationMethod
+from superFunction import applyAugmentationMethod
 from superFunction import logReg
 from columnNumberTesting import runClassifier
 
-# data = generateRawData(500, 1000, .5, 'gaussian')
+data = generateRawData(500, 7, .25, 'gaussian')
+
+accRaw = runClassifier(data, 'svm').iloc[0,3]
 
 
-numCols = []
-for i in range(1, 15):
-    numCols.append(i)
+# numCols = [1,2,3,4,5,6,7]
 
-accM = []
+# accM = []
 
-augAcc = []
+# augAcc = []
 
-plt.cla()
+# plt.cla()
 
-for i in range(len(numCols)):
-    data = generateRawData(500, numCols[i], .5, 'uniform')
-    accM.append(runClassifier(data, 'svm').iloc[0,3])
+# for i in range(len(numCols)):
+#     data = generateRawData(500, numCols[i], .5, 'uniform')
+#     accM.append(runClassifier(data, 'svm').iloc[0,3])
     
-    feature_cols = []
-    for i in range(data.shape[1]-1):
-        feature_cols.append(i)
+#     feature_cols = []
+#     for i in range(data.shape[1]-1):
+#         feature_cols.append(i)
         
-    pmUnit = [0, .5, 1, 5, 10]
-    pmAcc = []
+#     pmUnit = [0, .5, 1, 5, 10]
+#     pmAcc = []
     
-    for j in range(len(pmUnit)):
+#     label = str(numCols[i]) + " cols"
+    
+#     for j in range(len(pmUnit)):
 
-        aug = applyAugmentationMethod(df=data, method='pmOne', nrows=500, nvalues=3, unit=0.1)
+#         aug = applyAugmentationMethod(df=data, method='pmOne', nrows=500, nvalues=3, unit=pmUnit[j])
     
-        log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+#         log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
     
-        acc = runClassifier(df=log, classifier='SVM')
+#         acc = runClassifier(df=log, classifier='SVM')
         
-        pmAcc.append(acc.iloc[0, 3])
+#         pmAcc.append(acc.iloc[0, 3])
         
-    plt.plot(pmUnit, pmAcc, label=j)
+#     plt.plot(pmUnit, pmAcc, label=label)
     
     
+# plt.legend()
+
+
+feature_cols = []
+for i in range(data.shape[1]-1):
+    feature_cols.append(i)
     
-# plt.plot(numCols, accM, label='raw')
-# plt.plot(numCols, augAcc, label="augmented")
-plt.legend()
+pmUnit = [0, .1, 0.25, 0.5, 0.75, 1]
+pmAcc = [accRaw]
+
+for j in range(1,len(pmUnit)):
+
+    aug = applyAugmentationMethod(data, method='pmOne', nrows=500, nvalues=3, unit=pmUnit[j])
+
+    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+
+    acc = runClassifier(df=log, classifier='SVM')
+    
+    pmAcc.append(acc.iloc[0, 3])
+    
+plt.plot(pmUnit, pmAcc)
+plt.title("pmOne Perturbation Amount Accuracy")
+plt.show()
+
+
+gausNoise = [0, .05, .25, .5, .75, 1]
+gausAcc = [accRaw]
+
+for j in range(1,len(gausNoise)):
+
+    aug = applyAugmentationMethod(data, method='gausNoise', nrows=500, nvalues=3, noise=gausNoise[j])
+
+    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+
+    acc = runClassifier(df=log, classifier='SVM')
+    
+    gausAcc.append(acc.iloc[0, 3])
+    
+plt.plot(gausNoise, gausAcc)
+plt.title("gausNoise Perturbation Amount Accuracy")
+plt.show()
+
+
+randAmount = [0,1,2,3,4,5,6,7]
+randAcc = [accRaw]
+
+for j in range(1, len(randAmount)):
+
+    aug = applyAugmentationMethod(data, method='randSwap', nrows=500, nvalues=randAmount[j])
+
+    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+
+    acc = runClassifier(df=log, classifier='SVM')
+    
+    randAcc.append(acc.iloc[0, 3])
+    
+plt.plot(randAmount, randAcc)
+plt.title("randSwap Perturbation Amount Accuracy")
+plt.show()
+
+
+
 
 
 
