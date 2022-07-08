@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun 24 14:33:06 2022
+Created on Wed Jul  6 11:25:24 2022
 
-@author: jeffr
+@author: cdiet
 """
-
 import pandas as pd
 import numpy as np
 import random
@@ -31,7 +30,6 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
             # Selects random row index
             # random.seed(k)
             random_row = random.randint(0, df.shape[0]-1)
-            # random_row = random.sample(range(0, df.shape[0]-1), 1)
 
             # Adds new row from pre-existing random row
             augmented_df = pd.concat([augmented_df, df.iloc[[random_row]]], ignore_index=True)
@@ -46,7 +44,6 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
                 # Selects random column index
                 # random.seed(i)
                 random_col = random.randint(0, df.shape[1]-1)
-                # random_col = random.sample(range(0, df.shape[1]-1), 1)
                 
                 # Selects random value from original data frame in the same column
                 rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
@@ -173,7 +170,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
         
     elif method == "gausNoise":
     #Create a noise matrix
-       # np.random.seed(0)
+       np.random.seed(0)
        noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
        
        #noise_matrix = pd.DataFrame()
@@ -195,7 +192,7 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
            
            data_portion = pd.DataFrame()
            for i in range(nrows):
-               # random.seed(i + 1)
+               random.seed(i)
                data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
             
            
@@ -243,7 +240,7 @@ def logReg(dataset, feature_cols, target, split):
     from sklearn.linear_model import LogisticRegression
     
     # instantiate the model (using the default parameters)
-    # random.seed(1)
+    random.seed(1)
     logreg = LogisticRegression(max_iter = 10000)
     
     # fit the model with data
@@ -285,7 +282,7 @@ def runClassifier(df, classifier, accuracy=None):
         X_train, X_test, y_train, y_test = train_test_split(
                      X, Y, test_size = 0.2, random_state=42)
          
-        knn = KNeighborsClassifier(n_neighbors=4, weights='distance')
+        knn = KNeighborsClassifier(n_neighbors=2)
          
         knn.fit(X_train, y_train)
          
@@ -367,15 +364,29 @@ def runClassifier(df, classifier, accuracy=None):
         
     #SVM
     elif classifier == "SVM":
+        # Need to figure out why using only two columns works to get a good accuracy
         
-        X = dfdrop
+        def make_meshgrid(x, y, h=.02):
+            x_min, x_max = x.min() - 1, x.max() + 1
+            y_min, y_max = y.min() - 1, y.max() + 1
+            xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+            return xx, yy
+        
+        def plot_contours(ax, clf, xx, yy, **params):
+            Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+            Z = Z.reshape(xx.shape)
+            out = ax.contourf(xx, yy, Z, **params)
+            return out
+        
+        # X = dfdrop.iloc[:, :2]
+        X = dfdrop.iloc[:, :df.shape[1]-1]
         y = df[df.shape[1] - 1]
         
         # Split into training and test set
         X_train, X_test, y_train, y_test = train_test_split(
                      X, y, test_size = 0.2, random_state=42)
      
-        # random.seed(1)
+        random.seed(1)
         svm = SVC(gamma = 2, C = 1, kernel = 'linear', max_iter = 1000000, random_state = 0)
         
         # fit the model with data
@@ -383,6 +394,22 @@ def runClassifier(df, classifier, accuracy=None):
         svm.fit(X_train, y_train)
         predicted_values = svm.predict(X_test)
         
+        # fig, ax = plt.subplots()
+        # # title for the plots
+        # title = ('Decision surface of linear SVC ')
+        # # Set-up grid for plotting.
+        # X0, X1 = X.iloc[:, 0], X.iloc[:, 1]
+        # xx, yy = make_meshgrid(X0, X1)
+        
+        # plot_contours(ax, clf, xx, yy, cmap=plt.cm.coolwarm, alpha=0.8)
+        # ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
+        # ax.set_ylabel('y label here')
+        # ax.set_xlabel('x label here')
+        # ax.set_xticks(())
+        # ax.set_yticks(())
+        # ax.set_title(title)
+        # ax.legend()
+        # plt.show()
 
     
     
@@ -448,16 +475,18 @@ Outputs:
     Gives a row of accuracy measures or the accuracy measure chosen by the user
 """
 def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
-    df = pd.read_table(file, delimiter=" ", header=None)
+    # df = pd.read_table(file, delimiter=" ", header=None)
+    
+    df = file
 
-    plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
-    plt.show()
+    # plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
+    # plt.show()
     augmentation = applyAugmentationMethod(df, method, nrows, nvalues, unit=unit, noise=noise)
     
     logRegression = logReg(augmentation, feature_cols, target, split)
     
-    plt.scatter(logRegression[0], logRegression[1],
-                c = logRegression[logRegression.shape[1] - 1])
+    # plt.scatter(logRegression[0], logRegression[1],
+    #             c = logRegression[logRegression.shape[1] - 1])
     classifier = runClassifier(logRegression, classifier)
     
     return classifier

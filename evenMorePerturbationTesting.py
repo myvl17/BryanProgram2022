@@ -16,7 +16,18 @@ from columnNumberTesting import runClassifier
 
 data = generateRawData(500, 7, .25, 'gaussian')
 
+data1 = generateRawData(500, 7, .25, 'uniform')
+
 accRaw = runClassifier(data, 'svm').iloc[0,3]
+print(accRaw)
+
+fig, ax = plt.subplots(1,2, figsize=(10,5))
+ax[1].scatter(data[0], data[1], c=data[7])
+ax[1].set_title('Gaussian Distribution')
+ax[0].scatter(data1[0], data1[1], c=data1[7])
+ax[0].set_title('Uniform Distribution')
+plt.tight_layout()
+plt.show()
 
 
 # numCols = [1,2,3,4,5,6,7]
@@ -73,8 +84,11 @@ for j in range(1,len(pmUnit)):
     
     pmAcc.append(acc.iloc[0, 3])
     
-plt.plot(pmUnit, pmAcc)
+plt.plot(pmUnit, pmAcc, marker='o')
 plt.title("pmOne Perturbation Amount Accuracy")
+plt.xticks(ticks=pmUnit)
+plt.xlabel('Unit')
+plt.ylabel('Accuracy')
 plt.show()
 
 
@@ -91,8 +105,11 @@ for j in range(1,len(gausNoise)):
     
     gausAcc.append(acc.iloc[0, 3])
     
-plt.plot(gausNoise, gausAcc)
+plt.plot(gausNoise, gausAcc, marker='o')
 plt.title("gausNoise Perturbation Amount Accuracy")
+plt.xticks(ticks=gausNoise)
+plt.xlabel('Noise')
+plt.ylabel('Accuracy')
 plt.show()
 
 
@@ -109,8 +126,11 @@ for j in range(1, len(randAmount)):
     
     randAcc.append(acc.iloc[0, 3])
     
-plt.plot(randAmount, randAcc)
+plt.plot(randAmount, randAcc, marker='o')
 plt.title("randSwap Perturbation Amount Accuracy")
+plt.xticks(ticks=randAmount)
+plt.xlabel('# of values swapped')
+plt.ylabel('Accuracy')
 plt.show()
 
 
