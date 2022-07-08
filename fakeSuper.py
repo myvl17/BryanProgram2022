@@ -364,7 +364,7 @@ def runClassifier(df, classifier, accuracy=None):
         
     #SVM
     elif classifier == "SVM":
-        
+        # Need to figure out why using only two columns works to get a good accuracy
         
         def make_meshgrid(x, y, h=.02):
             x_min, x_max = x.min() - 1, x.max() + 1
@@ -378,7 +378,8 @@ def runClassifier(df, classifier, accuracy=None):
             out = ax.contourf(xx, yy, Z, **params)
             return out
         
-        X = dfdrop.iloc[:, :2]
+        # X = dfdrop.iloc[:, :2]
+        X = dfdrop
         y = df[df.shape[1] - 1]
         
         # Split into training and test set

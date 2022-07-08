@@ -25,8 +25,8 @@ for i in range(0, 149, 1):
 
 test = generateRawData(500, 150, 0.75, 'uniform')
  
-test2 = (superFunction(file = test, method = "gausNoise", nrows = 200, nvalues = 30, feature_cols = feature_cols,
-              target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
+test2 = (superFunction(file = test, method = "pmOne", nrows = 200, nvalues = 30, feature_cols = feature_cols,
+              target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
 # test2 = (superFunction(file = test, method = "gausNoise", nrows = 200, nvalues = 30, feature_cols = feature_cols,
 #               target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])

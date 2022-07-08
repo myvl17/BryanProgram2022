@@ -30,9 +30,10 @@ cols = ['CRKUS30A',  # Number of days used crack in past month, between 1 and 30
     "METHAMEVR" # 1 = yes, 2 = no
 ]
 
-df = pd.read_csv('NSDUH_2015_Tab.tsv', sep = '\t')
+df = pd.read_csv('NSDUH_2015_Tab.tsv', sep = '\t', na_values = 0)
 
-df = df.loc[(df['DIABETEVR'] == 1) | (df['DIABETEVR'] == 2)]
+
+dfdiab = df.loc[(df['DIABETEVR'] == 1) | (df['DIABETEVR'] == 2)]
 
 # descrip = df.describe()
 
@@ -46,7 +47,25 @@ df = df.loc[(df['DIABETEVR'] == 1) | (df['DIABETEVR'] == 2)]
 # df = df[(df['IRWRKSTAT'] <= 3) | (df['IRWRKSTAT'] == 99)]
 # df = df[(df['MRDAYPYR'] <= 366) | (df['MRDAYPYR'] == 991)]
 # df = df[(df['WRKDHRSWK2'] <= 61)]
-df = df.replace(to_replace =  (df['DIABETEVR'] == 2), value = 1)
+
+dfdiab1 = dfdiab.replace(to_replace =  (df['DIABETEVR'] == 1), value = 0)
+dfdiab2 = dfdiab1.replace(to_replace =  (df['DIABETEVR'] == 2), value = 1)
+
+dfdrop = dfdiab2.drop(axis = 1, labels = "FILEDATE")
+
+dfdrop2 = dfdrop
+
+list1 = []
+for i in range(dfdrop.shape[1]):
+    # if (df.iloc[:, i].dtypes == "str"):
+    #     dfdrop2 = dfdrop.drop(axis = 1, labels = dfdrop.columns[i])
+    list1.append(df.iloc[:, i].dtypes)
+    
+list2 = []
+for value in list1:
+    if(value == )
+        
+dfreal = dfdrop2.astype(float)
 
 # plt.scatter(x = df["WRKDHRSWK2"], y = df['CIG30USE'])
 
@@ -56,25 +75,18 @@ cols = ['IRALCFY','WRKDHRSWK2']
 def cont_clean_data(x):
 
     # Survey codes for "Bad Data", Don't Know, Skip, Refused, or Blank
-    if (x == -9):
-        return np.nan
-    if (x == 985):
-        return np.nan
-    if (x == 989):
-        return np.nan
-    if ((x >= 994) & (x < 1000)):
+    if (x == -9) or (x == 985) or (x == 989) or ((x >= 994) and (x < 1000)):
         return np.nan
 
     # Codes for "Have never done..." or "Have not done in the past X days"
     # Equivalent to 0 for numbered questions
-    if ((x == 991) | 
-    (x == 993)):
+    if ((x == 991) or (x == 993)):
         return 0
 
     # Ignore value if conditions don't match
     return x 
 
-df[cols] = df[cols].applymap(cont_clean_data)
+df = df.applymap(cont_clean_data)
 
 
 # # Function that cleans all other special data codes
