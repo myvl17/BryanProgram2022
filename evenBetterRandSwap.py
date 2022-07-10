@@ -8,28 +8,31 @@ Created on Wed Jul  6 14:39:03 2022
 import numpy as np
 import pandas as pd
 import random
+import matplotlib.pyplot as plt
 
 from generateRawData import generateRawData
 
-data = generateRawData(10, 3, 0.5, 'gaussian')
-
-def betterRandSwap(df, nrows, nvalues):
+def betterRandSwap(data, nrows, nvalues):
     augmentedDf = pd.DataFrame()
     
-    rowIndexCopies = random.sample(range(0, df.shape[0]-1), nrows)
-    
-    
-    for row in rowIndexCopies:
-        augmentedDf = pd.concat([augmentedDf, df.iloc[[row]]], ignore_index=True)
-    
-    augmentedDf = augmentedDf.drop(augmentedDf.shape[1]-1, axis=1)
-    
-    
-    columnIndexSwaps = random.sample(range(0, df.shape[1]-1), nvalues)
-    
-    # for col in columnIndexSwaps:
+    for i in range(nrows):
+        augmentedDf = pd.concat([augmentedDf, data.iloc[[random.randint(0, data.shape[0]-1)]]], ignore_index=True)
         
+    # augmentedDf = augmentedDf.drop(augmentedDf.shape[1]-1, axis=1)
+    
+    # TESTING PURPOSES
+    for i in range(augmentedDf.shape[0]):
+        augmentedDf.iloc[i, augmentedDf.shape[1]-1] = 2
+    
+    columnIndexSwaps = random.sample(range(0, data.shape[1]-1), nvalues)
+
+    
+    for i in range(augmentedDf.shape[0]):
+        for col in columnIndexSwaps:
+            randValue = data.iloc[random.randint(0, data.shape[0]-1), col]
+            
+            augmentedDf.iloc[i, col] = randValue
+        
+    augmentedDf = pd.concat([data, augmentedDf], axis=0, ignore_index=True)
     
     return augmentedDf
-
-aug = betterRandSwap(data, 5, 3)
