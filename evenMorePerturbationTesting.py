@@ -67,58 +67,65 @@ plt.show()
 # plt.legend()
 
 
+# feature_cols = []
+# for i in range(data.shape[1]-1):
+#     feature_cols.append(i)
+    
+# pmUnit = [0, .1, 0.25, 0.5, 0.75, 1]
+# pmAcc = [accRaw]
+
+# for j in range(1,len(pmUnit)):
+
+#     aug = applyAugmentationMethod(data, method='pmOne', nrows=500, nvalues=3, unit=pmUnit[j])
+
+#     log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+
+#     acc = runClassifier(df=log, classifier='SVM')
+    
+#     pmAcc.append(acc.iloc[0, 3])
+    
+# plt.plot(pmUnit, pmAcc, marker='o')
+# plt.title("pmOne Perturbation Amount Accuracy")
+# plt.xticks(ticks=pmUnit)
+# plt.xlabel('Unit')
+# plt.ylabel('Accuracy')
+# plt.show()
+
+
+# gausNoise = [0, .05, .25, .5, .75, 1]
+# gausAcc = [accRaw]
+
+# for j in range(1,len(gausNoise)):
+
+#     aug = applyAugmentationMethod(data, method='gausNoise', nrows=500, nvalues=3, noise=gausNoise[j])
+
+#     log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+
+#     acc = runClassifier(df=log, classifier='SVM')
+    
+#     gausAcc.append(acc.iloc[0, 3])
+    
+# plt.plot(gausNoise, gausAcc, marker='o')
+# plt.title("gausNoise Perturbation Amount Accuracy")
+# plt.xticks(ticks=gausNoise)
+# plt.xlabel('Noise')
+# plt.ylabel('Accuracy')
+# plt.show()
+
+
 feature_cols = []
 for i in range(data.shape[1]-1):
     feature_cols.append(i)
-    
-pmUnit = [0, .1, 0.25, 0.5, 0.75, 1]
-pmAcc = [accRaw]
-
-for j in range(1,len(pmUnit)):
-
-    aug = applyAugmentationMethod(data, method='pmOne', nrows=500, nvalues=3, unit=pmUnit[j])
-
-    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
-
-    acc = runClassifier(df=log, classifier='SVM')
-    
-    pmAcc.append(acc.iloc[0, 3])
-    
-plt.plot(pmUnit, pmAcc, marker='o')
-plt.title("pmOne Perturbation Amount Accuracy")
-plt.xticks(ticks=pmUnit)
-plt.xlabel('Unit')
-plt.ylabel('Accuracy')
-plt.show()
-
-
-gausNoise = [0, .05, .25, .5, .75, 1]
-gausAcc = [accRaw]
-
-for j in range(1,len(gausNoise)):
-
-    aug = applyAugmentationMethod(data, method='gausNoise', nrows=500, nvalues=3, noise=gausNoise[j])
-
-    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
-
-    acc = runClassifier(df=log, classifier='SVM')
-    
-    gausAcc.append(acc.iloc[0, 3])
-    
-plt.plot(gausNoise, gausAcc, marker='o')
-plt.title("gausNoise Perturbation Amount Accuracy")
-plt.xticks(ticks=gausNoise)
-plt.xlabel('Noise')
-plt.ylabel('Accuracy')
-plt.show()
-
 
 randAmount = [0,1,2,3,4,5,6,7]
 randAcc = [accRaw]
 
+from evenBetterRandSwap import betterRandSwap
+
 for j in range(1, len(randAmount)):
 
-    aug = applyAugmentationMethod(data, method='randSwap', nrows=500, nvalues=randAmount[j])
+    # aug = applyAugmentationMethod(data, method='randSwap', nrows=500, nvalues=randAmount[j])
+    aug = betterRandSwap(data, 500, randAmount[j])
 
     log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
 
