@@ -118,20 +118,26 @@ for i in range(data.shape[1]-1):
     feature_cols.append(i)
 
 randAmount = [0,1,2,3,4,5,6,7]
-randAcc = [accRaw]
+randAcc = [accRaw, 0, 0, 0, 0, 0, 0, 0]
 
 from evenBetterRandSwap import betterRandSwap
 
 for j in range(1, len(randAmount)):
-
-    # aug = applyAugmentationMethod(data, method='randSwap', nrows=500, nvalues=randAmount[j])
-    aug = betterRandSwap(data, 500, randAmount[j])
-
-    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
-
-    acc = runClassifier(df=log, classifier='SVM')
     
-    randAcc.append(acc.iloc[0, 3])
+    for k in range(100):
+        
+
+        # aug = applyAugmentationMethod(data, method='randSwap', nrows=500, nvalues=randAmount[j])
+        aug = betterRandSwap(data, 500, randAmount[j])
+    
+        log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+    
+        acc = runClassifier(df=log, classifier='SVM')
+        
+        randAcc[j] = randAcc[j] + acc.iloc[0,3]
+        
+for i in range(1, len(randAcc)):
+    randAcc[i] = randAcc[i] / 100
     
 plt.plot(randAmount, randAcc, marker='o')
 plt.title("randSwap Perturbation Amount Accuracy")
