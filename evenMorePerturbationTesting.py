@@ -16,7 +16,18 @@ from columnNumberTesting import runClassifier
 
 data = generateRawData(500, 7, .25, 'gaussian')
 
+data1 = generateRawData(500, 7, .25, 'uniform')
+
 accRaw = runClassifier(data, 'svm').iloc[0,3]
+print(accRaw)
+
+fig, ax = plt.subplots(1,2, figsize=(10,5))
+ax[1].scatter(data[0], data[1], c=data[7])
+ax[1].set_title('Gaussian Distribution')
+ax[0].scatter(data1[0], data1[1], c=data1[7])
+ax[0].set_title('Uniform Distribution')
+plt.tight_layout()
+plt.show()
 
 
 # numCols = [1,2,3,4,5,6,7]
@@ -56,61 +67,83 @@ accRaw = runClassifier(data, 'svm').iloc[0,3]
 # plt.legend()
 
 
+# feature_cols = []
+# for i in range(data.shape[1]-1):
+#     feature_cols.append(i)
+    
+# pmUnit = [0, .1, 0.25, 0.5, 0.75, 1]
+# pmAcc = [accRaw]
+
+# for j in range(1,len(pmUnit)):
+
+#     aug = applyAugmentationMethod(data, method='pmOne', nrows=500, nvalues=3, unit=pmUnit[j])
+
+#     log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+
+#     acc = runClassifier(df=log, classifier='SVM')
+    
+#     pmAcc.append(acc.iloc[0, 3])
+    
+# plt.plot(pmUnit, pmAcc, marker='o')
+# plt.title("pmOne Perturbation Amount Accuracy")
+# plt.xticks(ticks=pmUnit)
+# plt.xlabel('Unit')
+# plt.ylabel('Accuracy')
+# plt.show()
+
+
+# gausNoise = [0, .05, .25, .5, .75, 1]
+# gausAcc = [accRaw]
+
+# for j in range(1,len(gausNoise)):
+
+#     aug = applyAugmentationMethod(data, method='gausNoise', nrows=500, nvalues=3, noise=gausNoise[j])
+
+#     log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+
+#     acc = runClassifier(df=log, classifier='SVM')
+    
+#     gausAcc.append(acc.iloc[0, 3])
+    
+# plt.plot(gausNoise, gausAcc, marker='o')
+# plt.title("gausNoise Perturbation Amount Accuracy")
+# plt.xticks(ticks=gausNoise)
+# plt.xlabel('Noise')
+# plt.ylabel('Accuracy')
+# plt.show()
+
+
 feature_cols = []
 for i in range(data.shape[1]-1):
     feature_cols.append(i)
-    
-pmUnit = [0, .1, 0.25, 0.5, 0.75, 1]
-pmAcc = [accRaw]
-
-for j in range(1,len(pmUnit)):
-
-    aug = applyAugmentationMethod(data, method='pmOne', nrows=500, nvalues=3, unit=pmUnit[j])
-
-    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
-
-    acc = runClassifier(df=log, classifier='SVM')
-    
-    pmAcc.append(acc.iloc[0, 3])
-    
-plt.plot(pmUnit, pmAcc)
-plt.title("pmOne Perturbation Amount Accuracy")
-plt.show()
-
-
-gausNoise = [0, .05, .25, .5, .75, 1]
-gausAcc = [accRaw]
-
-for j in range(1,len(gausNoise)):
-
-    aug = applyAugmentationMethod(data, method='gausNoise', nrows=500, nvalues=3, noise=gausNoise[j])
-
-    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
-
-    acc = runClassifier(df=log, classifier='SVM')
-    
-    gausAcc.append(acc.iloc[0, 3])
-    
-plt.plot(gausNoise, gausAcc)
-plt.title("gausNoise Perturbation Amount Accuracy")
-plt.show()
-
 
 randAmount = [0,1,2,3,4,5,6,7]
-randAcc = [accRaw]
+randAcc = [accRaw, 0, 0, 0, 0, 0, 0, 0]
+
+from evenBetterRandSwap import betterRandSwap
 
 for j in range(1, len(randAmount)):
-
-    aug = applyAugmentationMethod(data, method='randSwap', nrows=500, nvalues=randAmount[j])
-
-    log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
-
-    acc = runClassifier(df=log, classifier='SVM')
     
-    randAcc.append(acc.iloc[0, 3])
+    for k in range(100):
+        
+
+        # aug = applyAugmentationMethod(data, method='randSwap', nrows=500, nvalues=randAmount[j])
+        aug = betterRandSwap(data, 500, randAmount[j])
     
-plt.plot(randAmount, randAcc)
+        log = logReg(dataset=aug, feature_cols=feature_cols, target=data.shape[1]-1, split=data.shape[0]-1)
+    
+        acc = runClassifier(df=log, classifier='SVM')
+        
+        randAcc[j] = randAcc[j] + acc.iloc[0,3]
+        
+for i in range(1, len(randAcc)):
+    randAcc[i] = randAcc[i] / 100
+    
+plt.plot(randAmount, randAcc, marker='o')
 plt.title("randSwap Perturbation Amount Accuracy")
+plt.xticks(ticks=randAmount)
+plt.xlabel('# of values swapped')
+plt.ylabel('Accuracy')
 plt.show()
 
 

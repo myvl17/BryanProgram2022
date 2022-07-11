@@ -38,7 +38,7 @@ def runClassifier(df, classifier, accuracy=None):
     X_train, X_test, y_train, y_test = train_test_split(
                  X, Y, test_size = 0.2, random_state=42)
  
-    random.seed(1)
+    # random.seed(1)
     svm = SVC(gamma = 2, C = 1, kernel = 'linear', max_iter = 10000, random_state = 0)
     
     # fit the model with data

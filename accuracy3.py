@@ -4,10 +4,10 @@ Created on Wed Jul  6 14:46:35 2022
 
 @author: cdiet
 """
-from fakeSuper import superFunction
+from fakeSuperDebugging import superFunction
 import matplotlib.pyplot as plt
 from generateRawData import generateRawData
-from fakeSuper import runClassifier
+from fakeSuperDebugging import runClassifier
 
 
 
