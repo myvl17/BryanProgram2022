@@ -9,6 +9,8 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 import sklearn.metrics as skm
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 
 def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
@@ -378,9 +380,10 @@ def runClassifier(df, classifier, accuracy=None):
             out = ax.contourf(xx, yy, Z, **params)
             return out
         
-        # X = dfdrop.iloc[:, :2]
         X = dfdrop
+
         y = df[df.shape[1] - 1]
+
         
         # Split into training and test set
         X_train, X_test, y_train, y_test = train_test_split(
