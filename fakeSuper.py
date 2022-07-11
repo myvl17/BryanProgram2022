@@ -394,22 +394,22 @@ def runClassifier(df, classifier, accuracy=None):
         clf = svm.fit(X_train, y_train)
         predicted_values = svm.predict(X_test)
         
-        fig, ax = plt.subplots()
-        # title for the plots
-        title = ('Decision surface of linear SVC ')
-        # Set-up grid for plotting.
-        X0, X1 = X[0], X[1]
-        xx, yy = make_meshgrid(X0, X1)
+        # fig, ax = plt.subplots()
+        # # title for the plots
+        # title = ('Decision surface of linear SVC ')
+        # # Set-up grid for plotting.
+        # X0, X1 = X[0], X[1]
+        # xx, yy = make_meshgrid(X0, X1)
         
-        plot_contours(ax, clf, xx, yy, cmap=plt.cm.coolwarm, alpha=0.8)
-        ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
-        ax.set_ylabel('y label here')
-        ax.set_xlabel('x label here')
-        ax.set_xticks(())
-        ax.set_yticks(())
-        ax.set_title(title)
-        ax.legend()
-        plt.show()
+        # plot_contours(ax, clf, xx, yy, cmap=plt.cm.coolwarm, alpha=0.8)
+        # ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
+        # ax.set_ylabel('y label here')
+        # ax.set_xlabel('x label here')
+        # ax.set_xticks(())
+        # ax.set_yticks(())
+        # ax.set_title(title)
+        # ax.legend()
+        # plt.show()
 
     
     
