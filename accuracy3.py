@@ -11,9 +11,9 @@ from fakeSuperDebugging import runClassifier
 
 
 
-feature_cols = []
-for i in range(0, 149, 1):
-    feature_cols.append(i)
+feature_cols = [0,1,2,3,4,5,6, 7, 8, 9]
+# for i in range(0, 149, 1):
+#     feature_cols.append(i)
     
 
 # Empty lists for plots
@@ -31,37 +31,37 @@ values = [0, 0.15, 0.25, 0.50, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
 
 for value in values:
-    data = generateRawData(500, 150, value, 'uniform')
+    data = generateRawData(500, 10, value, 'uniform')
     
     uniform.append(runClassifier(data, 'SVM').iloc[0, 3])
     #pmOne
     uniform2.append(superFunction(data, "pmOne", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+                  target = 10, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
     uniform3.append(superFunction(data, "randSwap", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+                  target = 10, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #gausNoise
     uniform4.append(superFunction(data, "gausNoise", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
+                  target = 10, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
   
     
 for value in values:
-    data = generateRawData(500, 150, value, 'gaussian')
+    data = generateRawData(500, 10, value, 'gaussian')
     
     Gaussian.append(runClassifier(data, 'SVM').iloc[0, 3])
     #pmOne
     Gaussian2.append(superFunction(data, "pmOne", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
+                  target = 10, split = 500, classifier = 'SVM', unit = 0.1).iloc[0, 3])
 
     #randSwap
     Gaussian3.append(superFunction(data, "randSwap", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM').iloc[0, 3])
+                  target = 10, split = 500, classifier = 'SVM').iloc[0, 3])
 
     #gausNoise
     Gaussian4.append(superFunction(data, "gausNoise", 200, 30, feature_cols = feature_cols,
-                  target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
+                  target = 10, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
 
 
 
