@@ -225,12 +225,14 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
   
 from sklearn.model_selection import train_test_split
 def logReg(dataset, feature_cols, target, split):
+    
+    logDf = dataset.copy(deep=True)
         
    # Feature variables
-    X = dataset[feature_cols]
+    X = logDf[feature_cols]
     
     # Target variable
-    y = dataset[target]
+    y = logDf[target]
     
     # Split both x and y into training and testing sets
     
@@ -255,12 +257,14 @@ def logReg(dataset, feature_cols, target, split):
     y_pred= logreg.predict(X_test)
 
     # Appends predicted labels to NAN
-    for i in range(split, dataset.shape[0]):
-        dataset.loc[i, target] = y_pred[i - split]
+    for i in range(split, logDf.shape[0]):
+        logDf.loc[i, target] = y_pred[i - split]
         
     
-    # plt.scatter(dataset[0], dataset[1], c = dataset[dataset.shape[1] - 1])
-    return dataset
+    # plt.scatter(logDf[0], logDf[1], c = logDf[logDf.shape[1] - 1])
+    
+    
+    return logDf
 
 
 from sklearn.neighbors import KNeighborsClassifier
