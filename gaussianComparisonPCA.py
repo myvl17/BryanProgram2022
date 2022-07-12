@@ -77,19 +77,21 @@ ax[0,2].grid(True)
 ax[0,2].set_title('500 x PCA')
 
    
-noise = np.arange(0, 2.05, .05)
+ITERATIONS = 1
 
-exp1AccNoise = [rawAcc]
-exp2AccNoise = [rawAcc]
-exp3AccNoise = [rawAcc]
+noise = np.arange(0, 10, .05)
 
-ITERATIONS = 2
+exp1AccNoise = [exp1Acc[0]]
+exp2AccNoise = [exp2Acc[0]]
+exp3AccNoise = [exp3Acc[0]]
+
 
 for i in range(0, len(noise)-1):
     exp1AccNoise.append(0)
     exp2AccNoise.append(0)
     exp3AccNoise.append(0)
 
+print('BEGINNING gausNoise')
 for j in range(ITERATIONS):
     percent = int(j / ITERATIONS * 100)
     print("COMPLETION: ", percent, "%")
@@ -158,20 +160,21 @@ ax[1,2].grid(True)
 ax[1,2].set_xlabel('Noise')
 
 
+'''
+units = np.arange(0, 4.05, .05)
 
-units = np.arange(0, 2.05, .05)
+exp1AccPM = [exp1Acc[0]]
+exp2AccPM = [exp2Acc[0]]
+exp3AccPM = [exp3Acc[0]]
 
-exp1AccPM = [rawAcc]
-exp2AccPM = [rawAcc]
-exp3AccPM = [rawAcc]
-
-ITERATIONS = 2
+ITERATIONS = 1
 
 for i in range(0, len(units)-1):
     exp1AccPM.append(0)
     exp2AccPM.append(0)
     exp3AccPM.append(0)
 
+print("BEGINNING pmOne")
 for j in range(ITERATIONS):
     percent = int(j / ITERATIONS * 100)
     print("COMPLETION: ", percent, "%")
@@ -238,7 +241,7 @@ ax[2,1].set_xlabel('Units (1 value changed)')
 ax[2,2].plot(units, npExp3AccPM, marker='o')
 ax[2,2].grid(True)
 ax[2,2].set_xlabel('Units (1 value changed)')
-
+'''
 
 plt.tight_layout()
 plt.show()
