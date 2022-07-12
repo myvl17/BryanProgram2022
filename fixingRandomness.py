@@ -79,7 +79,7 @@ def applyAugmentationMethod(df, method, nrows, nvalues, unit=None, noise=None):
 
         #df = dftest.drop(columns = dftest.shape[1] - 1)
         
-        df1 = df.drop(columns = df.shape[1] - 1)
+        df1 = df.drop(df.shape[1] - 1, axis=1)
 
         # if statement to determine if the number of rows entered is odd
         # The sample function takes random rows from the df
