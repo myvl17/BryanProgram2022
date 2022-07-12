@@ -13,12 +13,6 @@ import random
 from generateRawData import generateRawData
 # from superFunction import runClassifier
 
-'''
-data = generateRawData(500, 1000, .5, 'uniform')
-
-plt.scatter(data[0], data[1], c=data[data.shape[1]-1])
-plt.show()
-'''
 
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
@@ -28,7 +22,8 @@ def runClassifier(df, classifier, accuracy=None):
     
     # dfdrop = df.drop(columns = df.shape[1] - 1)
     
-    results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
+    # results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
+    results_df = pd.DataFrame({'Accuracy':[np.NAN], 'Mean Absolute Error':[np.NAN], 'Rooted Mean Square Error':[np.NAN], 'F1 Score':[np.NAN]})
     
 
     X = df.iloc[:, :df.shape[1]-1]
@@ -50,22 +45,22 @@ def runClassifier(df, classifier, accuracy=None):
     #Accuracy
     if (accuracy == "og"): 
         acc = skm.accuracy_score(y_test, predicted_values)
-        results_df = results_df.append({'Accuracy' : acc}, ignore_index=True)
+        return acc
         
     elif (accuracy == "mae"):
         mae_accuracy = skm.mean_absolute_error(y_test, predicted_values)
-        results_df = results_df.append({'Mean Absolute Error' : mae_accuracy}, ignore_index=True)
+        return mae_accuracy
 
     
     elif (accuracy == "rmse"):
         rmse_accuracy = skm.mean_squared_error(y_test, predicted_values,
                                                     squared=False)
-        results_df = results_df.append({'Rooted Mean Square Error' : rmse_accuracy}, ignore_index=True)
+        return rmse_accuracy
 
     
     elif(accuracy == "f1"):
         f1_accuracy = skm.f1_score(y_test, predicted_values)
-        results_df = results_df.append({'F1 Score' : f1_accuracy}, ignore_index=True)
+        return f1_accuracy
 
         
     else:
@@ -75,10 +70,10 @@ def runClassifier(df, classifier, accuracy=None):
                                                     squared=False)
         f1_accuracy = skm.f1_score(y_test, predicted_values)
         
-        results_df = results_df.append({'Accuracy' : acc, 
-                           'Mean Absolute Error':mae_accuracy,
-                           'Rooted Mean Square Error':rmse_accuracy,
-                           'F1 Score':f1_accuracy}, ignore_index=True)
+        results_df.iloc[0,0] = acc
+        results_df.iloc[0,1] = mae_accuracy
+        results_df.iloc[0,2] = rmse_accuracy
+        results_df.iloc[0,3] = f1_accuracy
         
     return results_df
 
