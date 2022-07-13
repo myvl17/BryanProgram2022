@@ -12,14 +12,14 @@ import random
 
 
 '''
-DESCRIPTION: randomly selects unique column values and replaces with new value
-from same column
+DESCRIPTION: randomly selects unique column values and replaces with 
+Gaussian noise centered at zero with designated noise as std.
 
 INPUTS:
 data = dataframe
 nrows = number of rows that will be created in augmentation
 nvalues = number of values being swapped, limited to column length
-noise = amount of noise
+noise = amount of noise, aka std.
 '''
 
 def betterGausNoise(data, nrows, nvalues, noise):
