@@ -16,14 +16,20 @@ from superFunction import logReg
 from columnNumberTesting import runClassifier
 from modifiedGausNoise import modifiedGausNoise
 
-data = generateRawData(100, 5, .25, 'uniform')
+NROWS = 100
+NCOLS = 75
+
+data = generateRawData(NROWS, NCOLS, .15, 'gaussian')
 raw = runClassifier(data, 'SVM', 'f1')
+print(raw)
 
-ITERATIONS = 500
+ITERATIONS = 10
 
-for j in range(2):
-    nCols = [0, 1, 2, 3, 4, 5]
-    augAcc = [raw, 0, 0, 0, 0, 0]
+for j in range(1):
+    nCols = np.arange(0, NCOLS+1, 1)
+    augAcc = [0] * (NCOLS)
+    augAcc.insert(0, raw)
+    
     counter = 0
     
     for i in range(ITERATIONS):
