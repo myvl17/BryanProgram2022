@@ -5,12 +5,8 @@ Created on Wed Jul  6 14:39:03 2022
 @author: jeffr
 """
 
-import numpy as np
 import pandas as pd
 import random
-import matplotlib.pyplot as plt
-
-from generateRawData import generateRawData
 
 
 '''
