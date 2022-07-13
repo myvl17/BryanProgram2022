@@ -38,8 +38,9 @@ def betterGausNoise(data, nrows, nvalues, noise):
     randCols = random.sample(range(0, data.shape[1]-1), nvalues)
     
     # Applies Gaussian noise to randCols values stored in array
-    for i in range(len(randCols)):
-        augmentedDf.iloc[i, randCols[i]] += np.random.normal(0, noise)
+    for i in range(augmentedDf.shape[0]):
+        for cols in randCols:
+            augmentedDf.iloc[i, cols] += np.random.normal(0, noise)
         
     
     # Combines both data and augmentedDf for full augmented dataframe
