@@ -7,16 +7,6 @@ Created on Tue Jul 12 15:11:41 2022
 import numpy as np
 import pandas as pd
 import random
-import matplotlib.pyplot as plt
-
-from generateRawData import generateRawData
-
-from superFunction import logReg
-from columnNumberTesting import runClassifier
-
-data = generateRawData(10, 5, 0, 'gaussian')
-print(runClassifier(data, 'SVM', 'f1'))
-
 
 def modifiedGausNoise(df, nrows, nvalues):
     augmentedDf = pd.DataFrame()
@@ -41,10 +31,3 @@ def modifiedGausNoise(df, nrows, nvalues):
     
     return augmentedDf
     
-    
-    
-aug = modifiedGausNoise(data, 10, 5)
-
-log = logReg(aug, feature_cols = np.arange(0, aug.shape[1]-1), target=aug.shape[1]-1, split=data.shape[0]-1)
-
-acc = runClassifier(log, 'SVM', 'f1')
