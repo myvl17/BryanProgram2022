@@ -23,56 +23,30 @@ def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None)
     
     if method == "randSwap":
         
-        # Creates empty data frame
-        augmented_df = pd.DataFrame()
+        # Creates empty dataframe to store augmented rows
+        augmentedDf = pd.DataFrame()
         
-        for k in range(0, nrows, 1):
-                   
-            # Selects random row index
-            # random.seed(k)
-            random_row = random.randint(0, df.shape[0]-1)
-            # random_row = random.sample(range(0, df.shape[0]-1), 1)
-
-            # Adds new row from pre-existing random row
-            augmented_df = pd.concat([augmented_df, df.iloc[[random_row]]], ignore_index=True)
-        
+        # Copies nrows from original data and appends to augmentedDf
+        for i in range(nrows):
+            augmentedDf = pd.concat([augmentedDf, df.iloc[[random.randint(0, df.shape[0]-1)]]], ignore_index=True)
             
-            # Actual Data Augmentation Method:
-            # Grabs random row from original data set and appends to new data frame
-            # Selects random column from new row and takes random value from same column in original data set
-            # Appends random value from original data frame and appends to new row column in new data frame
-            for i in range(nvalues):
-                
-                # Selects random column index
-                # random.seed(i)
-                random_col = random.randint(0, df.shape[1]-1)
-                # random_col = random.sample(range(0, df.shape[1]-1), 1)
-                
-                # Selects random value from original data frame in the same column
-                rand_value = df.iloc[random.randint(0, df.shape[0]-1)][random_col]
-                
-                # Appends original and old value to keep track of distances
-                original_points = augmented_df.iloc[-1][random_col]
-                augmented_points.append(rand_value)
-                
-                # Appends rand_value to new column
-                augmented_df.iloc[-1, random_col] = rand_value
-                
-                
-                
-                
-        # Removes label column
-        augmented_df.drop(df.columns[-1], axis=1, inplace=True)
+        # Drops labels column from augmentedDF
+        augmentedDf = augmentedDf.drop(augmentedDf.shape[1]-1, axis=1)
         
-        # print(augmented_df)
+        # Picks UNIQUE column indexes to swap
+        columnIndexSwaps = random.sample(range(0, df.shape[1]-1), nvalues)
+
+        # Swaps augmentedDf column value from same column in df
+        for i in range(augmentedDf.shape[0]):
+            for col in columnIndexSwaps:
+                randValue = df.iloc[random.randint(0, df.shape[0]-1), col]
+                
+                augmentedDf.iloc[i, col] = randValue
+            
+        # Combines both df and augmentedDf into one dataframe
+        augmentedDf = pd.concat([df, augmentedDf], axis=0, ignore_index=True)
         
-        finished_df = pd.concat([df, augmented_df], ignore_index=True)
-        
-        # Norm 1 distance 
-        #print(norm1Distance(original_points, augmented_points))
-        
-        # print(finished_df)
-        return finished_df
+        return augmentedDf
         
     elif method == "pmOne":
 
