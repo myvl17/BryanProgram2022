@@ -23,11 +23,11 @@ data = generateRawData(NROWS, NCOLS, .15, 'gaussian')
 raw = runClassifier(data, 'SVM', 'f1')
 print(raw)
 
-ITERATIONS = 10
+ITERATIONS = 1
 
 for j in range(1):
     nCols = np.arange(0, NCOLS+1, 1)
-    augAcc = [0] * (NCOLS)
+    augAcc = [0] * (len(nCols)-1)
     augAcc.insert(0, raw)
     
     counter = 0
