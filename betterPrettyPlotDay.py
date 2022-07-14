@@ -16,7 +16,6 @@ from sklearn.preprocessing import StandardScaler
 
 
 font = {'family' : 'normal',
-        'weight' : 'bold',
         'size'   : 10}
 
 plt.rc('font', **font)
@@ -59,10 +58,11 @@ x = []
 for j in range(len(arr)):
     x.append(j)
     
-plt.plot(x, npArr, c='r', linewidth=10, label='Single Exp. Var.')
-plt.plot(x, arrSum, c='black', linewidth=10, label='Cummulative Exp. Var.')
+plt.plot(x, npArr, c='r', linewidth=8, label='Single Exp. Var.')
+plt.plot(x, arrSum, c='black', linewidth=8, label='Cummulative Exp. Var.')
 plt.ylabel("Explained Variance", **hfont)
 plt.xlabel('# of Principle Components', **hfont)
+plt.xticks(np.arange(0, 151, 10))
 plt.legend()
 plt.show()
 
@@ -74,6 +74,7 @@ ax[0].set_title("Cumulative Exp. Var.", **hfont)
 ax[0].set_ylabel("Explained Variance", **hfont)
 ax[1].plot(x, npArr, c='r', linewidth=10)
 ax[1].set_title("Single Exp. Var.", **hfont)
+ax[0].set_xticks(np.arange(0, 160, 10))
 ax[1].set_xlabel("# of Principle Components", **hfont)
 ax[1].set_ylabel('Explained Variance', **hfont)
 plt.legend()
@@ -88,6 +89,7 @@ ax[0].set_ylabel("Explained Variance", **hfont)
 ax[0].set_xlabel('# of Principle Components', **hfont)
 ax[1].plot(x, npArr, c='r', linewidth=10)
 ax[1].set_title("Single Exp. Var.", **hfont)
+ax[0].set_xticks(np.arange(0, 160, 10))
 ax[1].set_xlabel("# of Principle Components", **hfont)
 plt.tight_layout()
 plt.show()

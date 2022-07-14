@@ -24,7 +24,7 @@ raw = generateRawData(500, 150, .25, 'gaussian')
 rawAcc = runClassifier(raw, 'SVM', 'f1')
 
 
-fig, ax = plt.subplots(4, 3, sharey=True, sharex=False, figsize=(20, 10))
+fig, ax = plt.subplots(3, 3, sharey=True, sharex=False, figsize=(20, 10))
 
 
 distances = np.arange(0, 1.05, 0.05)
@@ -77,7 +77,7 @@ ax[0,2].grid(True)
 ax[0,2].set_title('500 x PCA')
 
    
-ITERATIONS = 1
+ITERATIONS = 5
 
 noise = np.arange(0, 10, .05)
 
@@ -160,14 +160,14 @@ ax[1,2].grid(True)
 ax[1,2].set_xlabel('Noise')
 
 
-'''
+
 units = np.arange(0, 4.05, .05)
 
 exp1AccPM = [exp1Acc[0]]
 exp2AccPM = [exp2Acc[0]]
 exp3AccPM = [exp3Acc[0]]
 
-ITERATIONS = 1
+ITERATIONS = 5
 
 for i in range(0, len(units)-1):
     exp1AccPM.append(0)
@@ -241,7 +241,7 @@ ax[2,1].set_xlabel('Units (1 value changed)')
 ax[2,2].plot(units, npExp3AccPM, marker='o')
 ax[2,2].grid(True)
 ax[2,2].set_xlabel('Units (1 value changed)')
-'''
+
 
 plt.tight_layout()
 plt.show()
