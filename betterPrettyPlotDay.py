@@ -16,11 +16,11 @@ from sklearn.preprocessing import StandardScaler
 
 
 font = {'family' : 'normal',
-        'size'   : 10}
+        'size'   : 20}
 
 plt.rc('font', **font)
 
-hfont = {'fontname':'normal', 'size':15}
+hfont = {'fontname':'normal', 'size':30}
 
 
 
@@ -87,12 +87,25 @@ ax[0].plot(x, arrSum, c='black', linewidth=10)
 ax[0].set_title("Cumulative Exp. Var.", **hfont)
 ax[0].set_ylabel("Explained Variance", **hfont)
 ax[0].set_xlabel('# of Principle Components', **hfont)
+
+
 ax[1].plot(x, npArr, c='r', linewidth=10)
 ax[1].set_title("Single Exp. Var.", **hfont)
 ax[0].set_xticks(np.arange(0, 160, 10))
 ax[1].set_xlabel("# of Principle Components", **hfont)
 plt.tight_layout()
 plt.show()
+
+
+fig, ax = plt.subplots(1,1, figsize=(15,10))
+
+ax.plot(x, npArr, c='r', linewidth=10)
+ax.set_title("Single Exp. Var.", **hfont)
+ax.set_xticks(np.arange(0, 160, 10))
+ax.set_xlabel("# of Principle Components", **hfont)
+plt.tight_layout()
+plt.show()
+
 
 
 
@@ -107,22 +120,6 @@ ax.set_title("Covalence Matrix of First 25 Principle Components")
   
 # displaying heatmap
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
