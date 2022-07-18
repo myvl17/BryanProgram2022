@@ -54,7 +54,7 @@ def betterApplyAugmentationMethods(data, method, nrows, nvalues=None, unit=None,
         
         return augmentedDf
     
-    elif str(method).lower() == 'gausNoise':
+    elif str(method).lower() == 'gausnoise':
         # Creates empty dataframe to hold augmented rows
         augmentedDf = pd.DataFrame()
         
