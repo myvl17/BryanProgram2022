@@ -66,7 +66,7 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         
         # Shuffles Gaussian distributions
         shuffled_df = pd.DataFrame(np.random.permutation(df))
-        
+            
         # Creates historgram of Gaussian distributions
         # plt.scatter(shuffled_df[0], shuffled_df[1])
         # plt.title("Random Gaussian Distribution")
