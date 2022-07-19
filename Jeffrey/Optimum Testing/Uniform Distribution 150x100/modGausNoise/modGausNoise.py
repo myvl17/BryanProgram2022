@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jul 18 13:03:08 2022
+Created on Mon Jul 18 17:09:38 2022
 
 @author: jeffr
 """
@@ -13,6 +13,7 @@ from generateRawData import generateRawData
 from columnNumberTesting import runClassifier
 from betterApplyAugmentationMethod import betterApplyAugmentationMethods
 from updatedSuperFunction import logReg
+from modifiedGausNoise import modifiedGausNoise
 
 
 # distances = np.arange(0, 2.05, .05)
@@ -52,7 +53,8 @@ from updatedSuperFunction import logReg
 #             counter += 1
 #             print(str(counter / (ITERATIONS * (len(nValues)-1))*100)[:4] + '%')
             
-#             aug = betterApplyAugmentationMethods(data, 'randSwap', 100, nvalues=nValues[n])
+#             # aug = betterApplyAugmentationMethods(data, 'randSwap', 100, nvalues=nValues[n])
+#             aug = modifiedGausNoise(data, 100, nvalues=nValues[n])
             
 #             log = logReg(aug, split=data.shape[0]-1)
             
@@ -73,14 +75,14 @@ from updatedSuperFunction import logReg
 
 # plt.show()
 
-# fig = plt.subplots(figsize=(35,10))
+# fig = plt.subplots(figsize=(40,10))
 # plt.plot(nValues, augAcc, marker='o', color='black')
-# plt.title('randSwap: # of values swapped vs. Accuracy', fontsize='xx-large')
+# plt.title('modGausNoise: # of values swapped vs. Accuracy', fontsize='xx-large')
 # plt.xlabel('# of values swapped', fontsize='xx-large')
 # plt.ylabel('Accuracy %', fontsize='xx-large')
 # plt.grid(True)
 # plt.xticks(nValues, fontsize='xx-large')
-# plt.yticks(np.arange(int(str(raw*100)[0] + '0'), 105, 5))
+# plt.yticks(np.arange(int(str(raw*100)[0] + '0'), 105, 5), fontsize='xx-large')
 # plt.tight_layout()
 
 # plt.show()
@@ -106,7 +108,8 @@ for j in range(1):
             counter += 1
             print(str(counter / (ITERATIONS * (len(nRows)-1))*100)[:4] + '%')
             
-            aug = betterApplyAugmentationMethods(data, 'randSwap', nrows=nRows[n], nvalues=1)
+            # aug = betterApplyAugmentationMethods(data, 'randSwap', nrows=nRows[n])
+            aug = modifiedGausNoise(data, nrows=nRows[n], nvalues=4)
             
             log = logReg(aug, split=data.shape[0]-1)
             
@@ -129,7 +132,7 @@ plt.show()
 
 fig = plt.subplots(figsize=(20,10))
 plt.plot(nRows, augAcc, marker='o', color='black')
-plt.title('randSwap: number of rows vs. Accuracy', fontsize='xx-large')
+plt.title('modGausNoise: number of rows vs. Accuracy', fontsize='xx-large')
 plt.xlabel('# of rows', fontsize='xx-large')
 plt.ylabel('Accuracy %', fontsize='xx-large')
 plt.grid(True)

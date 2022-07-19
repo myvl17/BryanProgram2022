@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jul 18 13:03:08 2022
+Created on Mon Jul 18 11:09:36 2022
 
 @author: jeffr
 """
@@ -41,18 +41,18 @@ from updatedSuperFunction import logReg
 # ITERATIONS = 25
 
 # for j in range(1):
-#     nValues = np.arange(0, data.shape[1]-1, 1)
-#     augAcc = [0] * (len(nValues)-1)
+#     units = np.arange(0, 10.25, .25)
+#     augAcc = [0] * (len(units)-1)
 #     augAcc.insert(0, raw)
     
 #     counter = 0
     
 #     for i in range(ITERATIONS):
-#         for n in range(1, len(nValues)):
+#         for n in range(1, len(units)):
 #             counter += 1
-#             print(str(counter / (ITERATIONS * (len(nValues)-1))*100)[:4] + '%')
+#             print(str(counter / (ITERATIONS * (len(units)-1))*100)[:4] + '%')
             
-#             aug = betterApplyAugmentationMethods(data, 'randSwap', 100, nvalues=nValues[n])
+#             aug = betterApplyAugmentationMethods(data, 'pmOne', 100, unit=units[n])
             
 #             log = logReg(aug, split=data.shape[0]-1)
             
@@ -63,9 +63,9 @@ from updatedSuperFunction import logReg
 #     augAcc[1:] /= ITERATIONS
 #     augAcc *= 100
     
-#     plt.plot(nValues, augAcc, marker='o', color='black')
+#     plt.plot(units, augAcc, marker='o', color='black')
 
-# plt.xlabel('# of values swapped')
+# plt.xlabel('Units')
 # plt.ylabel('Accuracy %')
 # plt.grid(True)
 # plt.yticks(np.arange(int(str(raw*100)[0] + '0'), 105, 5))
@@ -73,13 +73,13 @@ from updatedSuperFunction import logReg
 
 # plt.show()
 
-# fig = plt.subplots(figsize=(35,10))
-# plt.plot(nValues, augAcc, marker='o', color='black')
-# plt.title('randSwap: # of values swapped vs. Accuracy', fontsize='xx-large')
-# plt.xlabel('# of values swapped', fontsize='xx-large')
+# fig = plt.subplots(figsize=(20,10))
+# plt.plot(units, augAcc, marker='o', color='black')
+# plt.title('pmOne Units vs. Accuracy', fontsize='xx-large')
+# plt.xlabel('Units', fontsize='xx-large')
+# plt.xticks(units, fontsize='large')
 # plt.ylabel('Accuracy %', fontsize='xx-large')
 # plt.grid(True)
-# plt.xticks(nValues, fontsize='xx-large')
 # plt.yticks(np.arange(int(str(raw*100)[0] + '0'), 105, 5))
 # plt.tight_layout()
 
@@ -106,7 +106,7 @@ for j in range(1):
             counter += 1
             print(str(counter / (ITERATIONS * (len(nRows)-1))*100)[:4] + '%')
             
-            aug = betterApplyAugmentationMethods(data, 'randSwap', nrows=nRows[n], nvalues=1)
+            aug = betterApplyAugmentationMethods(data, 'pmOne', nRows[n], unit = .25)
             
             log = logReg(aug, split=data.shape[0]-1)
             
@@ -124,16 +124,17 @@ plt.ylabel('Accuracy %')
 plt.grid(True)
 plt.yticks(np.arange(int(str(raw*100)[0] + '0'), 105, 5))
 plt.tight_layout()
+
 plt.show()
 
 
 fig = plt.subplots(figsize=(20,10))
 plt.plot(nRows, augAcc, marker='o', color='black')
-plt.title('randSwap: number of rows vs. Accuracy', fontsize='xx-large')
 plt.xlabel('# of rows', fontsize='xx-large')
+plt.title('Number of rows vs. Accuracy', fontsize='xx-large')
+plt.xticks(nRows, fontsize='xx-large')
 plt.ylabel('Accuracy %', fontsize='xx-large')
 plt.grid(True)
-plt.xticks(nRows)
 plt.yticks(np.arange(int(str(raw*100)[0] + '0'), 105, 5), fontsize='xx-large')
 plt.tight_layout()
 
