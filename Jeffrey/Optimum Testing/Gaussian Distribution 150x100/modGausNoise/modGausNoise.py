@@ -132,7 +132,7 @@ plt.show()
 
 fig = plt.subplots(figsize=(20,10))
 plt.plot(nRows, augAcc, marker='o', color='black')
-plt.title('randSwap: number of rows vs. Accuracy', fontsize='xx-large')
+plt.title('modGausNoise: number of rows vs. Accuracy', fontsize='xx-large')
 plt.xlabel('# of rows', fontsize='xx-large')
 plt.ylabel('Accuracy %', fontsize='xx-large')
 plt.grid(True)
