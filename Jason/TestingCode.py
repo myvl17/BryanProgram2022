@@ -20,19 +20,30 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans
 from sklearn.naive_bayes import GaussianNB
 import tensorflow as tf
+from sklearn.preprocessing import StandardScaler
 
 
 
-df_1 = pd.read_table("Gaussian_Distribution.txt", delimiter=" ", header=None)
+df = pd.read_table("combined_data.txt", delimiter=" ", header=None)
 
-dfdrop = df_1.drop(columns = df_1.shape[1] - 1)
+
+
+dfdrop = df.drop(columns = df.shape[1] - 1)
+
 
 X = dfdrop
-Y = df_1[df_1.shape[1] - 1]
+Y = df[df.shape[1] - 1]
 
 
+#Splitting dataset into training and testing dataset
 X_train,X_test,Y_train,Y_test = train_test_split(
-    X,Y,test_size=0.2,random_state=0)
+    X,Y,test_size=7,random_state=42, shuffle= False)
+
+
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
 
 ann = tf.keras.models.Sequential()
 
@@ -41,9 +52,27 @@ ann.add(tf.keras.layers.Dense(units=6,activation="relu"))
 ann.add(tf.keras.layers.Dense(units=1,activation="sigmoid"))
 
 ann.compile(optimizer="adam",loss="binary_crossentropy",metrics=['accuracy'])
+
 ann.fit(X_train,Y_train,batch_size=32,epochs = 100)
 
-predictied_values = ann.predict(X_test)
+predicted_values = ann.predict(X_test)
+print(predicted_values>.5)
+predicted_labels = predicted_values > .5
+final_predicted_labels  = predicted_labels * 1
+print(final_predicted_labels)
 
-print(predictied_values)
 
+X = dfdrop
+Y = df[df.shape[1] - 1]
+ 
+ # Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(
+              X, Y, test_size = 5, random_state=42, shuffle = False)
+  
+knn = KNeighborsClassifier(n_neighbors=3)
+  
+knn.fit(X_train, y_train)
+  
+ # Predict on dataset which model has not seen before
+predicted_values = knn.predict(X_test)
+print(predicted_values)

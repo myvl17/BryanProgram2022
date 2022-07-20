@@ -74,7 +74,7 @@ def generateRawData(nrows, ncolumns, distance, distribution):
         plt.show()
         
         # Saves generated Gaussian distribution in same folder as file
-        np.savetxt("Generated Gaussian Distribution.txt", shuffled_df)
+        np.savetxt("Generated Gaussian Distribution_1.txt", shuffled_df)
         
         return shuffled_df
 

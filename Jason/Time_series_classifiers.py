@@ -21,22 +21,18 @@ from pyts.classification import TimeSeriesForest
 
 
 
-df = pd.read_csv("Binary_epilepsy.csv")
+df = pd.read_csv("epilepsy_data copy.csv")
 
+df_1 = df[0: 500]
 
-
-df_1 = df.drop(columns = ['Unnamed: 0', 'Unnamed: 0.1'])
+df_2 = df_1.drop(columns = ['Unnamed: 0'])
               
-# df_2 = df_1.loc[df_1['y'] == 1].sample(n = 4)
+df_2.loc[df_2['y'] != 1, 'y'] = 0
 
-# print(df_2)
 
-# df_3 = df_1[df_1['y'] != 1]
+df_2.to_csv('binary_epilepsy_2.1.csv')
 
-# df_4 = pd.concat([df_2, df_3])
-
-# print(df_4)
-
+"""
 numCols = []
 acc = []
 for i in range(2,178):
@@ -53,10 +49,10 @@ for i in range(len(numCols)):
     
     
     
-    # knn = KNeighborsClassifier(metric='dtw')
-    # knn.fit(X_train, y_train)
+     knn = KNeighborsClassifier(metric='dtw')
+     knn.fit(X_train, y_train)
     
-    # knn.score(X_test, y_test)
+     knn.score(X_test, y_test)
     
     
     clf = TimeSeriesForest(random_state=43)
@@ -67,7 +63,7 @@ for i in range(len(numCols)):
     plt.plot(numCols[:i+1], acc)
     plt.show()
 
-
+"""
 
 
 
