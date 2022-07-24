@@ -92,7 +92,7 @@ def corrAugmentation(data, nrows, nvalues, unit):
     
     sortedMatrix = sortedMatrix.sort_values(0, ascending=False, ignore_index=True)
     
-    #print(sortedMatrix)
+    print(sortedMatrix)
     
     cols1 = []
     cols2 = []
@@ -100,11 +100,11 @@ def corrAugmentation(data, nrows, nvalues, unit):
     
     # Create list of columns and correlations. 
     
-    for i in range(nvalues):
+    for i in range(sortedMatrix.shape[0]):
         cols1.append(sortedMatrix.iloc[i, 2])
         cols2.append(sortedMatrix.iloc[i, 1])
         corr.append(sortedMatrix.iloc[i, 0])
-        
+
     # Looping through each augmented row in the dataframe
     
     for i in range(augmentedDf.shape[0]):
@@ -120,19 +120,20 @@ def corrAugmentation(data, nrows, nvalues, unit):
                  augmentedDf.iloc[i, int(cols1[j])] -= unit
                 
             temp = pd.concat([data, augmentedDf.iloc[i, :]])
-            #tempCorr = temp.corr().iloc[int(cols1[j]), int(cols2[j])]
-            tempCorr = (augmentedDf.iloc[i, :]).any()
-            #print(tempCorr)
-           # print(corr[j])
+            # tempCorr = temp.corr().iloc[int(cols1[j]), int(cols2[j])]
+            tempCorr = (augmentedDf.iloc[:data.shape[0]+i + 1, :]).corr()
+            print(tempCorr)
+            print(tempCorr.iloc[, j])
+            print(corr)
            # print(augmentedDf)
             counter = 0
-            while ((tempCorr < corr[j] - .1)  | (tempCorr > corr[j] + .1)):
-                if tempCorr < corr[j]:
+            while ((tempCorr.iloc[i, j + 1] < (corr[j] - .1))  or (tempCorr.iloc[i, j + 1] > (corr[j] + .1))):
+                if (tempCorr < corr[j]):
                     augmentedDf.iloc[i, int(cols2[j])] += .01
                 else:
                     augmentedDf.iloc[i, int(cols2[j])] -= .01
                 temp = pd.concat([data, augmentedDf.iloc[i, :]])
-                tempCorr = (augmentedDf.iloc[i, :]).any()
+                tempCorr = (augmentedDf.iloc[i, :])
                 #print("sup")
                 counter+= 1
                 
