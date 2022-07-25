@@ -59,15 +59,15 @@ def modPMOne(data, nrows, nvalues, unit):
     return augmentedDf
 
 
-x1 = random.sample(range(2),2)
-x2 = random.sample(range(2), 2)
-x3 = random.sample(range(2), 2)
-y = [0,1,0]
-y = pd.DataFrame(y)
+# x1 = random.sample(range(2),2)
+# x2 = random.sample(range(2), 2)
+# x3 = random.sample(range(2), 2)
+# y = [0,1,0]
+# y = pd.DataFrame(y)
 
-data = pd.DataFrame({0:x1, 1:x2, 2:x3})
-data = data.transpose()
-data = pd.concat([data, y], axis=1, ignore_index=True)
+# data = pd.DataFrame({0:x1, 1:x2, 2:x3})
+# data = data.transpose()
+# data = pd.concat([data, y], axis=1, ignore_index=True)
 
 
-aug = modPMOne(data, 10, 2, 1)
+# aug = modPMOne(data, 10, 2, 1)
