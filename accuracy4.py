@@ -38,7 +38,8 @@ uniform6 = []
 Gaussian7 = []
 uniform7 = []
     
-        
+## EXPERIMENTS LOOKING AT SYNTHETIC UNIFORM DATA WITH PCA, 2 COLS, AND FULL DATA  
+## LOOKING AT THE TRENDS IN ACCURACY      
 
 # values = [0, 0.15, 0.25, 0.50, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
@@ -46,14 +47,17 @@ values = np.arange(0, 1.05, 0.05)
 
 
 for value in values:
+    # First generate the raw data
     data = generateRawData(500, 150, value, 'uniform')
     
     # EXP ONE
+    # Raw synthetic uniform data and augmentation via gaussian noise
     uniform.append(runClassifier(data, 'SVM').iloc[0, 3])
     uniform5.append(superFunction(data, 'gausNoise', 200, 10, feature_cols = feature_cols,
                                   target = 150, split = 500, classifier = 'SVM', noise = 0.05).iloc[0, 3])
     
     # EXP TWO
+    # First two columns of raw data and augmented data and find accuracy
     x = data.iloc[:, :2]
     y = data[data.shape[1] - 1]
     xy = pd.concat([x, y], axis = 1, ignore_index=True)
@@ -68,6 +72,8 @@ for value in values:
     
     
     #EXP THREE
+    # Utilize PCA to take two dimensions from whole dataset and run accuracy on 
+    # Raw data and the augmented data
     data2 = StandardScaler().fit_transform(data)
     pca = PCA(n_components=2)
     X = pca.fit_transform(data2)
@@ -85,6 +91,8 @@ for value in values:
     AB = pd.concat([B, label2], axis = 1, ignore_index=True)
     uniform7.append(runClassifier(AB, 'SVM').iloc[0, 3])
     
+    
+## SAME EXPERIMENT BUT WITH GAUSSIAN  
 for value in values:
     data = generateRawData(500, 150, value, 'gaussian')
     

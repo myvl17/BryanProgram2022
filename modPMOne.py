@@ -41,18 +41,33 @@ def modPMOne(data, nrows, nvalues, unit):
             colMax = data.iloc[:, col].max()
             colMin = data.iloc[:, col].min()
             
-            if (random.randint(0, 1) == 0):
-                if (augmentedDf.iloc[i, col] + unit <= colMax):
-                    augmentedDf.iloc[i, col] += unit
+            if (augmentedDf.iloc[i, col] + unit < colMax and augmentedDf.iloc[i, col] - unit > colMin):
+                if (random.randint(0, 1) == 0):
+                    if (augmentedDf.iloc[i, col] + unit <= colMax):
+                        augmentedDf.iloc[i, col] += unit
+                    else:
+                        augmentedDf.iloc[i, col] -= unit
                 else:
-                    augmentedDf.iloc[i, col] -= unit
-            else:
-                if (augmentedDf.iloc[i, col] - unit >= colMin):
-                    augmentedDf.iloc[i, col] -= unit
-                else:
-                    augmentedDf.iloc[i, col] += unit
+                    if (augmentedDf.iloc[i, col] - unit >= colMin):
+                        augmentedDf.iloc[i, col] -= unit
+                    else:
+                        augmentedDf.iloc[i, col] += unit
 
     # Combines data and augmentedDf into finished augmented dataframe
     augmentedDf = pd.concat([data, augmentedDf], ignore_index=True)
     
     return augmentedDf
+
+
+# x1 = random.sample(range(2),2)
+# x2 = random.sample(range(2), 2)
+# x3 = random.sample(range(2), 2)
+# y = [0,1,0]
+# y = pd.DataFrame(y)
+
+# data = pd.DataFrame({0:x1, 1:x2, 2:x3})
+# data = data.transpose()
+# data = pd.concat([data, y], axis=1, ignore_index=True)
+
+
+# aug = modPMOne(data, 10, 2, 1)
