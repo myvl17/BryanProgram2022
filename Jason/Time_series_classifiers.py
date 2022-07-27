@@ -32,15 +32,15 @@ df_2.loc[df_2['y'] != 1, 'y'] = 0
 
 df_2.to_csv('binary_epilepsy_2.1.csv')
 
-"""
+
 numCols = []
 acc = []
 for i in range(2,178):
     numCols.append(i)
 
 for i in range(len(numCols)):
-    X = df_1.iloc[:, 0:numCols[i]]
-    Y = df_1['y']
+    X = df_2.iloc[:, 0:numCols[i]]
+    Y = df_2['y']
     
     
     
@@ -49,21 +49,20 @@ for i in range(len(numCols)):
     
     
     
-     knn = KNeighborsClassifier(metric='dtw')
-     knn.fit(X_train, y_train)
+knn = KNeighborsClassifier(metric='dtw')
+knn.fit(X_train, y_train)
+knn.score(X_test, y_test)
     
-     knn.score(X_test, y_test)
     
+clf = TimeSeriesForest(random_state=43)
+clf.fit(X_train, y_train)
     
-    clf = TimeSeriesForest(random_state=43)
-    clf.fit(X_train, y_train)
-    
-    acc.append(clf.score(X_test, y_test))
+acc.append(clf.score(X_test, y_test))
 
-    plt.plot(numCols[:i+1], acc)
-    plt.show()
+plt.plot(numCols[:i+1], acc)
+plt.show()
 
-"""
+
 
 
 
