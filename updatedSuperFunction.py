@@ -12,195 +12,15 @@ import matplotlib.pyplot as plt
 import sklearn.metrics as skm
 
 
-def applyAugmentationMethod(file, method, nrows, nvalues, unit=None, noise=None):
-    # Reads .txt data frame file
-    # df = pd.read_table(file, delimiter=" ", header=None)
-    df = file
-
-    # Vector of original and augmented points
-    original_points = []
-    augmented_points = []
-    
-    if method == "randSwap":
-        
-        # Creates empty dataframe to store augmented rows
-        augmentedDf = pd.DataFrame()
-        
-        # Copies nrows from original data and appends to augmentedDf
-        for i in range(nrows):
-            augmentedDf = pd.concat([augmentedDf, df.iloc[[random.randint(0, df.shape[0]-1)]]], ignore_index=True)
-            
-        # Drops labels column from augmentedDF
-        augmentedDf = augmentedDf.drop(augmentedDf.shape[1]-1, axis=1)
-        
-        # Picks UNIQUE column indexes to swap
-        columnIndexSwaps = random.sample(range(0, df.shape[1]-1), nvalues)
-
-        # Swaps augmentedDf column value from same column in df
-        for i in range(augmentedDf.shape[0]):
-            for col in columnIndexSwaps:
-                randValue = df.iloc[random.randint(0, df.shape[0]-1), col]
-                
-                augmentedDf.iloc[i, col] = randValue
-            
-        # Combines both df and augmentedDf into one dataframe
-        augmentedDf = pd.concat([df, augmentedDf], axis=0, ignore_index=True)
-        
-        return augmentedDf
-        
-    elif method == "pmOne":
-
-        # Reads in the dataset needed, dropping whatever column contains
-        # the labels/status
-
-        #df = dftest.drop(columns = dftest.shape[1] - 1)
-        
-        df1 = df.drop(columns = df.shape[1] - 1)
-
-        # if statement to determine if the number of rows entered is odd
-        # The sample function takes random rows from the df
-        # in this case it take in the nrows and the # of rows
-        
-        sample1 = pd.DataFrame()
-        sample2 = pd.DataFrame()
-        
-        if (nrows % 2 == 0):
-            '''
-            sample1 = df1.sample(n = int(nrows / 2), random_state=(0))
-            sample2 = df1.sample(n = int(nrows / 2), random_state=(0))
-            '''
-            
-            for i in range(int(nrows/2)):
-                ##random.seed(i)
-                sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
-                sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
-            
-            
-        else:
-            
-            # sample1 = df1.sample(n = int((nrows / 2 ) + 0.5), random_state=(1))
-            # sample2 = df1.sample(n = int((nrows / 2) - 0.5), random_state=(1))
-            
-            
-            for k in range(int(nrows / 2 + .5)):
-                ##random.seed(k)
-                sample1 = pd.concat([sample1, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
-                sample2 = pd.concat([sample2, df1.iloc[[random.randint(0, df1.shape[0]-1)]]], ignore_index=True)
-            
-        # Reset the index in each sample so they increase from 0 to nrows        
-        sample1real = sample1.reset_index(drop = True)
-        sample2real = sample2.reset_index(drop = True)
-        
-        
-    # Create a list of random numbers
-        randomlist = []
-        for j in range(0, nvalues):
-            ##random.seed(j)
-            n = random.randint(0, df.shape[1]-2)
-            randomlist.append(n)
-            
-    # Select one of the random rows then use the random list to 
-    # pinpoint one specfic number in the dataframe and add or 
-    # subtract the unit specified in the function
-        for i in range(len(sample1real)):
-            for j in randomlist:
-    
-                oldValue = sample1real.iloc[i, j]
-                newValue = oldValue + unit
-                
-                # Appends old and new values to augmented_points vector to keep track for distance
-                original_points.append(oldValue)
-                augmented_points.append(newValue)
-                
-                # Replace the oldvalue with the new value in the
-                # samples set
-                sample1real = sample1real.replace(to_replace = oldValue, value = newValue)
-                
-           
-        for i in range(len(sample2real)):
-            for j in randomlist:
-                oldValue = (sample2real.iloc[i, j])
-                newValue = oldValue - unit
-                
-                # Appends and and new value to augmented_points vector to keep track for distance
-                original_points.append(oldValue)
-                augmented_points.append(newValue)
-                
-                
-                sample2real = sample2real.replace(to_replace = oldValue, value = newValue)
-                
-            
-
-        #print(np.linalg.norm(np.array(original_points) - np.array(augmented_points), ord=2)) norm 2
-        # Norm 1 distance
-        #print(norm1Distance(original_points, augmented_points))
-        
-        
-
-        # Put the two samples together and mix them
-        dfreal = pd.concat([sample1real, sample2real])
-        # dfreal = pd.DataFrame(np.random.permutation(dffinaltest))
-        
-        finished_df = pd.concat([df, dfreal], ignore_index=True)
-        
-        return finished_df
-        
-    elif method == "gausNoise":
-    #Create a noise matrix
-       # np.random.seed(0)
-       noise_matrix = pd.DataFrame(np.random.normal(0, noise, size = (nrows, df.shape[1]-1)))
-       
-       #noise_matrix = pd.DataFrame()
-       
-       # for k in range(nrows):
-       #     #random.seed(k)
-       #     noise_matrix = pd.concat([noise_matrix, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
-           
-       # print(noise_matrix)
-      
-      
-       if (1 == 0):
-           return (df.add(noise_matrix, fill_value = 0))
-      
-       #add noise to random rows matrix from data set
-       else:
-           
-           # data_portion = df.sample(n = nrows, ignore_index=True)
-           
-           data_portion = pd.DataFrame()
-           for i in range(nrows):
-               # random.seed(i + 1)
-               data_portion = pd.concat([data_portion, df.iloc[[random.randint(0, df.shape[1]-1)]]], ignore_index=True)
-            
-           
-           added_noise = data_portion.add(noise_matrix, fill_value = None)
-           
-           
-                   
-           data_portion.drop(data_portion.columns[-1], axis=1, inplace=True)
-           
-           finished_df = pd.concat([df, added_noise], ignore_index=True)
-           
-           for i in range(data_portion.shape[0]):
-               for j in range(data_portion.shape[1]):
-                   original_points.append(data_portion.loc[i,j])
-                   augmented_points.append(added_noise.loc[i,j])
-
-  
-           # Norm 1 distance 
-           #print(norm1Distance(original_points, augmented_points))
-                   
-           # print(finished_df)
-                   
-           return finished_df
-    else:
-        return None
+from betterApplyAugmentationMethod import betterApplyAugmentationMethods
     
   
 from sklearn.model_selection import train_test_split
 def logReg(dataset, split):
     
+    # Selects all columns excluding labels
     feature_cols = np.arange(0, dataset.shape[1]-1, 1)
+    # Selects only labels column
     target = dataset.shape[1]-1
     
     logDf = dataset.copy(deep=True)
@@ -235,13 +55,34 @@ def logReg(dataset, split):
 
     # Appends predicted labels to NAN
     for i in range(split, logDf.shape[0]):
-        logDf.loc[i, target] = y_pred[i - split]
+        logDf.iloc[i, target] = y_pred[i - split]
         
     
-    # plt.scatter(logDf[0], logDf[1], c = logDf[logDf.shape[1] - 1])
-    
-    
     return logDf
+
+
+from pyts.classification import TimeSeriesForest
+
+def ts_dtree(dataset, split):
+   
+    # Selects all columns except labels
+    X = dataset.drop(columns = dataset.shape[1] - 1)
+    # Selects only labels column
+    y = dataset[dataset.shape[1] - 1]
+    
+    
+    # Splits dataframe into testing and training data, splits between original and augmented
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = split, shuffle = False,  stratify = None) 
+    
+    # Time Series forest classifier
+    clf = TimeSeriesForest(random_state=43)
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    
+    for i in range(split, dataset.shape[0]):
+        dataset.iloc[i, dataset.shape[1]-1] = y_pred[i - split]
+        
+    return dataset
 
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -255,6 +96,7 @@ from sklearn.svm import SVC
 def runClassifier(df, classifier, accuracy=None):
     dfdrop = df.drop(columns = df.shape[1] - 1)
     
+    # Creates accuracy table dataframe
     results_df = pd.DataFrame(columns = ["Accuracy", "Mean Absolute Error", "Rooted Mean Square Error", "F1 Score"])
     
     if classifier == "kNN":
@@ -279,7 +121,7 @@ def runClassifier(df, classifier, accuracy=None):
         Y = df.df[df.shape[1] - 1]
         
         X_train, X_test, y_train, y_test = train_test_split( 
-    X, Y, test_size = 0.3, random_state = 100)
+            X, Y, test_size = 0.3, random_state = 100)
         
         clf_gini = DecisionTreeClassifier(criterion = "gini",
             random_state = 100,max_depth=3, min_samples_leaf=5)
@@ -364,6 +206,10 @@ def runClassifier(df, classifier, accuracy=None):
         svm.fit(X_train, y_train)
         predicted_values = svm.predict(X_test)
         
+    else:
+        print("Unknown classifier")
+        return None
+        
 
     
     
@@ -395,6 +241,7 @@ def runClassifier(df, classifier, accuracy=None):
                                                     squared=False)
         f1_accuracy = skm.f1_score(y_test, predicted_values)
         
+        # Appends accuracies to accuracy table
         results_df.iloc[0,0] = acc
         results_df.iloc[0,1] = mae_accuracy
         results_df.iloc[0,2] = rmse_accuracy
@@ -404,17 +251,16 @@ def runClassifier(df, classifier, accuracy=None):
 
 
 """
-superFunction applies all methods from the flowchart augmentation, logistic 
-regression, classifier and accuracy, taking all inputs from these functions and
-outputs the accuracy of the augmented data.
+superFunction applies all methods from the flowchart: augmentation, 
+interpretable/uninterpretable classifiers, and accuracy, taking all inputs from
+these functions and outputs the accuracy of the augmented data.
 
 Inputs:
     file: A text file containing all raw data with the labels
     method: The augmentation method the user wants to use for the data
     nrows: How many output augmentation rows are wanted
     nvalues: The number of values in each row that need to be augmented
-    feature_cols: The name/number of every column that is NOT the labels column
-    target: The name/number of the column that contains the labels
+    labels_classifier: interpretable classifier the user wants for labels
     split: The number of rows that contain original data
     classifier: The classifier the user wants to use
     accuracy(optional): Which type of accuracy the user would like to use,
@@ -428,29 +274,26 @@ Inputs:
 Outputs:
     Gives a row of accuracy measures or the accuracy measure chosen by the user
 """
-def superFunction(file, method, nrows, nvalues, feature_cols, target, split, classifier, accuracy=None, unit=None, noise=None):
+def superFunction(file, method, nrows, nvalues, labels_classifier, split, classifier, accuracy=None, unit=None, noise=None):
     df = pd.read_table(file, delimiter=" ", header=None)
 
-    plt.scatter(df[0], df[1], c = df[df.shape[1] - 1])
-    plt.show()
-    augmentation = applyAugmentationMethod(df, method, nrows, nvalues, unit=unit, noise=noise)
+    augmentation = betterApplyAugmentationMethods(df, method, nrows, nvalues, unit=unit, noise=noise)
     
-    logRegression = logReg(augmentation, feature_cols, target, split)
     
-    plt.scatter(logRegression[0], logRegression[1],
-                c = logRegression[logRegression.shape[1] - 1])
-    classifier = runClassifier(logRegression, classifier)
+    if str(labels_classifier).lower == 'logreg' or 'log regression' or 'logistic regression':
+        logRegression = logReg(augmentation, split)
+        
+    elif str(labels_classifier).lower == 'decisiontree' or 'decision tree':
+        ts_dtree(augmentation, split)
+    else:
+        print('Unknown classifier')
+        return None
+    
+
+    classifier = runClassifier(logRegression, classifier, accuracy)
     
     return classifier
     
-# feature_cols = []
-# for i in range(0, 149, 1):
-#     feature_cols.append(i)
-    
-# # test = superFunction(file='Generated Gaussian Distribution.txt', method='pmOne', nrows=500, nvalues=150, unit=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
-
-
-# test = superFunction(file='Generated Gaussian Distribution.txt', method='randSwap', nrows=100, nvalues=50, noise=0.1, feature_cols=feature_cols, target=150, split=500, classifier='kNN')
 
 
 
