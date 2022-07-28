@@ -44,32 +44,35 @@ acc1 = runClassifier(df100, 'SVM', 'f1')
             
 
 ## Instantiate the list for the accuracies
-augAcc = [0] * (len(randUnit) - 1)
-augAcc.insert(0, acc1)
-
-augAcc2 = [0] * (len(pmUnit) - 1)
-augAcc2.insert(0, acc1)
-
-augAcc3 = [0] * (len(gausNoise) - 1)
-augAcc3.insert(0, acc1)
-
-augAcc4 = [0] * (len(modGausNoise) - 1)
-augAcc4.insert(0, acc1)
-
-augAcc5 = [0] * (len(modPMOneUnit) - 1)
-augAcc5.insert(0, acc1)
-
-# augAcc = [0] * (len(rowIter) - 1)
+# augAcc = [0] * (len(randUnit) - 1)
 # augAcc.insert(0, acc1)
 
-# augAcc2 = [0] * (len(rowIter) - 1)
+# augAcc2 = [0] * (len(pmUnit) - 1)
 # augAcc2.insert(0, acc1)
 
-# augAcc4 = [0] * (len(rowIter) - 1)
+# augAcc3 = [0] * (len(gausNoise) - 1)
+# augAcc3.insert(0, acc1)
+
+# augAcc4 = [0] * (len(modGausNoise) - 1)
 # augAcc4.insert(0, acc1)
 
-# augAcc3 = [0] * (len(rowIter) - 1)
-# augAcc3.insert(0, acc1)
+# augAcc5 = [0] * (len(modPMOneUnit) - 1)
+# augAcc5.insert(0, acc1)
+
+augAcc = [0] * (len(rowIter) - 1)
+augAcc.insert(0, acc1)
+
+augAcc2 = [0] * (len(rowIter) - 1)
+augAcc2.insert(0, acc1)
+
+augAcc4 = [0] * (len(rowIter) - 1)
+augAcc4.insert(0, acc1)
+
+augAcc3 = [0] * (len(rowIter) - 1)
+augAcc3.insert(0, acc1)
+
+augAcc5 = [0] * (len(rowIter) - 1)
+augAcc5.insert(0, acc1)
 
 
 # ## Experiment for finding the optimal percent of rows to augment
@@ -132,20 +135,20 @@ augAcc5.insert(0, acc1)
 # augAcc2[1:] /= ITERATIONS
 # augAcc2 *= 100
 
-for q in range(ITERATIONS):
-    for r in range(1, len(modPMOneUnit)):
-        counter += 1
+# for q in range(ITERATIONS):
+#     for r in range(1, len(rowIter)):
+#         counter += 1
     
-        print(str(counter / (ITERATIONS * (len(modPMOneUnit)-1))*100)[:4] + '%')
-        x = modPMOne(df100, 'pmOne', 100, cols, unit = modPMOneUnit[r])
-        log = betterLogReg(dataset = x, feature_cols = cols1, target = cols, split = rows)
-        acc = runClassifier(log, 'SVM', 'f1')
-        augAcc5[i] += acc
+#         print(str(counter / (ITERATIONS * (len(rowIter)-1))*100)[:4] + '%')
+#         x = modPMOne(df100, rowIter[r], cols, 3)
+#         log = betterLogReg(dataset = x, feature_cols = cols1, target = cols, split = rows)
+#         acc = runClassifier(log, 'SVM', 'f1')
+#         augAcc5[r] += acc
         
     
-augAcc5 = np.asarray(augAcc5)
-augAcc5[1:] /= ITERATIONS
-augAcc5 *= 100
+# augAcc5 = np.asarray(augAcc5)
+# augAcc5[1:] /= ITERATIONS
+# augAcc5 *= 100
 
 # # ## Experiment for accuracy and randUnit perturbation
 # for k in range(ITERATIONS):
@@ -177,29 +180,29 @@ augAcc5 *= 100
 # augAcc3[1:] /= ITERATIONS
 # augAcc3 *= 100
 
-# ## Experiment for accuracy and randUnit perturbation
-# for o in range(ITERATIONS):
-#     for p in range(1, len(rowIter)):
-#         counter += 1
-#         print(str(counter / (ITERATIONS * (len(rowIter)-1))*100)[:4] + '%')
-#         # x = applyAugmentationMethod(dftest, 'randSwap', 50, value)
-#         x = modifiedGausNoise(df100, rowIter[p], 43)
-#         log = betterLogReg(dataset = x, feature_cols = cols1, target = cols, split = rows)
-#         acc = runClassifier(log, 'SVM', 'f1')
-#         augAcc4[p] += acc
+## Experiment for accuracy and randUnit perturbation
+for o in range(ITERATIONS):
+    for p in range(1, len(rowIter)):
+        counter += 1
+        print(str(counter / (ITERATIONS * (len(rowIter)-1))*100)[:4] + '%')
+        # x = applyAugmentationMethod(dftest, 'randSwap', 50, value)
+        x = modifiedGausNoise(df100, rowIter[p], 90)
+        log = betterLogReg(dataset = x, feature_cols = cols1, target = cols, split = rows)
+        acc = runClassifier(log, 'SVM', 'f1')
+        augAcc4[p] += acc
     
-# augAcc4 = np.asarray(augAcc4)
-# augAcc4[1:] /= ITERATIONS
-# augAcc4 *= 100
+augAcc4 = np.asarray(augAcc4)
+augAcc4[1:] /= ITERATIONS
+augAcc4 *= 100
 
 # ##Graphs of experiments vs accuracy        
-fig, ax = plt.subplots()
-ax.plot(rowIter, augAcc2, marker = 'o', linewidth = 3.0, color = 'blue')
-ax.set_title('Accuracy vs pmOne Row Accuracy')
-ax.set_xlabel('Unit')
-ax.set_ylabel('Accuracy')
-ax.set_facecolor('white')
-plt.show()
+# fig, ax = plt.subplots()
+# ax.plot(rowIter, augAcc2, marker = 'o', linewidth = 3.0, color = 'blue')
+# ax.set_title('Accuracy vs pmOne Row Accuracy')
+# ax.set_xlabel('Unit')
+# ax.set_ylabel('Accuracy')
+# ax.set_facecolor('white')
+# plt.show()
 
 # plt.plot(rowIter, augAcc, marker = 'o', linewidth = 3.0, color = 'blue')
 # plt.title('Accuracy vs randUnit Row Accuracy')
@@ -214,15 +217,15 @@ plt.show()
 # plt.ylabel('Accuracy')
 # plt.show()
 
-# plt.plot(rowIter, augAcc4, marker = 'o', linewidth = 3.0, color = 'blue')
-# plt.title('Accuracy vs modGausNoise Row Accuracy')
+plt.plot(rowIter, augAcc4, marker = 'o', linewidth = 3.0, color = 'blue')
+plt.title('Accuracy vs modGausNoise Row Accuracy')
+plt.xlabel('Rows')
+plt.ylabel('Accuracy')
+plt.show()
+
+# plt.plot(rowIter, augAcc5, marker = 'o', linewidth = 3.0, color = 'blue')
+# plt.title('Accuracy vs modPMOne Row Accuracy')
 # plt.xlabel('Rows')
 # plt.ylabel('Accuracy')
 # plt.show()
-
-plt.plot(modPMOneUnit, augAcc5, marker = 'o', linewidth = 3.0, color = 'blue')
-plt.title('Accuracy vs modPMOne')
-plt.xlabel('Unit')
-plt.ylabel('Accuracy')
-plt.show()
 
