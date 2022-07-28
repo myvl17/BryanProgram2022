@@ -11,14 +11,19 @@ import random
 
 
 '''
-DESCRIPTION: randomly selects unique column values and adds plus or minus
-designated unit
+DESCRIPTION: applies chosen augmentation method to supplied dataframe.
+It is assumed that that the labels column is located at the END of the dataframe.
 
 INPUTS:
 data = dataframe
 nrows = number of rows that will be created in augmentation
+
+OPTIONAL:
 nvalues = number of values being swapped, limited to column length
+
+PMONE and GAUSNOISE ONLY:
 unit = amount being plus or minused
+noise = 
 '''
 
 def betterApplyAugmentationMethods(data, method, nrows, nvalues=None, unit=None, noise=None):
