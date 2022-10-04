@@ -24,6 +24,7 @@ from updatedSuperFunction import runClassifier
 from updatedSuperFunction import logReg
 from betterApplyAugmentationMethod import betterApplyAugmentationMethods
 import pandas as pd
+import numpy as np
 
 
 data = generateRawData(200, 135, .1, 'gaussian')
@@ -48,9 +49,16 @@ logRegression = logReg(augmented, training.shape[0])
 X_train = logRegression.iloc[:, :logRegression.shape[1]-1]
 y_train = logRegression.iloc[:, logRegression.shape[1]-1]
 
-weight1 = [2]*(X_train.shape[0]-50)
-weight2 = [1]*50
 
+'''
+weight1 = weight of original data
+weight2 = weight of augmented data
+'''
+originalWeight = 3/4
+augmentedWeight = 1/4
+
+weight1 = [originalWeight / (X_train.shape[0]-50)]*(X_train.shape[0]-50)
+weight2 = [augmentedWeight / 50]*50
 weight = weight1 + weight2
 
 
